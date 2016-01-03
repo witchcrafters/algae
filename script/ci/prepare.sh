@@ -2,7 +2,7 @@
 
 set -e
 
-export ERLANG_VERSION="18.0"
+export ERLANG_VERSION="18.2.1"
 export ELIXIR_VERSION="v1.2.0"
 
 # If you have a elixir_buildpack.config, do this instead:
