@@ -8,7 +8,7 @@ defmodule Algae.Mixfile do
      description: "Bootstrapped algebraic data types for Elixir",
      package: package,
 
-     version: "0.5.2",
+     version: "0.6.0",
      elixir:  "~> 1.1",
 
      source_url:   "https://github.com/robot-overlord/algae",
@@ -18,7 +18,7 @@ defmodule Algae.Mixfile do
      start_permanent: Mix.env == :prod,
 
      deps: deps,
-     docs: [logo: "https://github.com/robot-overlord/algae/blob/master/logo.png?raw=true",
+     docs: [logo: "./logo.png",
             extras: ["README.md"]]]
   end
 
