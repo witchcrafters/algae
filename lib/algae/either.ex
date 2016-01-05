@@ -3,12 +3,12 @@ defmodule Algae.Either do
 
   defmodule Left do
     @type t :: %Left{left: any}
-    defstruct left: nil
+    defstruct [:left]
   end
 
   defmodule Right do
     @type t :: %Left{left: any}
-    defstruct left: nil
+    defstruct [:right]
   end
 
   def left(value), do: %Left{left: value}

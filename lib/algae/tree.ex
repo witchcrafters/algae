@@ -12,14 +12,14 @@ defmodule Algae.Tree do
   end
 
   def leaf(value), do: %Algae.Tree.Leaf{leaf: value}
-  def branch(left, right), do: %Algae.Tree.branch{left: left, right: right}
+  def branch(left, right), do: %Algae.Tree.Branch{left: left, right: right}
   def branch(left: left, right: right), do: branch(left, right)
 end
 
 defimpl Witchcraft.Functor, for: Algae.Tree.Leaf do
   import Quark.Curry, only: [curry: 1]
 
-  def lift(%Algae.Tree.Leaf{leaf: value}, fun), do
+  def lift(%Algae.Tree.Leaf{leaf: value}, fun) do
     curry(fun).(value) |> Algae.Tree.leaf
   end
 end

@@ -7,7 +7,7 @@ defmodule Algae.Maybe do
   end
 
   defmodule Just do
-    @type t :: Just{just: any}
+    @type t :: %Just{just: any}
     defstruct [:just]
   end
 

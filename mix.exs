@@ -27,6 +27,11 @@ defmodule Algae.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    []
+    [
+      {:earmark, "~> 0.1", only: :dev},
+      {:ex_doc, "~> 0.10", only: :dev},
+      {:quark, "~> 1.0.0"},
+      {:witchcraft, "~> 0.2.0"}
+    ]
   end
 end
