@@ -11,6 +11,5 @@ defmodule Algae.Id do
 end
 
 defimpl Witchcraft.Functor, for: Algae.Id do
-  import Quark.Curry, only: [curry: 1]
-  def lift(%Algae.Id{id: value}, fun), do: Algae.id curry(fun).(value)
+  def lift(%Algae.Id{id: value}, fun), do: Algae.id Quark.Curry.curry(fun).(value)
 end

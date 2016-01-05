@@ -1,4 +1,6 @@
 defmodule Algae.Tree do
+  use Quark.Partial
+
   @type t :: Leaf.t | Branch.t
 
   defmodule Leaf do
@@ -11,24 +13,23 @@ defmodule Algae.Tree do
     defstruct [:left, :right]
   end
 
-  def leaf(value), do: %Algae.Tree.Leaf{leaf: value}
-  def branch(left, right), do: %Algae.Tree.Branch{left: left, right: right}
+  defpartial leaf(value), do: %Algae.Tree.Leaf{leaf: value}
+
   def branch(left: left, right: right), do: branch(left, right)
+  defpartial branch(left, right), do: %Algae.Tree.Branch{left: left, right: right}
 end
 
 defimpl Witchcraft.Functor, for: Algae.Tree.Leaf do
-  import Quark.Curry, only: [curry: 1]
-
   def lift(%Algae.Tree.Leaf{leaf: value}, fun) do
-    curry(fun).(value) |> Algae.Tree.leaf
+    Quark.Curry.curry(fun).(value) |> Algae.Tree.leaf
   end
 end
 
 defimpl Witchcraft.Functor, for: Algae.Tree.Branch do
   def lift(%Algae.Tree.Branch{left: left, right: right}, fun) do
     %Algae.Tree.Branch{
-      left: lift(left, fun),
-      right: lift(right, fun)
+      left: lift(left, Quark.Curry.curry(fun)),
+      right: lift(right, Quark.Curry.curry(fun))
     }
   end
 end

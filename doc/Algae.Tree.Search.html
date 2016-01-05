@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.3">
-    <title>Algae.Tree.Search – Algae v0.5.2</title>
+    <title>Algae.Tree.Search – Algae v0.6.0</title>
     <link rel="stylesheet" href="dist/app-ddd9717ad9.css" />
     <script src="dist/sidebar_items.js"></script>
   </head>
@@ -27,7 +27,7 @@
         Algae
       </h1>
       <h2 class="sidebar-projectVersion">
-        v0.5.2
+        v0.6.0
       </h2>
     </div>
     
@@ -61,7 +61,7 @@
 
 
       <h1>
-        <small class="visible-xs">Algae v0.5.2</small>
+        <small class="visible-xs">Algae v0.6.0</small>
         Algae.Tree.Search
         
         
@@ -103,7 +103,19 @@
     </h2>
     <div class="summary-row">
   <div class="summary-signature">
-    <a href="#node/1">node(list)</a>
+    <a href="#node/0">node()</a>
+  </div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#node/1">node(left)</a>
+  </div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#node/2">node(left, middle)</a>
   </div>
   
 </div>
@@ -156,18 +168,72 @@
             </a>
             Functions
           </h1>
-          <div class="detail" id="node/1">
+          <div class="detail" id="node/0">
   <div class="detail-header">
-    <a href="#node/1" class="detail-link" title="Link to this function">
+    <a href="#node/0" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
-    <span class="signature">node(list)</span>
+    <span class="signature">node()</span>
       
-      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/tree/search.ex#L28" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/tree/search.ex#L22" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
   </div>
+  
+  <section class="docstring">
+    
+  </section>
+</div>
+<div class="detail" id="node/1">
+  <div class="detail-header">
+    <a href="#node/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">node(left)</span>
+      
+      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/tree/search.ex#L31" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+  </div>
+  
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">node(<a href="Algae.Tree.Search.Node.html#t:t/0">Algae.Tree.Search.Node.t</a>) :: (any -> (<a href="Algae.Tree.Search.Node.html#t:t/0">Algae.Tree.Search.Node.t</a> -> <a href="Algae.Tree.Search.html#t:t/0">Algae.Tree.Search.t</a>))</code></pre>
+        
+          <pre><code class="elixir">node(left: <a href="Algae.Tree.Search.Node.html#t:t/0">Algae.Tree.Search.Node.t</a>, middle: any, right: <a href="Algae.Tree.Search.Node.html#t:t/0">Algae.Tree.Search.Node.t</a>) :: <a href="Algae.Tree.Search.Node.html#t:t/0">Algae.Tree.Search.Node.t</a></code></pre>
+        
+      </div>
+    </div>
+  
+  <section class="docstring">
+    
+  </section>
+</div>
+<div class="detail" id="node/2">
+  <div class="detail-header">
+    <a href="#node/2" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">node(left, middle)</span>
+      
+      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/tree/search.ex#L37" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+  </div>
+  
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">node(<a href="Algae.Tree.Search.Node.html#t:t/0">Algae.Tree.Search.Node.t</a>, any) :: (<a href="Algae.Tree.Search.Node.html#t:t/0">Algae.Tree.Search.Node.t</a> -> <a href="Algae.Tree.Search.html#t:t/0">Algae.Tree.Search.t</a>)</code></pre>
+        
+      </div>
+    </div>
   
   <section class="docstring">
     
@@ -180,7 +246,7 @@
     </a>
     <span class="signature">node(left, middle, right)</span>
       
-      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/tree/search.ex#L19" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/tree/search.ex#L40" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -191,8 +257,6 @@
       <div class="specs-list">
         
           <pre><code class="elixir">node(<a href="Algae.Tree.Search.Node.html#t:t/0">Algae.Tree.Search.Node.t</a>, any, <a href="Algae.Tree.Search.Node.html#t:t/0">Algae.Tree.Search.Node.t</a>) :: <a href="Algae.Tree.Search.Node.html#t:t/0">Algae.Tree.Search.Node.t</a></code></pre>
-        
-          <pre><code class="elixir">node(<a href="Algae.Tree.Search.Node.html#t:t/0">Algae.Tree.Search.Node.t</a>, any, <a href="Algae.Tree.Search.Node.html#t:t/0">Algae.Tree.Search.Node.t</a>) :: ALgae.Tree.Search.Node.t</code></pre>
         
       </div>
     </div>
@@ -208,7 +272,7 @@
     </a>
     <span class="signature">tip()</span>
       
-      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/tree/search.ex#L16" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/tree/search.ex#L20" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     

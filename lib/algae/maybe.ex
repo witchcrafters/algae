@@ -1,4 +1,6 @@
 defmodule Algae.Maybe do
+  use Quark.Partial
+
   @type t :: Just.t | Nothing.t
 
   defmodule Nothing do
@@ -12,7 +14,7 @@ defmodule Algae.Maybe do
   end
 
   def nothing(), do: %Algae.Maybe.Nothing{}
-  def just(value), do: %Algae.Maybe.Just{just: value}
+  defpartial just(value), do: %Algae.Maybe.Just{just: value}
 
   defdelegate maybe(), to: __MODULE__, as: :nothing
   defdelegate maybe(value), to: __MODULE__, as: :just

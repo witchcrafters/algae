@@ -1,6 +1,10 @@
 defmodule Algae.Tree.Search do
+  use Quark.Curry
+  alias Quark.Curry, as: QC
+  import Kernel, except: [node: 0]
+
+
   @type t :: Tip.t | Node.t
-  # data Stree a = Tip | Node (Stree a) a (Stree a)
 
   defmodule Tip do
     @type t :: %Tip{}
@@ -15,8 +19,7 @@ defmodule Algae.Tree.Search do
   @spec tip() :: Algae.Tree.Search.Tip.t
   def tip(), do: %Algae.Tree.Search.Tip{}
 
-  @spec node(Algae.Tree.Search.Node.t, any, Algae.Tree.Search.Node.t) :: ALgae.Tree.Search.Node.t
-  def node(left, middle, right) do
+  defcurry node(left, middle, right) do
     %Algae.Tree.Search.Node{
       left: left,
       middle: middle,
@@ -24,12 +27,21 @@ defmodule Algae.Tree.Search do
     }
   end
 
-  @spec node(Algae.Tree.Search.Node.t, any, Algae.Tree.Search.Node.t) :: Algae.Tree.Search.Node.t
+  @spec node(left: Algae.Tree.Search.Node.t, middle: any, right: Algae.Tree.Search.Node.t) :: Algae.Tree.Search.Node.t
   def node(left: left, middle: middle, right: right), do: node(left, middle, right)
+
+  @spec node(Algae.Tree.Search.Node.t) :: (any -> (Algae.Tree.Search.Node.t -> Algae.Tree.Search.t))
+  def node(left), do: node.(left)
+
+  @spec node(Algae.Tree.Search.Node.t, any) :: (Algae.Tree.Search.Node.t -> Algae.Tree.Search.t)
+  def node(left, middle), do: QC.uncurry(node, [left, middle])
+
+  @spec node(Algae.Tree.Search.Node.t, any, Algae.Tree.Search.Node.t) :: Algae.Tree.Search.Node.t
+  def node(left, middle, right), do: QC.uncurry(node, [left, middle, right])
 end
 
 defimpl Witchcraft.Functor, for: Algae.Tree.Search.Tip do
-  def lift(%Algae.Tree.Search.Tip{}, _), do: %Algae.Tree.Search.Tip{}
+  def lift(%Algae.Tree.Search.Tip{}, _), do: Algae.Tree.Search.tip
 end
 
 defimpl Witchcraft.Functor, for: Algae.Tree.Search.Node do
