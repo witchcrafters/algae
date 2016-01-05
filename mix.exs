@@ -48,9 +48,9 @@ defmodule Algae.Mixfile do
   end
 
   defp package do
-    [maintainers: ["Brooklyn Zelenka", "Jennifer Cooper"],
+    [maintainers: ["Brooklyn Zelenka"],
      licenses: ["MIT"],
-     links: %{"GitHub" => "https://github.com/robot-overlord/witchcraft",
-              "Docs" => "http://robot-overlord.github.io/witchcraft/"}]
+     links: %{"GitHub" => "https://github.com/robot-overlord/algae",
+              "Docs" => "http://robot-overlord.github.io/algae/"}]
   end
 end
