@@ -2,12 +2,24 @@ defmodule Algae.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :algae,
+    [app:     :algae,
+     name:    "Algae",
+
+     description: "Bootstrapped algebraic data types for Elixir",
+     package: package,
+
      version: "0.5.1",
-     elixir: "~> 1.1",
-     build_embedded: Mix.env == :prod,
+     elixir:  "~> 1.1",
+
+     source_url:   "https://github.com/robot-overlord/algae",
+     homepage_url: "https://github.com/robot-overlord/algae",
+
+     build_embedded:  Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     deps: deps]
+
+     deps: deps,
+     docs: [logo: "https://github.com/robot-overlord/algae/blob/master/logo.png?raw=true",
+            extras: ["README.md"]]]
   end
 
   # Configuration for the OTP application
@@ -33,5 +45,12 @@ defmodule Algae.Mixfile do
       {:quark, "~> 1.0.0"},
       {:witchcraft, "~> 0.2.0"}
     ]
+  end
+
+  defp package do
+    [maintainers: ["Brooklyn Zelenka", "Jennifer Cooper"],
+     licenses: ["MIT"],
+     links: %{"GitHub" => "https://github.com/robot-overlord/witchcraft",
+              "Docs" => "http://robot-overlord.github.io/witchcraft/"}]
   end
 end
