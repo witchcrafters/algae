@@ -29,5 +29,5 @@ defimpl Witchcraft.Functor, for: Algae.Maybe.Just do
 end
 
 defimpl Witchcraft.Functor, for: Algae.Maybe.Nothing do
-  def lift(_, _), do: Algae.Maybe.nothing
+  def lift(%Algae.Maybe.Nothing{}, _), do: Algae.Maybe.nothing
 end
