@@ -9,7 +9,7 @@ defmodule Algae.Either do
   end
 
   defmodule Right do
-    @type t :: %Left{left: any}
+    @type t :: %Right{right: any}
     defstruct [:right]
   end
 
