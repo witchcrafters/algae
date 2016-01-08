@@ -8,7 +8,7 @@ defmodule Algae.Reader do
   Simply invoke the `reader` function on the contained `env`ironment
   """
   @spec read(Algae.Reader.t) :: any
-  def read(%Algae.Reader{env: env, reader: reader}), do: env |> Q.Curry.curry(reader)
+  def read(%Algae.Reader{env: env, reader: reader}), do: Q.Curry.curry(reader).(env)
 end
 
 defimpl Witchcraft.Functor, for: Algae.Reader do
