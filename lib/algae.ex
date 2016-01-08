@@ -1,2 +1,0 @@
-defmodule Algae do
-end
