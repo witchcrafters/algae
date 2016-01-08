@@ -8,7 +8,7 @@ defmodule Algae.Mixfile do
      description: "Bootstrapped algebraic data types for Elixir",
      package: package,
 
-     version: "0.6.1",
+     version: "0.7.0",
      elixir:  "~> 1.1",
 
      source_url:   "https://github.com/robot-overlord/algae",
