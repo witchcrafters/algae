@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.3">
-    <title>Algae.Tree – Algae v0.6.0</title>
+    <title>Algae.Tree – Algae v0.6.1</title>
     <link rel="stylesheet" href="dist/app-ddd9717ad9.css" />
     <script src="dist/sidebar_items.js"></script>
   </head>
@@ -27,7 +27,7 @@
         Algae
       </h1>
       <h2 class="sidebar-projectVersion">
-        v0.6.0
+        v0.6.1
       </h2>
     </div>
     
@@ -61,7 +61,7 @@
 
 
       <h1>
-        <small class="visible-xs">Algae v0.6.0</small>
+        <small class="visible-xs">Algae v0.6.1</small>
         Algae.Tree
         
         
@@ -121,6 +121,12 @@
 </div>
 <div class="summary-row">
   <div class="summary-signature">
+    <a href="#empty/0">empty()</a>
+  </div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
     <a href="#leaf/0">leaf()</a>
   </div>
   
@@ -128,6 +134,24 @@
 <div class="summary-row">
   <div class="summary-signature">
     <a href="#leaf/1">leaf(value)</a>
+  </div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#tree/0">tree()</a>
+  </div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#tree/1">tree(leaf_value)</a>
+  </div>
+  
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="#tree/2">tree(left, right)</a>
   </div>
   
 </div>
@@ -152,7 +176,7 @@
           </h1>
           <div class="types-list">
             <div id="t:t/0" class="type-detail">
-  <pre><code class="elixir"><a href="#t:t/0">t</a> :: Leaf.t | Branch.t</code></pre>
+  <pre><code class="elixir"><a href="#t:t/0">t</a> :: Empty.t | Leaf.t | Branch.t</code></pre>
   
 </div>
 
@@ -175,7 +199,7 @@
     </a>
     <span class="signature">branch()</span>
       
-      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/tree.ex#L19" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/tree.ex#L26" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -192,7 +216,7 @@
     </a>
     <span class="signature">branch(left)</span>
       
-      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/tree.ex#L18" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/tree.ex#L25" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -209,7 +233,24 @@
     </a>
     <span class="signature">branch(left, right)</span>
       
-      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/tree.ex#L19" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/tree.ex#L26" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+  </div>
+  
+  <section class="docstring">
+    
+  </section>
+</div>
+<div class="detail" id="empty/0">
+  <div class="detail-header">
+    <a href="#empty/0" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">empty()</span>
+      
+      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/tree.ex#L21" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -226,7 +267,7 @@
     </a>
     <span class="signature">leaf()</span>
       
-      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/tree.ex#L16" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/tree.ex#L23" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -243,7 +284,58 @@
     </a>
     <span class="signature">leaf(value)</span>
       
-      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/tree.ex#L16" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/tree.ex#L23" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+  </div>
+  
+  <section class="docstring">
+    
+  </section>
+</div>
+<div class="detail" id="tree/0">
+  <div class="detail-header">
+    <a href="#tree/0" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">tree()</span>
+      
+      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/tree.ex#L28" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+  </div>
+  
+  <section class="docstring">
+    
+  </section>
+</div>
+<div class="detail" id="tree/1">
+  <div class="detail-header">
+    <a href="#tree/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">tree(leaf_value)</span>
+      
+      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/tree.ex#L30" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+  </div>
+  
+  <section class="docstring">
+    
+  </section>
+</div>
+<div class="detail" id="tree/2">
+  <div class="detail-header">
+    <a href="#tree/2" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">tree(left, right)</span>
+      
+      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/tree.ex#L34" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     

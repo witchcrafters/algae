@@ -27,10 +27,10 @@ defmodule Algae.Tree do
 
   def tree(), do: empty()
 
-  def tree(leaf: value), do: leaf(value)
-  def tree(leaf_value), do: leaf(leaf_value)
-
   def tree(left: left, right: right), do: branch(left, right)
+  def tree(leaf: value), do: leaf(value)
+
+  def tree(leaf_value), do: leaf(leaf_value)
   def tree(left, right), do: branch(left, right)
 end
 
