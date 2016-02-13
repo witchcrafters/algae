@@ -10,10 +10,3 @@ defmodule Algae.Reader do
   @spec read(Algae.Reader.t) :: any
   def read(%Algae.Reader{env: env, reader: reader}), do: Q.Curry.curry(reader).(env)
 end
-
-defimpl Witchcraft.Functor, for: Algae.Reader do
-  def lift(%Algae.Reader{reader: reader, env: env}, fun) do
-    import Quark.Compose, only: [<|>: 2]
-    %Algae.Reader{reader: fun <|> reader, env: env}
-  end
-end

@@ -33,18 +33,3 @@ defmodule Algae.Tree do
   def tree(leaf_value), do: leaf(leaf_value)
   def tree(left, right), do: branch(left, right)
 end
-
-defimpl Witchcraft.Functor, for: Algae.Tree.Leaf do
-  def lift(%Algae.Tree.Leaf{leaf: value}, fun) do
-    Quark.Curry.curry(fun).(value) |> Algae.Tree.leaf
-  end
-end
-
-defimpl Witchcraft.Functor, for: Algae.Tree.Branch do
-  def lift(%Algae.Tree.Branch{left: left, right: right}, fun) do
-    %Algae.Tree.Branch{
-      left: lift(left, Quark.Curry.curry(fun)),
-      right: lift(right, Quark.Curry.curry(fun))
-    }
-  end
-end

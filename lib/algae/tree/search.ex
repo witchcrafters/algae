@@ -39,19 +39,3 @@ defmodule Algae.Tree.Search do
   @spec node(Algae.Tree.Search.Node.t, any, Algae.Tree.Search.Node.t) :: Algae.Tree.Search.Node.t
   def node(left, middle, right), do: QC.uncurry(node, [left, middle, right])
 end
-
-defimpl Witchcraft.Functor, for: Algae.Tree.Search.Tip do
-  def lift(%Algae.Tree.Search.Tip{}, _), do: Algae.Tree.Search.tip
-end
-
-defimpl Witchcraft.Functor, for: Algae.Tree.Search.Node do
-  import Witchcraft.Functor.Functions, only: [<~: 2]
-
-  def lift(%Algae.Tree.Search.Node{left: left, middle: middle, right: right}, fun) do
-    %Algae.Tree.Search.Node{
-      left: left <~ &lift(&1, fun),
-      middle: middle <~ fun,
-      right: right <~ &lift(&1, fun)
-    }
-  end
-end
