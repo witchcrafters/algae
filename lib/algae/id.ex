@@ -9,7 +9,3 @@ defmodule Algae.Id do
   def id(), do: %Algae.Id{}
   def id(value), do: %Algae.Id{id: value}
 end
-
-defimpl Witchcraft.Functor, for: Algae.Id do
-  def lift(%Algae.Id{id: value}, fun), do: Algae.id Quark.Curry.curry(fun).(value)
-end

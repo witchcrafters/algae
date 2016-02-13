@@ -8,8 +8,8 @@ defmodule Algae.Mixfile do
      description: "Bootstrapped algebraic data types for Elixir",
      package: package,
 
-     version: "0.7.0",
-     elixir:  "~> 1.1",
+     version: "0.8.0",
+     elixir:  "~> 1.2",
 
      source_url:   "https://github.com/robot-overlord/algae",
      homepage_url: "https://github.com/robot-overlord/algae",
@@ -40,11 +40,10 @@ defmodule Algae.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:earmark, "~> 0.1", only: :dev},
-      {:ex_doc, "~> 0.10", only: :dev},
-      {:inch_ex, only: :docs},
-      {:quark, "~> 1.0.0"},
-      {:witchcraft, "~> 0.2.0"}
+      {:earmark, "~> 0.2", only: :dev},
+      {:ex_doc, "~> 0.11", only: :dev},
+      {:inch_ex, "~> 0.5", only: :docs},
+      {:quark, "~> 1.0"}
     ]
   end
 

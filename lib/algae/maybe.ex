@@ -19,15 +19,3 @@ defmodule Algae.Maybe do
   defdelegate maybe(), to: __MODULE__, as: :nothing
   defdelegate maybe(value), to: __MODULE__, as: :just
 end
-
-defimpl Witchcraft.Functor, for: Algae.Maybe.Just do
-  import Quark.Curry, only: [curry: 1]
-
-  def lift(%Algae.Maybe.Just{just: value}, fun) do
-    Algae.Maybe.just curry(fun).(value)
-  end
-end
-
-defimpl Witchcraft.Functor, for: Algae.Maybe.Nothing do
-  def lift(%Algae.Maybe.Nothing{}, _), do: Algae.Maybe.nothing
-end
