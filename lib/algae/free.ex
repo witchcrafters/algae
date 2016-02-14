@@ -1,27 +1,29 @@
 defmodule Algae.Free do
   use Quark.Partial
 
-  @type t :: Algae.Free.Pure.t | Algae.Free.Wrap.t
+  @type t :: Algae.Free.Pure.t | Algae.Free.Deep.t
 
-  defmodule Pure do
-    @type t :: %Algae.Free.Pure{pure: any}
-    defstruct [:pure]
+  defmodule Shallow do
+    @type t :: %Algae.Free.Shallow{shallow: any}
+    defstruct [:shallow]
   end
 
-  defmodule Wrap do
-    @type t :: %Algae.Free.Wrap{wrap: any}
-
+  defmodule Deep do
     @moduledoc ~S"""
-    `wrap` must be some functor wrapping another `%Free.X{}`
+    Deep holds two values: a value (often a functor) in `deep`, and another
+    `Algae.Free.t` in `deeper`.
 
     ```elixir
 
-    %Free.Wrap{wrap: %Id{id: %Free.Pure{pure: "Terminus"}}
+    %Free.Deep{deep: %Id{id: 42}, deeper: %Free.Shallow{shallow: "Terminus"}}
 
     ```
 
     """
-    defstruct [:wrap]
+
+    @type t :: %Algae.Free.Deep{deep: any, deeper: Algae.Free.t}
+
+    defstruct [:deep, :deeper]
   end
 
   @spec wrap(any) :: Algae.Free.Wrap.t
