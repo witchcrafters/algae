@@ -26,6 +26,16 @@ defmodule Algae.Free do
     defstruct [:deep, :deeper]
   end
 
-  @spec wrap(any) :: Algae.Free.Wrap.t
-  defpartial wrap(value), do: %Algae.Free.Wrap{wrap: value}
+  @spec deep() :: (Algae.Free.Deep.t -> (any -> Algae.Free.Deep.t))
+  @spec deep(Algae.Free.Deep.t) :: (any -> Algae.Free.Deep.t)
+  @spec deep(Algae.Free.Deep.t, any) :: Algae.Free.Deep.t
+
+  defpartial deep(%Algae.Free.Deep{deep: deep, deeper: deeper}, value) do
+    %Algae.Free.Deep{deep: value, deeper: %Algae.Free.Deep{deep: deep, deeper: deeper}}
+  end
+
+  @spec shallow() :: (any -> Algae.Free.Shallow.t)
+  @spec shallow(any) :: Algae.Free.Shallow.t
+
+  defpartial shallow(value), do: %Algae.Free.Shallow{shallow: value}
 end

@@ -5,7 +5,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="ExDoc v0.11.3">
-    <title>Algae.Free.Wrap – Algae v0.8.0</title>
+    <title>Algae.Free.Deep – Algae v0.9.0</title>
     <link rel="stylesheet" href="dist/app-ddd9717ad9.css" />
     <script src="dist/sidebar_items.js"></script>
   </head>
@@ -27,7 +27,7 @@
         Algae
       </h1>
       <h2 class="sidebar-projectVersion">
-        v0.8.0
+        v0.9.0
       </h2>
     </div>
     
@@ -61,8 +61,8 @@
 
 
       <h1>
-        <small class="visible-xs">Algae v0.8.0</small>
-        Algae.Free.Wrap
+        <small class="visible-xs">Algae v0.9.0</small>
+        Algae.Free.Deep
         
         
           <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/free.ex#L11" title="View Source" class="view-source" rel="help">
@@ -71,6 +71,15 @@
         
       </h1>
 
+      
+        <section id="moduledoc" class="docstring">
+          <p>Deep holds two values: a value (often a functor) in <code class="inline">deep</code>, and another
+<code class="inline">Algae.Free.t</code> in <code class="inline">deeper</code>.</p>
+<pre><code class="elixir">
+%Free.Deep{deep: %Id{id: 42}, deeper: %Free.Shallow{shallow: &quot;Terminus&quot;}}
+</code></pre>
+
+        </section>
       
 
       
@@ -115,7 +124,7 @@
           </h1>
           <div class="types-list">
             <div id="t:t/0" class="type-detail">
-  <pre><code class="elixir"><a href="#t:t/0">t</a> :: %Algae.Free.Wrap{wrap: any}</code></pre>
+  <pre><code class="elixir"><a href="#t:t/0">t</a> :: %Algae.Free.Deep{deep: any, deeper: <a href="Algae.Free.html#t:t/0">Algae.Free.t</a>}</code></pre>
   
 </div>
 
