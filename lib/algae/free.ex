@@ -1,7 +1,7 @@
 defmodule Algae.Free do
   use Quark.Partial
 
-  @type t :: Algae.Free.Pure.t | Algae.Free.Deep.t
+  @type t :: Algae.Free.Shallow.t | Algae.Free.Deep.t
 
   defmodule Shallow do
     @type t :: %Algae.Free.Shallow{shallow: any}
