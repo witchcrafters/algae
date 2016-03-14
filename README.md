@@ -13,7 +13,7 @@ Add Algae to your list of dependencies in `mix.exs`:
 ```elixir
 
 def deps do
-  [{:algae, "~> 0.9.0"}]
+  [{:algae, "~> 0.10.0"}]
 end
 
 ```
