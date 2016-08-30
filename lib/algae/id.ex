@@ -1,5 +1,13 @@
 defmodule Algae.Id do
-  @moduledoc "The simplest ADT: a simple wrapper for some data"
+  @moduledoc ~S"""
+  The simplest ADT: a simple wrapper for some data
+
+  ## Examples
+
+      iex> %Algae.Id{id: "hi!"}
+      %Algae.Id{id: "hi!"}
+
+  """
 
   alias __MODULE__
 
