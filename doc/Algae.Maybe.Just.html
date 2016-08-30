@@ -82,11 +82,8 @@ Represents the presence of a value; one possible analog of <code class="inline">
   Examples
 </h2>
 
-<pre><code class="iex elixir">iex&gt; %Just{}
-%Algae.Just{just: nil}
-
-iex&gt; %Just{}
-%Algae.Maybe.Just{just: nil}</code></pre>
+<pre><code class="iex elixir">iex&gt; %Algae.Maybe.Just{just: 42}
+%Algae.Maybe.Just{just: 42}</code></pre>
 
         </section>
       
@@ -172,7 +169,7 @@ iex&gt; %Just{}
     </a>
     <span class="signature">new(value)</span>
     
-      <a href="https://github.com/expede/quark/blob/master/lib/algae/maybe/just.ex#L32" class="view-source" rel="help" title="View Source">
+      <a href="https://github.com/expede/quark/blob/master/lib/algae/maybe/just.ex#L29" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
@@ -191,8 +188,8 @@ iex&gt; %Just{}
   <section class="docstring">
     <p>Wrap a value in a <code class="inline">Just</code> struct</p>
 <h2>Examples</h2>
-<p>  iex&gt; Algae.Just.new(99)
-  %Algae.Just{just: 99}</p>
+<p>  iex&gt; new(99)
+  %Algae.Maybe.Just{just: 99}</p>
 
   </section>
 </div>

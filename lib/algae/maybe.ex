@@ -9,18 +9,18 @@ defmodule Algae.Maybe do
   ## Examples
 
       iex> [1,2,3]
-      ...> |> Enum.filter(&(&1 > 1))
+      ...> |> List.first
       ...> |> case do
-      ...>      []   -> nothing
-      ...>      list -> just(list)
+      ...>      nil  -> nothing
+      ...>      head -> just(head)
       ...>    end
-      %Algae.Maybe.Just{just: [2,3]}
+      %Algae.Maybe.Just{just: 1}
 
-      iex> [1,2,3]
-      ...> |> Enum.filter(&(&1 > 100))
+      iex> []
+      ...> |> List.first
       ...> |> case do
-      ...>      []   -> nothing
-      ...>      list -> just(list)
+      ...>      nil  -> nothing
+      ...>      head -> just(head)
       ...>    end
       %Algae.Maybe.Nothing{}
 
