@@ -11,7 +11,6 @@ defmodule Algae.Maybe.Just do
   """
 
   alias __MODULE__
-  alias Algae.RequiredFieldError
 
   @type t :: %Just{just: any}
   defstruct [:just]
@@ -21,8 +20,8 @@ defmodule Algae.Maybe.Just do
 
   ## Examples
 
-    iex> new(99)
-    %Algae.Maybe.Just{just: 99}
+      iex> new(99)
+      %Algae.Maybe.Just{just: 99}
 
   """
   @spec new(any) :: Just.t

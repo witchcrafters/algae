@@ -1,22 +1,16 @@
 defmodule Algae.Either do
-  use Quark.Partial
+  @moduledoc ~S"""
+  Represent branching conditions. These could be different return types,
+  error vs nominal value, and so on.
 
-  @type t :: Left.t | Right.t # Type union
 
-  defmodule Left do
-    @type t :: %Left{left: any}
-    defstruct [:left]
-  end
+  """
 
-  defmodule Right do
-    @type t :: %Right{right: any}
-    defstruct [:right]
-  end
+  alias Algae.Either.Left
+  alias Algae.Either.Right
 
-  defpartial left(value), do: %Left{left: value}
-  defpartial right(value), do: %Right{right: value}
+  @type t :: Left.t | Right.t
 
-  def either(), do: &either/1
-  def either(left: value), do: left(value)
-  def either(right: value), do: right(value)
+  def left(value),  do: %Left{left: value}
+  def right(value), do: %Right{right: value}
 end

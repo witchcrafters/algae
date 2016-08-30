@@ -28,7 +28,6 @@ defmodule Algae.Mixfile do
        {:ex_doc,   "~> 0.13", only: :dev},
 
        {:inch_ex,  "~> 0.5",  only: [:dev, :docs, :test]},
-
        {:quark,    "~> 2.0"}
      ],
 
