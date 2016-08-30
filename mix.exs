@@ -6,7 +6,7 @@ defmodule Algae.Mixfile do
      name:    "Algae",
 
      description: "Bootstrapped algebraic data types for Elixir",
-     version: "0.10.0",
+     version: "0.11.0",
      elixir:  "~> 1.3",
 
      package: [
