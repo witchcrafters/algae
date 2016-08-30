@@ -29,6 +29,14 @@ defmodule Algae.Maybe do
   alias Algae.Maybe.Just
   alias Algae.Maybe.Nothing
 
+  defmacro __using__(_) do
+    quote do
+      alias Algae.Maybe
+      alias Algae.Maybe.Nothing
+      alias Algae.Maybe.Just
+    end
+  end
+
   @type t :: Just.t | Nothing.t
 
   @doc ~S"""
