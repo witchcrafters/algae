@@ -1,10 +1,11 @@
-defmodule Algae.EmptyRequiredFieldError do
+defmodule Algae.RequiredFieldError do
   @moduledoc ~S"""
+  Exception for when a required field is missing
   """
 
   alias __MODULE__
 
-  @type t :: %EmptyRequiredFieldError{
+  @type t :: %RequiredFieldError{
     message: String.t,
     field_names: [String.t],
     struct: map,
@@ -12,7 +13,7 @@ defmodule Algae.EmptyRequiredFieldError do
   }
 
   defexception [
-    messgage: "Missing value in required field",
+    message: "Missing value in required field",
     struct: %{},
     field_names: [],
     plug_status: 500

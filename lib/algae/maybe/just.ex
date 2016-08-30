@@ -5,20 +5,26 @@ defmodule Algae.Maybe.Just do
 
   ## Examples
 
-      iex> %Just{}
-      %Algae.Just{just: nil}
-
-      iex> %Just{}
-      %Algae.Maybe.Just{just: nil}
+      iex> %Algae.Maybe.Just{just: 42}
+      %Algae.Maybe.Just{just: 42}
 
   """
 
   alias __MODULE__
-  use Quark.Partial
+  alias Algae.RequiredFieldError
 
   @type t :: %Just{just: any}
   defstruct [:just]
 
-  defpartial new(value) when is_nil(value), do: %Just{value: value}
-  defpartial new(value), do: %Just{value: value}
+  @doc ~S"""
+  Wrap a value in a `Just` struct
+
+  ## Examples
+
+    iex> new(99)
+    %Algae.Maybe.Just{just: 99}
+
+  """
+  @spec new(any) :: Just.t
+  def new(value), do: %Just{just: value}
 end

@@ -19,8 +19,8 @@ defmodule Algae.Maybe.Nothing do
 
   ## Examples
 
-      iex> Algae.Maybe.Nothing.new
-      Algae.Maybe.Nothing{}
+      iex> new
+      %Algae.Maybe.Nothing{}
 
   """
   @spec new() :: Nothing.t

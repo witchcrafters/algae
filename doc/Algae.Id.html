@@ -4,21 +4,20 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.11.3">
+    <meta name="generator" content="ExDoc v0.13.0">
     <title>Algae.Id – Algae v0.10.0</title>
-    <link rel="stylesheet" href="dist/app-ddd9717ad9.css" />
+    <link rel="stylesheet" href="dist/app-9c1e3d5aa2.css" />
+    
     <script src="dist/sidebar_items.js"></script>
   </head>
   <body data-type="modules">
+    <script>if(localStorage.getItem('night-mode')) document.body.className += ' night-mode';</script>
 
     <div class="main">
 <button class="sidebar-toggle">
   <i class="icon-menu"></i>
 </button>
 <section class="sidebar">
-  <button class="sidebar-toggle">
-    <i class="icon-menu"></i>
-  </button>
 
   
   <a href="api-reference.html" class="sidebar-projectLink">
@@ -48,6 +47,8 @@
     
 
     
+      <li><a id="exceptions-list" href="#full-list">Exceptions</a></li>
+    
 
     
   </ul>
@@ -57,7 +58,8 @@
 </section>
 
 <section class="content">
-  <div id="content" class="content-inner">
+  <div class="content-outer">
+    <div id="content" class="content-inner">
 
 
       <h1>
@@ -65,7 +67,7 @@
         Algae.Id
         
         
-          <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/id.ex#L1" title="View Source" class="view-source" rel="help">
+          <a href="https://github.com/expede/quark/blob/master/lib/algae/id.ex#L1" title="View Source" class="view-source" rel="help">
             <i class="icon-code"></i>
           </a>
         
@@ -73,7 +75,7 @@
 
       
         <section id="moduledoc" class="docstring">
-          <p>A simple wrapper for some data. This can be seen as a prototypical ADT.</p>
+          <p>The simplest ADT: a simple wrapper for some data</p>
 
         </section>
       
@@ -108,14 +110,20 @@
     </h2>
     <div class="summary-row">
   <div class="summary-signature">
-    <a href="#id/0">id()</a>
+    <a href="#id/1">id(value)</a>
   </div>
+  
+    <div class="summary-synopsis"><p>A value wrapped in an <code class="inline">Id</code> struct</p>
+</div>
   
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="#id/1">id(value)</a>
+    <a href="#new/1">new(value)</a>
   </div>
+  
+    <div class="summary-synopsis"><p>An alias for <code class="inline">id</code></p>
+</div>
   
 </div>
 
@@ -155,38 +163,69 @@
             </a>
             Functions
           </h1>
-          <div class="detail" id="id/0">
-  <div class="detail-header">
-    <a href="#id/0" class="detail-link" title="Link to this function">
-      <i class="icon-link"></i>
-    </a>
-    <span class="signature">id()</span>
-      
-      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/id.ex#L9" class="view-source" rel="help" title="View Source">
-       <i class="icon-code"></i>
-     </a>
-    
-  </div>
-  
-  <section class="docstring">
-    
-  </section>
-</div>
-<div class="detail" id="id/1">
+          <div class="detail" id="id/1">
   <div class="detail-header">
     <a href="#id/1" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
     <span class="signature">id(value)</span>
-      
-      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/id.ex#L10" class="view-source" rel="help" title="View Source">
+    
+      <a href="https://github.com/expede/quark/blob/master/lib/algae/id.ex#L22" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
+    
   </div>
   
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">id(any) :: <a href="Algae.Id.html#t:t/0">Algae.Id.t</a></code></pre>
+        
+      </div>
+    </div>
+  
   <section class="docstring">
+    <p>A value wrapped in an <code class="inline">Id</code> struct.</p>
+<h2>Examples</h2>
+<pre><code class="iex elixir">iex&gt; id(&quot;Bourne&quot;)
+%Algae.Id{id: &quot;Bourne&quot;}
+
+iex&gt; 42 |&gt; id
+%Algae.Id{id: 42}</code></pre>
+
+  </section>
+</div>
+<div class="detail" id="new/1">
+  <div class="detail-header">
+    <a href="#new/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">new(value)</span>
     
+      <a href="https://github.com/expede/quark/blob/master/lib/algae/id.ex#L34" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+  </div>
+  
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">new(any) :: <a href="Algae.Id.html#t:t/0">Algae.Id.t</a></code></pre>
+        
+      </div>
+    </div>
+  
+  <section class="docstring">
+    <p>An alias for <code class="inline">id</code>.</p>
+<h2>Examples</h2>
+<pre><code class="iex elixir">iex&gt; Algae.Id.new(&quot;value&quot;)
+%Algae.Id{id: &quot;value&quot;}</code></pre>
+
   </section>
 </div>
 
@@ -196,23 +235,24 @@
       
 
       
-        <footer class="footer">
-      <p>
-        <span class="line">
-          Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" rel="help" target="_blank">ExDoc</a> (v0.11.3),
-        </span>
-        <span class="line">
-          designed by
-          <a href="https://twitter.com/dignifiedquire" target="_blank" title="@dignifiedquire">Friedel Ziegelmayer</a>.
+          <footer class="footer">
+        <p>
+          <span class="line">
+            Built using
+            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" rel="help" target="_blank">ExDoc</a> (v0.13.0),
           </span>
-      </p>
-      <button class="night-mode-toggle" />
-    </footer>
+          <span class="line">
+            designed by
+            <a href="https://twitter.com/dignifiedquire" target="_blank" title="@dignifiedquire">Friedel Ziegelmayer</a>.
+            </span>
+        </p>
+        <button class="night-mode-toggle" />
+      </footer>
+    </div>
   </div>
 </section>
 </div>
-  <script src="dist/app-6d2e071366.js"></script>
+  <script src="dist/app-21f1a20b9e.js"></script>
   </body>
 </html>
 

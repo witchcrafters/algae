@@ -4,21 +4,20 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.11.3">
+    <meta name="generator" content="ExDoc v0.13.0">
     <title>Algae.Maybe.Just – Algae v0.10.0</title>
-    <link rel="stylesheet" href="dist/app-ddd9717ad9.css" />
+    <link rel="stylesheet" href="dist/app-9c1e3d5aa2.css" />
+    
     <script src="dist/sidebar_items.js"></script>
   </head>
   <body data-type="modules">
+    <script>if(localStorage.getItem('night-mode')) document.body.className += ' night-mode';</script>
 
     <div class="main">
 <button class="sidebar-toggle">
   <i class="icon-menu"></i>
 </button>
 <section class="sidebar">
-  <button class="sidebar-toggle">
-    <i class="icon-menu"></i>
-  </button>
 
   
   <a href="api-reference.html" class="sidebar-projectLink">
@@ -48,6 +47,8 @@
     
 
     
+      <li><a id="exceptions-list" href="#full-list">Exceptions</a></li>
+    
 
     
   </ul>
@@ -57,7 +58,8 @@
 </section>
 
 <section class="content">
-  <div id="content" class="content-inner">
+  <div class="content-outer">
+    <div id="content" class="content-inner">
 
 
       <h1>
@@ -65,12 +67,28 @@
         Algae.Maybe.Just
         
         
-          <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/maybe.ex#L11" title="View Source" class="view-source" rel="help">
+          <a href="https://github.com/expede/quark/blob/master/lib/algae/maybe/just.ex#L1" title="View Source" class="view-source" rel="help">
             <i class="icon-code"></i>
           </a>
         
       </h1>
 
+      
+        <section id="moduledoc" class="docstring">
+          <p>A simple, single-value-wrapping struct, much like <a href="Algae.Id.html"><code class="inline">Algae.Id</code></a>.
+Represents the presence of a value; one possible analog of <code class="inline">{:ok, value}</code></p>
+<h2 id="module-examples" class="section-heading">
+  <a href="#module-examples" class="hover-link"><i class="icon-link"></i></a>
+  Examples
+</h2>
+
+<pre><code class="iex elixir">iex&gt; %Just{}
+%Algae.Just{just: nil}
+
+iex&gt; %Just{}
+%Algae.Maybe.Just{just: nil}</code></pre>
+
+        </section>
       
 
       
@@ -97,6 +115,22 @@
 
 
           
+  <div class="summary-functions summary">
+    <h2>
+      <a href="#functions">Functions</a>
+    </h2>
+    <div class="summary-row">
+  <div class="summary-signature">
+    <a href="#new/1">new(value)</a>
+  </div>
+  
+    <div class="summary-synopsis"><p>Wrap a value in a <code class="inline">Just</code> struct</p>
+</div>
+  
+</div>
+
+  </div>
+
 
           
 
@@ -124,27 +158,69 @@
       
 
       
+        <section id="functions" class="details-list">
+          <h1 class="section-heading">
+            <a class="hover-link" href="#functions">
+              <i class="icon-link"></i>
+            </a>
+            Functions
+          </h1>
+          <div class="detail" id="new/1">
+  <div class="detail-header">
+    <a href="#new/1" class="detail-link" title="Link to this function">
+      <i class="icon-link"></i>
+    </a>
+    <span class="signature">new(value)</span>
+    
+      <a href="https://github.com/expede/quark/blob/master/lib/algae/maybe/just.ex#L32" class="view-source" rel="help" title="View Source">
+       <i class="icon-code"></i>
+     </a>
+    
+    
+  </div>
+  
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">new(any) :: <a href="Algae.Maybe.Just.html#t:t/0">Algae.Maybe.Just.t</a></code></pre>
+        
+      </div>
+    </div>
+  
+  <section class="docstring">
+    <p>Wrap a value in a <code class="inline">Just</code> struct</p>
+<h2>Examples</h2>
+<p>  iex&gt; Algae.Just.new(99)
+  %Algae.Just{just: 99}</p>
 
+  </section>
+</div>
+
+        </section>
       
 
       
-        <footer class="footer">
-      <p>
-        <span class="line">
-          Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" rel="help" target="_blank">ExDoc</a> (v0.11.3),
-        </span>
-        <span class="line">
-          designed by
-          <a href="https://twitter.com/dignifiedquire" target="_blank" title="@dignifiedquire">Friedel Ziegelmayer</a>.
+
+      
+          <footer class="footer">
+        <p>
+          <span class="line">
+            Built using
+            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" rel="help" target="_blank">ExDoc</a> (v0.13.0),
           </span>
-      </p>
-      <button class="night-mode-toggle" />
-    </footer>
+          <span class="line">
+            designed by
+            <a href="https://twitter.com/dignifiedquire" target="_blank" title="@dignifiedquire">Friedel Ziegelmayer</a>.
+            </span>
+        </p>
+        <button class="night-mode-toggle" />
+      </footer>
+    </div>
   </div>
 </section>
 </div>
-  <script src="dist/app-6d2e071366.js"></script>
+  <script src="dist/app-21f1a20b9e.js"></script>
   </body>
 </html>
 

@@ -4,21 +4,20 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.11.3">
+    <meta name="generator" content="ExDoc v0.13.0">
     <title>Algae.Maybe – Algae v0.10.0</title>
-    <link rel="stylesheet" href="dist/app-ddd9717ad9.css" />
+    <link rel="stylesheet" href="dist/app-9c1e3d5aa2.css" />
+    
     <script src="dist/sidebar_items.js"></script>
   </head>
   <body data-type="modules">
+    <script>if(localStorage.getItem('night-mode')) document.body.className += ' night-mode';</script>
 
     <div class="main">
 <button class="sidebar-toggle">
   <i class="icon-menu"></i>
 </button>
 <section class="sidebar">
-  <button class="sidebar-toggle">
-    <i class="icon-menu"></i>
-  </button>
 
   
   <a href="api-reference.html" class="sidebar-projectLink">
@@ -48,6 +47,8 @@
     
 
     
+      <li><a id="exceptions-list" href="#full-list">Exceptions</a></li>
+    
 
     
   </ul>
@@ -57,7 +58,8 @@
 </section>
 
 <section class="content">
-  <div id="content" class="content-inner">
+  <div class="content-outer">
+    <div id="content" class="content-inner">
 
 
       <h1>
@@ -65,12 +67,16 @@
         Algae.Maybe
         
         
-          <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/maybe.ex#L1" title="View Source" class="view-source" rel="help">
+          <a href="https://github.com/expede/quark/blob/master/lib/algae/maybe.ex#L1" title="View Source" class="view-source" rel="help">
             <i class="icon-code"></i>
           </a>
         
       </h1>
 
+      
+        <section id="moduledoc" class="docstring">
+          
+        </section>
       
 
       
@@ -103,14 +109,11 @@
     </h2>
     <div class="summary-row">
   <div class="summary-signature">
-    <a href="#just/0">just()</a>
-  </div>
-  
-</div>
-<div class="summary-row">
-  <div class="summary-signature">
     <a href="#just/1">just(value)</a>
   </div>
+  
+    <div class="summary-synopsis"><p>See <a href="Algae.Maybe.Just.html#new/1"><code class="inline">Algae.Maybe.Just.new/1</code></a></p>
+</div>
   
 </div>
 <div class="summary-row">
@@ -118,7 +121,7 @@
     <a href="#maybe/0">maybe()</a>
   </div>
   
-    <div class="summary-synopsis"><p>See <a href="Algae.Maybe.html#nothing/0"><code class="inline">Algae.Maybe.nothing/0</code></a></p>
+    <div class="summary-synopsis"><p>See <a href="Algae.Maybe.Nothing.html#new/0"><code class="inline">Algae.Maybe.Nothing.new/0</code></a></p>
 </div>
   
 </div>
@@ -127,7 +130,7 @@
     <a href="#maybe/1">maybe(value)</a>
   </div>
   
-    <div class="summary-synopsis"><p>See <a href="Algae.Maybe.html#just/1"><code class="inline">Algae.Maybe.just/1</code></a></p>
+    <div class="summary-synopsis"><p>Put a value into the <code class="inline">Maybe</code> context (ie: make it a <code class="inline">Just</code>)</p>
 </div>
   
 </div>
@@ -135,6 +138,9 @@
   <div class="summary-signature">
     <a href="#nothing/0">nothing()</a>
   </div>
+  
+    <div class="summary-synopsis"><p>See <a href="Algae.Maybe.Nothing.html#new/0"><code class="inline">Algae.Maybe.Nothing.new/0</code></a></p>
+</div>
   
 </div>
 
@@ -158,7 +164,7 @@
           </h1>
           <div class="types-list">
             <div id="t:t/0" class="type-detail">
-  <pre><code class="elixir"><a href="#t:t/0">t</a> :: Just.t | Nothing.t</code></pre>
+  <pre><code class="elixir"><a href="#t:t/0">t</a> :: <a href="Algae.Maybe.Just.html#t:t/0">Algae.Maybe.Just.t</a> | <a href="Algae.Maybe.Nothing.html#t:t/0">Algae.Maybe.Nothing.t</a></code></pre>
   
 </div>
 
@@ -174,38 +180,23 @@
             </a>
             Functions
           </h1>
-          <div class="detail" id="just/0">
-  <div class="detail-header">
-    <a href="#just/0" class="detail-link" title="Link to this function">
-      <i class="icon-link"></i>
-    </a>
-    <span class="signature">just()</span>
-      
-      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/maybe.ex#L17" class="view-source" rel="help" title="View Source">
-       <i class="icon-code"></i>
-     </a>
-    
-  </div>
-  
-  <section class="docstring">
-    
-  </section>
-</div>
-<div class="detail" id="just/1">
+          <div class="detail" id="just/1">
   <div class="detail-header">
     <a href="#just/1" class="detail-link" title="Link to this function">
       <i class="icon-link"></i>
     </a>
     <span class="signature">just(value)</span>
-      
-      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/maybe.ex#L17" class="view-source" rel="help" title="View Source">
+    
+      <a href="https://github.com/expede/quark/blob/master/lib/algae/maybe.ex#L12" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
+    
     
   </div>
   
   <section class="docstring">
-    
+    <p>See <a href="Algae.Maybe.Just.html#new/1"><code class="inline">Algae.Maybe.Just.new/1</code></a>.</p>
+
   </section>
 </div>
 <div class="detail" id="maybe/0">
@@ -214,15 +205,25 @@
       <i class="icon-link"></i>
     </a>
     <span class="signature">maybe()</span>
-      
-      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/maybe.ex#L19" class="view-source" rel="help" title="View Source">
+    
+      <a href="https://github.com/expede/quark/blob/master/lib/algae/maybe.ex#L15" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
+    
   </div>
   
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">maybe :: <a href="Algae.Maybe.Nothing.html#t:t/0">Algae.Maybe.Nothing.t</a></code></pre>
+        
+      </div>
+    </div>
+  
   <section class="docstring">
-    <p>See <a href="Algae.Maybe.html#nothing/0"><code class="inline">Algae.Maybe.nothing/0</code></a>.</p>
+    <p>See <a href="Algae.Maybe.Nothing.html#new/0"><code class="inline">Algae.Maybe.Nothing.new/0</code></a>.</p>
 
   </section>
 </div>
@@ -232,15 +233,28 @@
       <i class="icon-link"></i>
     </a>
     <span class="signature">maybe(value)</span>
-      
-      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/maybe.ex#L20" class="view-source" rel="help" title="View Source">
+    
+      <a href="https://github.com/expede/quark/blob/master/lib/algae/maybe.ex#L27" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
     
+    
   </div>
   
+    <div class="specs">
+      <h4 class="specs-title">Specs</h4>
+      <div class="specs-list">
+        
+          <pre><code class="elixir">maybe(any) :: <a href="Algae.Maybe.Just.html#t:t/0">Algae.Maybe.Just.t</a></code></pre>
+        
+      </div>
+    </div>
+  
   <section class="docstring">
-    <p>See <a href="Algae.Maybe.html#just/1"><code class="inline">Algae.Maybe.just/1</code></a>.</p>
+    <p>Put a value into the <code class="inline">Maybe</code> context (ie: make it a <code class="inline">Just</code>)</p>
+<h2>Examples</h2>
+<pre><code class="iex elixir">iex&gt; maybe(9)
+%Algae.Maybe.Just{just: 9}</code></pre>
 
   </section>
 </div>
@@ -250,15 +264,17 @@
       <i class="icon-link"></i>
     </a>
     <span class="signature">nothing()</span>
-      
-      <a href="https://github.com/robot-overlord/algae/blob/master/lib/algae/maybe.ex#L16" class="view-source" rel="help" title="View Source">
+    
+      <a href="https://github.com/expede/quark/blob/master/lib/algae/maybe.ex#L11" class="view-source" rel="help" title="View Source">
        <i class="icon-code"></i>
      </a>
+    
     
   </div>
   
   <section class="docstring">
-    
+    <p>See <a href="Algae.Maybe.Nothing.html#new/0"><code class="inline">Algae.Maybe.Nothing.new/0</code></a>.</p>
+
   </section>
 </div>
 
@@ -268,23 +284,24 @@
       
 
       
-        <footer class="footer">
-      <p>
-        <span class="line">
-          Built using
-          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" rel="help" target="_blank">ExDoc</a> (v0.11.3),
-        </span>
-        <span class="line">
-          designed by
-          <a href="https://twitter.com/dignifiedquire" target="_blank" title="@dignifiedquire">Friedel Ziegelmayer</a>.
+          <footer class="footer">
+        <p>
+          <span class="line">
+            Built using
+            <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" rel="help" target="_blank">ExDoc</a> (v0.13.0),
           </span>
-      </p>
-      <button class="night-mode-toggle" />
-    </footer>
+          <span class="line">
+            designed by
+            <a href="https://twitter.com/dignifiedquire" target="_blank" title="@dignifiedquire">Friedel Ziegelmayer</a>.
+            </span>
+        </p>
+        <button class="night-mode-toggle" />
+      </footer>
+    </div>
   </div>
 </section>
 </div>
-  <script src="dist/app-6d2e071366.js"></script>
+  <script src="dist/app-21f1a20b9e.js"></script>
   </body>
 </html>
 
