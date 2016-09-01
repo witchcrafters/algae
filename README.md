@@ -43,6 +43,9 @@ import Algae.Maybe
 ## Reader
 
 ```elixir
+%Algae.Reader{env: 42} |> read
+# 42
+
 config =
   %Algae.Reader.new{
     reader: &Map.get/1,
@@ -51,7 +54,7 @@ config =
       token: "12345"
     }
   }
-:uri |> run(config)
+:uri |> read(config)
 #=> "https://api.awesomeservice.com"
 
 elapsed_time =
@@ -63,6 +66,6 @@ elapsed_time =
         "#{now - start_time}ms"
       end
   }
-Algae.Reader.run elapsed_time
+run elapsed_time
 #=> "42ms"
 ```
