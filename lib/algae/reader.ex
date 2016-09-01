@@ -6,6 +6,9 @@ defmodule Algae.Reader do
 
   ## Examples
 
+      iex> %Algae.Reader{env: "stuff to check"}
+      %Algae.Reader{env: "stuff to check", reader: &Quark.id/1}
+
   """
 
   alias __MODULE__
