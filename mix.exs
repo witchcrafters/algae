@@ -6,7 +6,7 @@ defmodule Algae.Mixfile do
      name:    "Algae",
 
      description: "Bootstrapped algebraic data types for Elixir",
-     version: "0.11.0",
+     version: "0.12.0",
      elixir:  "~> 1.3",
 
      package: [
@@ -28,12 +28,13 @@ defmodule Algae.Mixfile do
        {:ex_doc,   "~> 0.13", only: :dev},
 
        {:inch_ex,  "~> 0.5",  only: [:dev, :docs, :test]},
-       {:quark,    "~> 2.0"}
+       {:quark,    "~> 2.1"}
      ],
 
      docs: [
+       extras: ["README.md"],
        logo: "./brand/logo.png",
-       extras: ["README.md"]
+       main: "readme"
      ]
     ]
   end
