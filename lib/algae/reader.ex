@@ -57,7 +57,7 @@ defmodule Algae.Reader do
   ## Examples
 
         iex> forty_two = %Algae.Reader{env: 42}
-        ...> run(forty_two)
+        ...> forty_two |> read
         42
 
         iex> config =
@@ -68,7 +68,7 @@ defmodule Algae.Reader do
         ...>       token: "12345"
         ...>     }
         ...>   }
-        ...> run(config).(:uri)
+        ...> read(config).(:uri)
         "https://api.awesomeservice.com"
 
         > elapsed_time =
@@ -80,7 +80,7 @@ defmodule Algae.Reader do
         >        "#{now - start_time}ms"
         >      end
         >    }
-        >  elapsed_time |> run
+        >  read elapsed_time
         "42ms"
 
   """
