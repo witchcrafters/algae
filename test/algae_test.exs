@@ -10,4 +10,6 @@ defmodule AlgaeTest do
   doctest Algae.Either, import: true
   doctest Algae.Either.Left, import: true
   doctest Algae.Either.Right, import: true
+
+  doctest Algae.Reader, import: true
 end

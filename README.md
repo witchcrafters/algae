@@ -11,7 +11,58 @@ Add Algae to your list of dependencies in `mix.exs`:
 ```elixir
 
 def deps do
-  [{:algae, "~> 0.10.0"}]
+  [{:algae, "~> 0.12"}]
 end
 
+```
+
+# Select Examples
+
+## Maybe
+
+```elixir
+import Algae.Maybe
+
+[1,2,3]
+|> List.first
+|> case do
+     nil  -> nothing
+     head -> just(head)
+   end
+#=> %Algae.Maybe.Just{just: 1}
+
+[]
+|> List.first
+|> case do
+     nil  -> nothing
+     head -> just(head)
+   end
+#=> %Algae.Maybe.Nothing{}
+```
+
+## Reader
+
+```elixir
+config =
+  %Algae.Reader.new{
+    reader: &Map.get/1,
+    env: %{
+      uri:   "https://api.awesomeservice.com",
+      token: "12345"
+    }
+  }
+:uri |> run(config)
+#=> "https://api.awesomeservice.com"
+
+elapsed_time =
+  %Algae.Reader.new{
+    env: %{start_time: 1472717375},
+    reader:
+      fn %{start_time: start_time} ->
+        now = DateTime.now |> DateTime.to_unix
+        "#{now - start_time}ms"
+      end
+  }
+Algae.Reader.run elapsed_time
+#=> "42ms"
 ```
