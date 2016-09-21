@@ -12,11 +12,11 @@ defmodule Algae.Mixfile do
      package: [
        maintainers: ["Brooklyn Zelenka"],
        licenses:    ["MIT"],
-       links:       %{"GitHub" => "https://github.com/expede/quark"}
+       links:       %{"GitHub" => "https://github.com/expede/algae"}
      ],
 
-     source_url:   "https://github.com/expede/quark",
-     homepage_url: "https://github.com/expede/quark",
+     source_url:   "https://github.com/expede/algae",
+     homepage_url: "https://github.com/expede/algae",
 
      aliases: ["quality": ["test", "credo --strict"]],
 
@@ -28,7 +28,7 @@ defmodule Algae.Mixfile do
        {:ex_doc,   "~> 0.13", only: :dev},
 
        {:inch_ex,  "~> 0.5",  only: [:dev, :docs, :test]},
-       {:quark,    "~> 2.1"}
+       {:algae,    "~> 2.1"}
      ],
 
      docs: [
