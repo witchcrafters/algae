@@ -5,5 +5,5 @@
   "ex_doc": {:hex, :ex_doc, "0.13.2", "1059a588d2ad3ffab25a0b85c58abf08e437d3e7a9124ac255e1d15cec68ab79", [:mix], [{:earmark, "~> 1.0", [hex: :earmark, optional: false]}]},
   "inch_ex": {:hex, :inch_ex, "0.5.4", "a2b032ad141a335a0a119f49b157b36326f5928d16a1d129b0f582398fdc25d2", [:mix], [{:poison, "~> 1.5 or ~> 2.0", [hex: :poison, optional: false]}]},
   "poison": {:hex, :poison, "2.2.0", "4763b69a8a77bd77d26f477d196428b741261a761257ff1cf92753a0d4d24a63", [:mix], []},
-  "quark": {:hex, :quark, "2.1.0", "3f0fccd6eea377a18ad48b007a456e51941b22bc2b6aee546b1d4cd5ffeaefe8", [:mix], []},
+  "quark": {:hex, :quark, "2.2.0", "56c231db44aea238e383472be3f909d4904a013c622631faafe97b001af146f1", [:mix], []},
   "witchcraft": {:hex, :witchcraft, "0.2.0"}}
