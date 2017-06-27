@@ -1,11 +1,17 @@
 defmodule Algae.Free do
   use Quark.Partial
 
-  @type t :: Algae.Free.Shallow.t | Algae.Free.Deep.t
+  alias __MODULE__
+
+  @type t :: Free.Shallow.t() | Free.Deep.t()
 
   defmodule Shallow do
-    @type t :: %Algae.Free.Shallow{shallow: any}
+
+    @type t :: %Free.Shallow{shallow: any}
     defstruct [:shallow]
+
+    @spec new(any()) :: Free.Shallow.t()
+    def new(value), do: %Free.Shallow{shallow: value}
   end
 
   defmodule Deep do
@@ -13,29 +19,34 @@ defmodule Algae.Free do
     Deep holds two values: a value (often a functor) in `deep`, and another
     `Algae.Free.t` in `deeper`.
 
-    ```elixir
-
-    %Free.Deep{deep: %Id{id: 42}, deeper: %Free.Shallow{shallow: "Terminus"}}
-
-    ```
+    %Free.Deep{
+      deep:   %Id{id: 42},
+      deeper: %Free.Shallow{shallow: "Terminus"}
+    }
 
     """
 
-    @type t :: %Algae.Free.Deep{deep: any, deeper: Algae.Free.t}
+    @type t :: %Free.Deep{deep: any, deeper: Free.t()}
 
     defstruct [:deep, :deeper]
   end
 
-  @spec deep() :: (Algae.Free.Deep.t -> (any -> Algae.Free.Deep.t))
-  @spec deep(Algae.Free.Deep.t) :: (any -> Algae.Free.Deep.t)
-  @spec deep(Algae.Free.Deep.t, any) :: Algae.Free.Deep.t
+  @spec deep() :: (Free.Deep.t() -> (any() -> Free.Deep.t()))
+  @spec deep(Free.Deep.t()) :: (any() -> Free.Deep.t())
+  @spec deep(Free.Deep.t(), any()) :: Free.Deep.t()
 
-  defpartial deep(%Algae.Free.Deep{deep: deep, deeper: deeper}, value) do
-    %Algae.Free.Deep{deep: value, deeper: %Algae.Free.Deep{deep: deep, deeper: deeper}}
+  defpartial deep(%Free.Deep{deep: deep, deeper: deeper}, value) do
+    %Free.Deep{
+      deep: value,
+      deeper: %Free.Deep{
+        deep:   deep,
+        deeper: deeper
+      }
+    }
   end
 
-  @spec shallow() :: (any -> Algae.Free.Shallow.t)
-  @spec shallow(any) :: Algae.Free.Shallow.t
+  @spec shallow() :: (any() -> Free.Shallow.t())
+  @spec shallow(any()) :: Free.Shallow.t()
 
-  defpartial shallow(value), do: %Algae.Free.Shallow{shallow: value}
+  defpartial shallow(value), do: %Free.Shallow{shallow: value}
 end

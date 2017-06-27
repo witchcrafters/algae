@@ -10,7 +10,6 @@ defmodule Algae.Either.Left do
       %Algae.Either.Left{
         left: %ArgumentError{message: "oopsie"}
       }
-
   """
 
   alias __MODULE__
@@ -27,6 +26,6 @@ defmodule Algae.Either.Left do
       %Algae.Either.Left{left: "field"}
 
   """
-  @spec new(any) :: Left.t
+  @spec new(any) :: Left.t()
   def new(value), do: %Left{left: value}
 end

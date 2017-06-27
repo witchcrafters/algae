@@ -8,7 +8,6 @@ defmodule Algae.Either.Right do
 
       iex> %Algae.Either.Right{right: 88}
       %Algae.Either.Right{right: 88}
-
   """
 
   alias __MODULE__
@@ -25,7 +24,6 @@ defmodule Algae.Either.Right do
       %Algae.Either.Right{right: "here"}
 
   """
-  @spec new(any) :: Right.t
+  @spec new(any) :: Right.t()
   def new(value), do: %Right{right: value}
-
 end

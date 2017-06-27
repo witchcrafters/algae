@@ -9,7 +9,7 @@ defmodule Algae.Maybe do
   ## Examples
 
       iex> [1,2,3]
-      ...> |> List.first
+      ...> |> List.first()
       ...> |> case do
       ...>      nil  -> nothing
       ...>      head -> just(head)
@@ -17,7 +17,7 @@ defmodule Algae.Maybe do
       %Algae.Maybe.Just{just: 1}
 
       iex> []
-      ...> |> List.first
+      ...> |> List.first()
       ...> |> case do
       ...>      nil  -> nothing
       ...>      head -> just(head)
@@ -26,18 +26,16 @@ defmodule Algae.Maybe do
 
   """
 
-  alias Algae.Maybe.Just
-  alias Algae.Maybe.Nothing
+  alias Algae.Maybe.{Just, Nothing}
 
   defmacro __using__(_) do
     quote do
       alias Algae.Maybe
-      alias Algae.Maybe.Nothing
-      alias Algae.Maybe.Just
+      alias Algae.Maybe.{Just, Nothing}
     end
   end
 
-  @type t :: Just.t | Nothing.t
+  @type t :: Just.t() | Nothing.t()
 
   @doc ~S"""
   Put no value into the `Maybe` context (ie: make it a `Nothing`)
@@ -48,7 +46,7 @@ defmodule Algae.Maybe do
       %Algae.Maybe.Nothing{}
 
   """
-  @spec maybe() :: Nothing.t
+  @spec maybe() :: Nothing.t()
   defdelegate maybe, to: Nothing, as: :new
 
   @doc ~S"""
@@ -60,7 +58,7 @@ defmodule Algae.Maybe do
       %Algae.Maybe.Nothing{}
 
   """
-  @spec nothing() :: Nothing.t
+  @spec nothing() :: Nothing.t()
   defdelegate nothing, to: Nothing, as: :new
 
   @doc ~S"""
@@ -72,7 +70,7 @@ defmodule Algae.Maybe do
       %Algae.Maybe.Just{just: 9}
 
   """
-  @spec maybe(any) :: Just.t
+  @spec maybe(any) :: Just.t()
   defdelegate maybe(value), to: Just, as: :new
 
   @doc ~S"""
@@ -84,6 +82,6 @@ defmodule Algae.Maybe do
       %Algae.Maybe.Just{just: 9}
 
   """
-  @spec just(any) :: Just.t
+  @spec just(any) :: Just.t()
   defdelegate just(value), to: Just, as: :new
 end
