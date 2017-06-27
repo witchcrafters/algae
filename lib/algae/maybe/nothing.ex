@@ -19,7 +19,7 @@ defmodule Algae.Maybe.Nothing do
 
   ## Examples
 
-      iex> new
+      iex> new()
       %Algae.Maybe.Nothing{}
 
   """
