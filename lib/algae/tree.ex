@@ -6,7 +6,7 @@ defmodule Algae.Tree do
   ## Examples
 
       %Algae.Tree.Branch{
-        left: %Algae.Tree.Empty{},
+        left:  %Algae.Tree.Empty{},
         right: %Algae.Tree.Leaf{leaf: 42}
       }
 

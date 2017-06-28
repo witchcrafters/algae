@@ -13,7 +13,7 @@ defmodule Algae.Reader do
 
   alias __MODULE__
 
-  @type t :: %Reader{reader: fun, env: any}
+  @type t :: %Reader{reader: fun(), env: any()}
   defstruct reader: &Quark.id/1, env: {}
 
   @doc ~S"""
@@ -51,7 +51,7 @@ defmodule Algae.Reader do
       "42ms"
 
   """
-  @spec run(t) :: any
+  @spec run(t()) :: any()
   def run(%{env: env, reader: reader}), do: Quark.Curry.curry(reader).(env)
 
   @doc ~S"""
@@ -87,6 +87,6 @@ defmodule Algae.Reader do
         "42ms"
 
   """
-  @spec read(t) :: any
+  @spec read(t()) :: any()
   def read(reader), do: run(reader)
 end
