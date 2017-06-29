@@ -194,12 +194,12 @@ defmodule Algae do
 
   defmacro defsum(do: {:__block__, _, parts} = ast) do
     quote do
-      @type t :: unquote(or_types(parts))
+      @type t :: unquote(or_types(parts, __CALLER__.module))
       unquote(ast)
     end
   end
 
-  def or_types([head | tail] = module_list) do
+  def or_types([head | tail] = module_list, module_ctx) do
     seed =
       head
       |> extract_part_name()
@@ -207,9 +207,11 @@ defmodule Algae do
 
     Enum.reduce(tail, seed, fn(module, acc) ->
       normalized_module =
-        module
-        |> extract_part_name()
+        [module_ctx, extract_part_name(module)]
+        |> List.flatten()
+        |> Module.concat()
         |> call_type()
+        |> IO.inspect()
 
       {:|, [], [normalized_module, acc]}
     end)
