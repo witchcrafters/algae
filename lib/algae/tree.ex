@@ -44,7 +44,7 @@ defmodule Algae.Tree do
   defpartial leaf(value), do: %Algae.Tree.Leaf{leaf: value}
 
   def branch(left: left, right: right), do: branch(left, right)
-  defpartial branch(left, right), do: %Tree.Branch{left: left, right: right}
+  def branch(left, right), do: %Tree.Branch{left: left, right: right}
 
   @spec tree() :: Empty.t()
   def tree, do: empty()

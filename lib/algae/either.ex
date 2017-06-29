@@ -6,24 +6,19 @@ defmodule Algae.Either do
   ## Examples
 
       iex> require Integer
-      ...> value = 11
       ...>
-      ...> if Integer.is_even(value) do
-      ...>   right(value)
-      ...> else
-      ...>   left(value)
+      ...> even_odd = fn(value) ->
+      ...>   if Integer.is_even(value) do
+      ...>     right(value)
+      ...>   else
+      ...>     left(value)
+      ...>   end
       ...> end
-      %Algae.Either.Left{left: 11}
-
-      iex> require Integer
-      ...> value = 10
       ...>
-      ...> if Integer.is_even(value) do
-      ...>   right(value)
-      ...> else
-      ...>   left(value)
-      ...> end
+      ...> even_odd.(10)
       %Algae.Either.Right{right: 10}
+      ...> even_odd.(11)
+      %Algae.Either.Left{left: 11}
   """
 
   alias Algae.Either.Left
@@ -32,8 +27,7 @@ defmodule Algae.Either do
   defmacro __using__(_) do
     quote do
       alias Algae.Either
-      alias Algae.Either.Left
-      alias Algae.Either.Right
+      alias Algae.Either.{Left, Right}
     end
   end
 

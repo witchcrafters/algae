@@ -11,7 +11,7 @@ defmodule Algae.Maybe do
       iex> [1,2,3]
       ...> |> List.first()
       ...> |> case do
-      ...>      nil  -> nothing
+      ...>      nil  -> nothing()
       ...>      head -> just(head)
       ...>    end
       %Algae.Maybe.Just{just: 1}
@@ -19,7 +19,7 @@ defmodule Algae.Maybe do
       iex> []
       ...> |> List.first()
       ...> |> case do
-      ...>      nil  -> nothing
+      ...>      nil  -> nothing()
       ...>      head -> just(head)
       ...>    end
       %Algae.Maybe.Nothing{}

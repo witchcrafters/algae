@@ -1,11 +1,18 @@
 defmodule Algae.Free do
-  use Quark.Partial
+  @moduledoc """
+  A "free" structure. Similar to lists.
 
+  * `Shallow` holds a plain value
+  * `Deep` holds recursive `Free` structs
+  """
+
+  use Quark.Partial
   alias __MODULE__
 
   @type t :: Free.Shallow.t() | Free.Deep.t()
 
   defmodule Shallow do
+    @moduledoc "Hold a simple value"
 
     @type t :: %Free.Shallow{shallow: any}
     defstruct [:shallow]
