@@ -4,14 +4,12 @@ defmodule Algae.Id do
 
   ## Examples
 
-      iex> %Algae.Id{id: "hi!"}
       %Algae.Id{id: "hi!"}
-
   """
 
   alias __MODULE__
 
-  @type t :: %Id{id: any}
+  @type t :: %Id{id: any()}
   defstruct [:id]
 
   @doc ~S"""
@@ -22,11 +20,11 @@ defmodule Algae.Id do
       iex> id("Bourne")
       %Algae.Id{id: "Bourne"}
 
-      iex> 42 |> id
+      iex> 42 |> id()
       %Algae.Id{id: 42}
 
   """
-  @spec id(any) :: Id.t
+  @spec id(any) :: Id.t()
   def id(value), do: %Id{id: value}
 
   @doc ~S"""
@@ -38,6 +36,6 @@ defmodule Algae.Id do
       %Algae.Id{id: "value"}
 
   """
-  @spec new(any) :: Id.t
+  @spec new(any) :: Id.t()
   def new(value), do: id(value)
 end

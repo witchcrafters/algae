@@ -6,23 +6,19 @@ defmodule Algae.Either do
   ## Examples
 
       iex> require Integer
-      ...> value = 11
-      ...> if Integer.is_even(value) do
-      ...>   right(value)
-      ...> else
-      ...>   left(value)
+      ...>
+      ...> even_odd = fn(value) ->
+      ...>   if Integer.is_even(value) do
+      ...>     right(value)
+      ...>   else
+      ...>     left(value)
+      ...>   end
       ...> end
-      %Algae.Either.Left{left: 11}
-
-      iex> require Integer
-      ...> value = 10
-      ...> if Integer.is_even(value) do
-      ...>   right(value)
-      ...> else
-      ...>   left(value)
-      ...> end
+      ...>
+      ...> even_odd.(10)
       %Algae.Either.Right{right: 10}
-
+      ...> even_odd.(11)
+      %Algae.Either.Left{left: 11}
   """
 
   alias Algae.Either.Left
@@ -31,12 +27,11 @@ defmodule Algae.Either do
   defmacro __using__(_) do
     quote do
       alias Algae.Either
-      alias Algae.Either.Left
-      alias Algae.Either.Right
+      alias Algae.Either.{Left, Right}
     end
   end
 
-  @type t :: Left.t | Right.t
+  @type t :: Left.t() | Right.t()
 
   @doc ~S"""
   Wrap a value in the `Left` branch
@@ -45,10 +40,9 @@ defmodule Algae.Either do
 
       iex> left(13)
       %Algae.Either.Left{left: 13}
-
   """
-  @spec left(any) :: Left.t
-  def left(value), do: value |> Left.new
+  @spec left(any) :: Left.t()
+  def left(value), do: Left.new(value)
 
   @doc ~S"""
   Wrap a value in the `Right` branch
@@ -57,8 +51,7 @@ defmodule Algae.Either do
 
       iex> right(7)
       %Algae.Either.Right{right: 7}
-
   """
-  @spec right(any) :: Right.t
-  def right(value), do: value |> Right.new
+  @spec right(any) :: Right.t()
+  def right(value), do: Right.new(value)
 end

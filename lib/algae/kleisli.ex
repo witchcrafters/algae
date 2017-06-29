@@ -19,6 +19,6 @@ defmodule Algae.Kleisli do
   @type t :: %Algae.Kleisli{morphism: fun}
   defstruct [:morphism]
 
-  @spec kleisli(fun) :: Algae.Kleisli.t
+  @spec kleisli(fun) :: Algae.Kleisli.t()
   defpartial kleisli(morphism), do: %Algae.Kleisli{morphism: morphism}
 end

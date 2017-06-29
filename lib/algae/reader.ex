@@ -12,8 +12,9 @@ defmodule Algae.Reader do
   """
 
   alias __MODULE__
+  use Quark.Curry
 
-  @type t :: %Reader{reader: fun, env: any}
+  @type t :: %Reader{reader: fun(), env: any()}
   defstruct reader: &Quark.id/1, env: {}
 
   @doc ~S"""
@@ -35,7 +36,8 @@ defmodule Algae.Reader do
       ...>       token: "12345"
       ...>     }
       ...>   }
-      ...> :uri |> Algae.Reader.run(config).()
+      ...>
+      ...> Algae.Reader.run(config).(:uri)
       "https://api.awesomeservice.com"
 
       > elapsed_time =
@@ -47,12 +49,13 @@ defmodule Algae.Reader do
       >        "#{now - start_time}ms"
       >      end
       >    }
+      >
       >  run(elapsed_time)
       "42ms"
 
   """
-  @spec run(t) :: any
-  def run(%{env: env, reader: reader}), do: Quark.Curry.curry(reader).(env)
+  @spec run(t()) :: any()
+  def run(%{env: env, reader: reader}), do: curry(reader).(env)
 
   @doc ~S"""
   Alias for `run`
@@ -71,6 +74,7 @@ defmodule Algae.Reader do
         ...>       token: "12345"
         ...>     }
         ...>   }
+        ...>
         ...> read(config).(:uri)
         "https://api.awesomeservice.com"
 
@@ -83,10 +87,11 @@ defmodule Algae.Reader do
         >        "#{now - start_time}ms"
         >      end
         >    }
+        >
         >  read elapsed_time
         "42ms"
 
   """
-  @spec read(t) :: any
+  @spec read(t()) :: any()
   def read(reader), do: run(reader)
 end
