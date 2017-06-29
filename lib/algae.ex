@@ -77,7 +77,7 @@ defmodule Algae do
 
     quote do
       @type t :: %unquote(module){
-        unquote(field) => unquote(type)
+        unquote(field) => unquote({type, [], []})
       }
 
       defstruct [{unquote(field), unquote(default)}]
@@ -118,7 +118,7 @@ defmodule Algae do
     quote do
       defmodule unquote(full_module) do
         @type t :: %unquote(full_module){
-          unquote(field) => unquote(type)
+          unquote(field) => unquote({type, [], []})
         }
 
         defstruct [{unquote(field), unquote(default)}]
