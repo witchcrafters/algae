@@ -4,9 +4,9 @@ defdata Foo = 42 :: any()
 defdata Bar :: integer()
 defdata Baz :: none()
 
-# defmodule Quux do
-#   defdata do: quux :: any()
-# end
+defmodule Foo.Quux do
+  defdata do: quux :: any()
+end
 
 defmodule Id.Foo do
   defdata any()

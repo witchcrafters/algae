@@ -84,6 +84,31 @@ defmodule Algae do
     end
   end
 
+  defmacro defdata(do: {:::, _, [{field, _, _}, {type, _, _} = full_type]}) do
+    module =
+      __CALLER__.module
+      |> Module.split()
+      |> Enum.map(&String.to_atom/1)
+      |> Module.concat()
+
+    field =
+      __CALLER__.module
+      |> Module.split()
+      |> List.last()
+      |> String.downcase()
+      |> String.to_atom()
+
+    default = default_value(type)
+
+    quote do
+      @type t :: %unquote(module){
+        unquote(field) => unquote(full_type)
+      }
+
+      defstruct [{unquote(field), unquote(default)}]
+    end
+  end
+
   defmacro defdata(ast) do
     IO.inspect ast
   end
