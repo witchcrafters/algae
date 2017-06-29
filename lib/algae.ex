@@ -51,11 +51,44 @@ defmodule Algae do
     data_ast(module_ctx, default_value, type_ctx)
   end
 
+  defmacro defdata({:::, _, [{_, _, module}, {:none, _, _}]} = ast) do
+    data_ast(module, :none)
+  end
+
   defmacro defdata({:::, _, [module_ctx, {type, _, _}]}) do
     data_ast(module_ctx, default_value(type), type)
   end
 
-  def data_ast(name, _, :none) do
+  defmacro defdata({type, _, _}) when is_atom(type) do
+    module =
+      __CALLER__.module
+      |> Module.split()
+      |> Enum.map(&String.to_atom/1)
+      |> Module.concat()
+
+    field =
+      __CALLER__.module
+      |> Module.split()
+      |> List.last()
+      |> String.downcase()
+      |> String.to_atom()
+
+    default = default_value(type)
+
+    quote do
+      @type t :: %unquote(module){
+        unquote(field) => unquote(type)
+      }
+
+      defstruct [{unquote(field), unquote(default)}]
+    end
+  end
+
+  defmacro defdata(ast) do
+    IO.inspect ast
+  end
+
+  def data_ast(name, :none) do
     full_module = Module.concat(name)
 
     quote do
@@ -64,7 +97,7 @@ defmodule Algae do
 
         defstruct []
 
-        @doc "Default #{__MODULE__} struct}"
+        @doc "Default #{__MODULE__} struct"
         @spec new() :: t()
         def new, do: struct(__MODULE__)
       end
@@ -90,7 +123,7 @@ defmodule Algae do
 
         defstruct [{unquote(field), unquote(default)}]
 
-        @doc "Default #{__MODULE__} struct}"
+        @doc "Default #{__MODULE__} struct. Value defaults to #{inspect unquote(default)}."
         @spec new() :: t()
         def new, do: struct(__MODULE__)
 
@@ -135,22 +168,34 @@ defmodule Algae do
   end
 
   defmacro defsum(do: {:__block__, _, parts} = ast) do
-    sum_type = parts |> Enum.map(&extract_part_name/1) |> or_types() |> IO.inspect
-
     quote do
-      @type t :: unquote(sum_type)
+      @type t :: unquote(or_types(parts))
       unquote(ast)
     end
   end
 
   def or_types([head | tail] = module_list) do
-    Enum.reduce(tail, call_type(head), fn(module, acc) ->
-      {:|, [], [call_type(module), acc]}
+    seed =
+      head
+      |> extract_part_name()
+      |> call_type()
+
+    Enum.reduce(tail, seed, fn(module, acc) ->
+      normalized_module =
+        module
+        |> extract_part_name()
+        |> call_type()
+
+      {:|, [], [normalized_module, acc]}
     end)
   end
 
   def call_type(module) do
     {{:., [], [{:__aliases__, [alias: false], module}, :t]}, [], []}
+  end
+
+  def extract_part_name({:defdata, _, [{:::, _, [{:=, _, [module_ctx, _]}, _]}]}) do
+    extract_name(module_ctx)
   end
 
   def extract_part_name({:defdata, _, [{:::, _, [module_ctx, _]}]}) do
