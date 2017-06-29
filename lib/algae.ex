@@ -109,9 +109,9 @@ defmodule Algae do
     end
   end
 
-  defmacro defdata(ast) do
-    IO.inspect ast
-  end
+  # defmacro defdata(ast) do
+  #   IO.inspect ast
+  # end
 
   def data_ast(name, :none) do
     full_module = Module.concat(name)
@@ -159,7 +159,7 @@ defmodule Algae do
     end
   end
 
-  def data_ast(module_ctx, default_value, ending)do
+  def data_ast(module_ctx, default_value, ending) do
     type =
       case ending do
         {inner_type, _, _} -> inner_type
