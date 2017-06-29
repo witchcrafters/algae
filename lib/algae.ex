@@ -47,42 +47,58 @@ defmodule Algae do
     end
   end
   """
-
-  defmacro defdata(do: body) do
-    quote do
-      defdata(__MODULE__, do: unquote(body))
-    end
+  defmacro defdata({:::, _, [{:=, _, [module_ctx, default_value]}, type_ctx]}) do
+    data_ast(module_ctx, default_value, type_ctx)
   end
 
-  defmacro defdata(adt_name, do: body) do
-    quote do
-      defmodule unqoute(adt_name) do
-
-        # def new do
-        # end
-      end
-    end
+  defmacro defdata({:::, _, [module_ctx, {type, _, _}]}) do
+    data_ast(module_ctx, default_value(type), type)
   end
 
-  # defdata Left  :: any()
-  defmacro defdata({:::, _, [{:=, _, [{_, _, [name]}, default]}, {type, _, _}]}) do
+  def data_ast(name, default, type) when is_list(name) do
+    full_module = Module.concat(name)
+
     field =
       name
+      |> List.last()
       |> Atom.to_string()
       |> String.downcase()
       |> String.trim_leading("elixir.")
       |> String.to_atom()
 
-    full_module = Module.concat([name])
-
     quote do
       defmodule unquote(full_module) do
-        @type t :: unquote(type)()
+        @type t :: %unquote(full_module){
+          unquote(field) => unquote(type)
+        }
+
         defstruct [{unquote(field), unquote(default)}]
 
+        @doc "Default #{__MODULE__} struct}"
+        @spec new() :: t()
+        def new, do: struct(__MODULE__)
+
+        @doc "Helper for initializing struct with a specific value"
+        @spec new(unquote(type)()) :: t()
         def new(value), do: struct(__MODULE__, [{unquote(field), value}])
       end
     end
+  end
+
+  def data_ast(module_ctx, default_value, ending)do
+    name =
+      case module_ctx do
+        {_, _, inner_name} -> List.wrap(inner_name)
+        module_chain when is_list(module_chain) -> module_chain
+      end
+
+    type =
+      case ending do
+        {inner_type, _, _} -> inner_type
+        bare_type when is_atom(bare_type) -> bare_type
+      end
+
+    data_ast(name, default_value, type)
   end
 
   def default_value(type) do
