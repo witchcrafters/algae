@@ -47,8 +47,10 @@ defmodule Algae do
     end
   end
   """
-  defmacro defdata({:::, _, [{:=, _, [module_ctx, default_value]}, type_ctx]}) do
-    data_ast(module_ctx, default_value, type_ctx)
+  defmacro defdata({:::, _, [{:=, _, [module_ctx, default_value]}, {type, _, _}]} = ast) do
+    IO.inspect ast
+    module = extract_name(module_ctx)
+    data_ast(modules(__CALLER__.module, module), default_value, type)
   end
 
   defmacro defdata({:::, _, [module_ctx, {:none, _, _}]} = ast) do
