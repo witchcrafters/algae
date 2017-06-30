@@ -1,5 +1,7 @@
 import Algae
 
+# defdata Ex = 42 :: [{:ok, integer()}] | number()
+
 defdata Foo = 42 :: any()
 defdata Bar :: integer()
 defdata Baz :: none()

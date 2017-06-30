@@ -47,58 +47,41 @@ defmodule Algae do
     end
   end
   """
-  defmacro defdata({:::, _, [{:=, _, [module_ctx, default_value]}, {type, _, _}]} = ast) do
-    IO.inspect ast
-    module = extract_name(module_ctx)
-    data_ast(modules(__CALLER__.module, module), default_value, type)
-  end
+  defmacro defdata(ast) do
+    caller_module = __CALLER__.module
 
-  defmacro defdata({:::, _, [module_ctx, {:none, _, _}]} = ast) do
-    data_ast(modules(__CALLER__.module, module_ctx), :none)
-  end
+    case ast do
+      {:::, _, [{:=, _, [module_ctx, default_value]}, {type, _, _}]} ->
+        module = extract_name(module_ctx)
+        data_ast(modules(caller_module, module), default_value, type)
 
-  defmacro defdata({:::, _, [module_ctx, {type, _, _}]}) do
-    data_ast(modules(__CALLER__.module, module_ctx), default_value(type), type)
+      {:::, _, [module_ctx, {:none, _, _}]} ->
+        data_ast(modules(caller_module, module_ctx), :none)
+
+      {:::, _, [module_ctx, {type, _, _}]} ->
+        data_ast(modules(caller_module, module_ctx), default_value(type), type)
+
+      {type, _, _} = full_type when is_atom(type) ->
+        data_ast_full_type(caller_module, type, full_type)
+
+      [do: {:::, _, [{field, _, _}, {type, _, _} = full_type]}] ->
+        data_ast_full_type(caller_module, type, full_type)
+    end
   end
 
   def modules(caller_module, module_ctx) do
     [caller_module | extract_name(module_ctx)]
   end
 
-  defmacro defdata({type, _, _}) when is_atom(type) do
+  def data_ast_full_type(caller_module, type, full_type) do
     module =
-      __CALLER__.module
+      caller_module
       |> Module.split()
       |> Enum.map(&String.to_atom/1)
       |> Module.concat()
 
     field =
-      __CALLER__.module
-      |> Module.split()
-      |> List.last()
-      |> String.downcase()
-      |> String.to_atom()
-
-    default = default_value(type)
-
-    quote do
-      @type t :: %unquote(module){
-        unquote(field) => unquote({type, [], []})
-      }
-
-      defstruct [{unquote(field), unquote(default)}]
-    end
-  end
-
-  defmacro defdata(do: {:::, _, [{field, _, _}, {type, _, _} = full_type]}) do
-    module =
-      __CALLER__.module
-      |> Module.split()
-      |> Enum.map(&String.to_atom/1)
-      |> Module.concat()
-
-    field =
-      __CALLER__.module
+      caller_module
       |> Module.split()
       |> List.last()
       |> String.downcase()
@@ -114,10 +97,6 @@ defmodule Algae do
       defstruct [{unquote(field), unquote(default)}]
     end
   end
-
-  # defmacro defdata(ast) do
-  #   IO.inspect ast
-  # end
 
   def data_ast(name, :none) do
     full_module = Module.concat(name)
