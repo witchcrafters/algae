@@ -58,8 +58,8 @@ defmodule Algae do
       {:::, _, [module_ctx, {:none, _, _}]} ->
         data_ast(modules(caller_module, module_ctx), :none)
 
-      {:::, _, [module_ctx, {type, _, _}]} ->
-        data_ast(modules(caller_module, module_ctx), default_value(type), type)
+      {:::, _, [module_ctx, {type, _, _} = full_type]} ->
+        data_ast(modules(caller_module, module_ctx), default_value(full_type), type)
 
       {type, _, _} = full_type when is_atom(type) ->
         data_ast_full_type(caller_module, type, full_type)
@@ -87,7 +87,7 @@ defmodule Algae do
       |> String.downcase()
       |> String.to_atom()
 
-    default = default_value(type)
+    default = default_value(full_type)
 
     quote do
       @type t :: %unquote(module){
@@ -157,7 +157,7 @@ defmodule Algae do
   def extract_name({_, _, inner_name}), do: List.wrap(inner_name)
   def extract_name(module_chain) when is_list(module_chain), do: module_chain
 
-  def default_value(type) do
+  def default_value({type, _, _}) do
     case type do
       :float -> 0.0
 
