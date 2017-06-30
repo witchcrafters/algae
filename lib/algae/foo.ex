@@ -16,6 +16,6 @@ defmodule Lights do
   defsum do
     defdata Red = 22 :: any()
     defdata Yellow :: any()
-    defdata Green :: any()
+    defdata Green :: none()
   end
 end

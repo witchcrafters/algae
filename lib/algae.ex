@@ -48,15 +48,20 @@ defmodule Algae do
   end
   """
   defmacro defdata({:::, _, [{:=, _, [module_ctx, default_value]}, type_ctx]}) do
+    modules = [__CALLER__.module | extract_name(module_ctx)] |> IO.inspect
+
     data_ast(module_ctx, default_value, type_ctx)
   end
 
-  defmacro defdata({:::, _, [{_, _, module}, {:none, _, _}]} = ast) do
-    data_ast(module, :none)
+  defmacro defdata({:::, _, [module_ctx, {:none, _, _}]} = ast) do
+    modules = [__CALLER__.module | extract_name(module_ctx)] |> IO.inspect
+    data_ast(modules, :none)
   end
 
   defmacro defdata({:::, _, [module_ctx, {type, _, _}]}) do
-    data_ast(module_ctx, default_value(type), type)
+    modules = [__CALLER__.module | extract_name(module_ctx)] |> IO.inspect
+
+    data_ast(modules, default_value(type), type)
   end
 
   defmacro defdata({type, _, _}) when is_atom(type) do
@@ -130,7 +135,7 @@ defmodule Algae do
   end
 
   def data_ast(name, default, type) when is_list(name) do
-    full_module = Module.concat(name)
+    full_module = Module.concat(name) |> IO.inspect
 
     field =
       name
@@ -211,7 +216,7 @@ defmodule Algae do
         |> List.flatten()
         |> Module.concat()
         |> call_type()
-        |> IO.inspect()
+        # |> IO.inspect()
 
       {:|, [], [normalized_module, acc]}
     end)
