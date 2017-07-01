@@ -105,29 +105,35 @@ defmodule Algae do
   """
   @spec data_ast(module() | [module()], ast()) :: ast()
   def data_ast(lines) when is_list(lines) do
-    {field_values, field_types} =
-      Enum.reduce(lines, {[], []}, fn
-        ({:::, _, [{:=, _, [{field, _, _}, default_value]}, type]}, {value_acc, type_acc}) ->
-          {
-            [{field, default_value}  | value_acc],
-            [{field, type}           | type_acc]
-          }
+    {field_values, field_types, typespecs} =
+      Enum.reduce(lines, {[], [], []},
+        fn(line, {value_acc, type_acc, typespec_acc}) ->
+          case line do
+            {:::, _, [{:=, _, [{field, _, _}, default_value]}, type]} ->
+              {
+                [{field, default_value} | value_acc],
+                [{field, type} | type_acc],
+                [type | typespec_acc]
+              }
 
-        ({:::, _, [{field, _, _}, type]}, {value_acc, type_acc}) ->
-          {
-            [{field, nil}  | value_acc],
-            [{field, type} | type_acc]
-          }
-      end)
+            {:::, _, [{field, _, _}, type]} ->
+              {
+                [{field, nil} | value_acc],
+                [{field, type} | type_acc],
+                [type | typespec_acc]
+              }
+          end
+        end)
 
     {constructor_args, constructor_mapping} =
-      Enum.reduce(field_values, {[], []}, fn({field, default}, {acc_arg, acc_mapping}) ->
-        arg = {field, [], Elixir}
+      Enum.reduce(field_values, {[], []},
+        fn({field, default}, {acc_arg, acc_mapping}) ->
+          arg = {field, [], Elixir}
 
-        new_args = [{:\\, [], [arg, default]} | acc_arg]
-        new_mapping = [{field, arg} | acc_mapping]
+          new_args    = [{:\\, [], [arg, default]} | acc_arg]
+          new_mapping = [{field, arg} | acc_mapping]
 
-        {new_args, new_mapping}
+          {new_args, new_mapping}
       end)
 
     quote do
@@ -138,7 +144,7 @@ defmodule Algae do
       defstruct unquote(field_values)
 
       @doc "Positional constructor, with args in the same order as they were defined in"
-
+      @spec new(unquote_splicing(typespecs)) :: t()
       def new(unquote_splicing(constructor_args)) do
         struct(__MODULE__, unquote(constructor_mapping))
       end
