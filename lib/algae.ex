@@ -120,12 +120,34 @@ defmodule Algae do
           }
       end)
 
+    # [{_, _, [{bfield, [], Elixir} = bar, _]} | _] =
+    {constructor_args, constructor_mapping} =
+      Enum.reduce(field_values, {[], []}, fn({field, default}, {acc_arg, acc_mapping}) ->
+        arg = {field, [], Elixir}
+        new_args = acc_arg ++ [{:\\, [], [arg, default]}]
+        new_mapping = acc_mapping ++ [{field, arg}]
+
+        {new_args, new_mapping}
+      end)
+
     quote do
       @type t :: %__MODULE__{
         unquote_splicing(field_types)
       }
 
       defstruct unquote(field_values)
+
+      @doc "Default #{__MODULE__} struct"
+      @spec new() :: t()
+      def new, do: struct(__MODULE__)
+
+      def new(unquote_splicing(constructor_args)) do
+        struct(__MODULE__, unquote(constructor_mapping))
+      end
+
+      # @doc "Constructor helper for piping"
+      # @spec new(unquote(type)) :: t()
+      # def new(field), do: struct(__MODULE__, [unquote(field), field])
     end
   end
 
@@ -161,6 +183,14 @@ defmodule Algae do
       }
 
       defstruct [{unquote(field), unquote(default)}]
+
+      @doc "Default #{__MODULE__} struct"
+      @spec new() :: t()
+      def new, do: struct(__MODULE__)
+
+      @doc "Constructor helper for piping"
+      @spec new(unquote(type)) :: t()
+      def new(field), do: struct(__MODULE__, [unquote(field), field])
     end
   end
 
