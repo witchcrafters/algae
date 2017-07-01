@@ -10,6 +10,18 @@ defmodule Foo.Quux do
   defdata do: quux :: any()
 end
 
+defmodule Foo.Longer do
+  defdata do
+    foo :: any()
+    bar = 42 :: integer()
+  end
+end
+
+# defdata Foo.Bare do
+#   foo :: any()
+#   bar = 22 :: non_neg_integer()
+# end
+
 defmodule Id.Foo do
   defdata any()
 end

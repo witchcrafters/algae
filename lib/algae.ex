@@ -66,8 +66,40 @@ defmodule Algae do
 
       [do: {:::, _, [{field, _, _}, {type, _, _} = full_type]}] ->
         data_ast_full_type(caller_module, type, full_type)
+
+      [do: {:__block__, _, lines}] ->
+        {field_values, field_types} =
+          Enum.reduce(lines, {[], []}, fn
+            ({:::, _, [{:=, _, [{field, _, _}, default_value]}, type]}, {value_acc, type_acc}) ->
+              {
+                [{field, default_value}  | value_acc],
+                [{field, type}           | type_acc]
+              }
+
+            ({:::, _, [{field, _, _}, type]}, {value_acc, type_acc}) ->
+              {
+                [{field, nil}  | value_acc],
+                [{field, type} | type_acc]
+              }
+
+
+            (_, acc) ->
+              acc
+          end)
+
+        quote do
+          @type t :: %__MODULE__{
+            unquote_splicing(field_types)
+            # unquote(field) => unquote(full_type)
+          }
+
+          defstruct unquote(field_values)
+        end
     end
   end
+
+  # def to_field() do
+  # end
 
   def modules(caller_module, module_ctx) do
     [caller_module | extract_name(module_ctx)]
