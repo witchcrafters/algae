@@ -27,13 +27,13 @@ defmodule Id.Foo do
   defdata any()
 end
 
-# defmodule Lights do
-#   defsum do
-#     defdata Red :: any() \\ 22
-#     defdata Yellow :: any()
-#     defdata Green :: none()
-#   end
-# end
+defmodule Lights do
+  defsum do
+    defdata Red :: any() \\ 22
+    defdata Yellow :: any()
+    defdata Green :: none()
+  end
+end
 
 defmodule Maybe do
   defsum do
