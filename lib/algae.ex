@@ -136,14 +136,14 @@ defmodule Algae do
   end
 
   def data_ast(caller_module, type) do
+    default = default_value(type)
+
     field =
       caller_module
       |> Module.split()
       |> List.last()
       |> String.downcase()
       |> String.to_atom()
-
-    default = default_value(type)
 
     quote do
       @type t :: %unquote(caller_module){
@@ -193,18 +193,21 @@ defmodule Algae do
     end
   end
 
+  @type field :: {atom(), [any()], [any()]}
+  @type type  :: {atom(), [any()], [any()]}
+
+  @spec module_elements([ast()])
+     :: {
+          [{field(), any()}],
+          [{field(), type()}],
+          [type],
+          [{:\\, [], any()}],
+          [{field(), any()}]
+        }
   def module_elements(lines) do
     Enum.reduce(lines, {[], [], [], [], []},
       fn(line, {value_acc, type_acc, typespec_acc, acc_arg, acc_mapping}) ->
-        {field, type, default_value} =
-          case line do
-            {:\\, _, [{:::, _, [{field, _, _}, type]}, default_value]} ->
-              {field, type, default_value}
-
-            {:::, _, [{field, _, _}, type]} ->
-              {field, type, nil}
-          end
-
+        {field, type, default_value} = normalize_elements(line)
         arg = {field, [], Elixir}
 
         {
@@ -215,6 +218,12 @@ defmodule Algae do
           [{field, arg} | acc_mapping]
         }
       end)
+  end
+
+  @spec normalize_elements(ast()) :: {atom(), type(), any()}
+  def normalize_elements({:::, _, [{field, _, _}, type]}), do: {field, type, nil}
+  def normalize_elements({:\\, _, [{:::, _, [{field, _, _}, type]}, default]}) do
+    {field, type, default}
   end
 
   @doc """
@@ -246,13 +255,13 @@ defmodule Algae do
 
   @spec call_type(module(), [module()]) :: ast()
   def call_type(new_module, module_ctx) do
-    full_module = List.wrap(module_ctx) ++ extract_part_name(new_module)
+    full_module = List.wrap(module_ctx) ++ submodule_name(new_module)
     {{:., [], [{:__aliases__, [alias: false], full_module}, :t]}, [], []}
   end
 
-  @spec extract_part_name({:defdata, any(), [{:::, any(), [any()]}]})
+  @spec submodule_name({:defdata, any(), [{:::, any(), [any()]}]})
      :: [module()]
-  def extract_part_name({:defdata, _, [{:::, _, [body, _]}]}) do
+  def submodule_name({:defdata, _, [{:::, _, [body, _]}]}) do
     body
     |> case do
       {:=, _, [inner_module_ctx, _]} -> inner_module_ctx
@@ -261,12 +270,12 @@ defmodule Algae do
     |> List.wrap()
   end
 
-  def extract_part_name({:defdata, _, [{:\\, _, [{:::, _, [{:__aliases__, _, module}, _]}, _]}]}) do
-    List.wrap module
+  def submodule_name({:defdata, _, [{:\\, _, [{:::, _, [{:__aliases__, _, module}, _]}, _]}]}) do
+    List.wrap(module)
   end
 
-  def extract_part_name({:defdata, _, [{:__aliases__, _, module}, _]}) do
-    List.wrap module
+  def submodule_name({:defdata, _, [{:__aliases__, _, module}, _]}) do
+    List.wrap(module)
   end
 
   @spec extract_name({any(), any(), atom()} | [module()]) :: [module()]
@@ -278,13 +287,13 @@ defmodule Algae do
 
   def default_value({type, _, _}) do
     case type do
-      :float -> 0.0
-
-      :number -> 0
+      :number  -> 0
       :integer -> 0
 
+      :float -> 0.0
+
+      :pos_integer     -> 1
       :non_neg_integer -> 0
-      :pos_integer -> 1
 
       :bitstring  -> ""
       :list -> []
