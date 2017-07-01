@@ -20,6 +20,7 @@ end
 defdata Foo.Bare do
   foo :: any()
   bar = 22 :: non_neg_integer() # \\ 22
+  baz :: any()
 end
 
 defmodule Id.Foo do
