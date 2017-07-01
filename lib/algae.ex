@@ -1,5 +1,7 @@
 defmodule Algae do
 
+  @type ast() :: {atom(), any(), any()}
+
   @doc """
   --- Id --
 
@@ -77,8 +79,6 @@ defmodule Algae do
     end
   end
 
-  def modules(top, module_ctx), do: [top | extract_name(module_ctx)]
-
   def data_ast(lines) when is_list(lines) do
     {field_values, field_types} =
       Enum.reduce(lines, {[], []}, fn
@@ -104,7 +104,6 @@ defmodule Algae do
     end
   end
 
-
   defmacro defdata(module_ctx, do: {:__block__, _, body}) do
     module_name =
       __CALLER__.module
@@ -120,8 +119,12 @@ defmodule Algae do
     end
   end
 
-  def data_ast(name, {:none, _, _}) do
-    full_module = Module.concat(name)
+  @doc """
+  Construct a data type AST
+  """
+  @spec data_ast(module() | [module()], ast()) :: ast()
+  def data_ast(modules, {:none, _, _}) do
+    full_module = Module.concat(modules)
 
     quote do
       defmodule unquote(full_module) do
@@ -136,7 +139,7 @@ defmodule Algae do
     end
   end
 
-  def data_ast(caller_module, full_type) do
+  def data_ast(caller_module, type) do
     field =
       caller_module
       |> Module.split()
@@ -144,18 +147,19 @@ defmodule Algae do
       |> String.downcase()
       |> String.to_atom()
 
-    default = default_value(full_type)
+    default = default_value(type)
 
     quote do
       @type t :: %unquote(caller_module){
-        unquote(field) => unquote(full_type)
+        unquote(field) => unquote(type)
       }
 
       defstruct [{unquote(field), unquote(default)}]
     end
   end
 
-  def data_ast(name, default, type_ctx) when is_list(name) do
+  @spec data_ast([module()], any(), ast()) :: ast()
+  def data_ast(name, default, type_ctx) do
     full_module = Module.concat(name)
 
     field =
@@ -185,6 +189,57 @@ defmodule Algae do
     end
   end
 
+  @doc """
+  Generate the AST for a sum type definition
+  """
+  @spec defsum([do: {:__block__, [any()], ast()}]) :: ast()
+  defmacro defsum(do: {:__block__, _, parts} = block) do
+    types = or_types(parts, __CALLER__.module)
+
+    quote do
+      @type t :: unquote(types)
+      unquote(block)
+    end
+  end
+
+  @spec or_types([ast()], module()) :: [ast()]
+  def or_types([head | tail], module_ctx) do
+    seed =
+      module_ctx
+      |> List.wrap()
+      |> Kernel.++(extract_part_name(head))
+      |> call_type()
+
+    Enum.reduce(tail, seed, fn(module, acc) ->
+      normalized_module =
+        module_ctx
+        |> List.wrap()
+        |> Kernel.++(extract_part_name(module))
+        |> call_type()
+
+      {:|, [], [normalized_module, acc]}
+    end)
+  end
+
+  @spec modules(module(), [module()]) :: [module()]
+  def modules(top, module_ctx), do: [top | extract_name(module_ctx)]
+
+  @spec call_type([module()]) :: ast()
+  def call_type(module) do
+    {{:., [], [{:__aliases__, [alias: false], module}, :t]}, [], []}
+  end
+
+  @spec extract_part_name({:defdata, any(), [{:::, any(), [any()]}]})
+     :: [module()]
+  def extract_part_name({:defdata, _, [{:::, _, [body, _]}]}) do
+    case body do
+      {:=, _, [inner_module_ctx, _]} -> inner_module_ctx
+      outer_module_ctx -> outer_module_ctx
+    end
+    |> List.wrap()
+  end
+
+  @spec extract_name({any(), any(), atom()} | [module()]) :: [module()]
   def extract_name({_, _, inner_name}), do: List.wrap(inner_name)
   def extract_name(module_chain) when is_list(module_chain), do: module_chain
 
@@ -207,44 +262,5 @@ defmodule Algae do
       :any -> nil
       atom -> atom
     end
-  end
-
-  defmacro defsum(do: {:__block__, _, parts} = block) do
-    types = or_types(parts, __CALLER__.module)
-
-    quote do
-      @type t :: unquote(types)
-      unquote(block)
-    end
-  end
-
-  def or_types([head | tail], module_ctx) do
-    seed =
-      head
-      |> extract_part_name()
-      |> call_type()
-
-    Enum.reduce(tail, seed, fn(module, acc) ->
-      normalized_module =
-        [module_ctx, extract_part_name(module)]
-        |> List.flatten()
-        |> Module.concat()
-        |> call_type()
-
-      {:|, [], [normalized_module, acc]}
-    end)
-  end
-
-  def call_type(module) do
-    {{:., [], [{:__aliases__, [alias: false], module}, :t]}, [], []}
-  end
-
-  def extract_part_name({:defdata, _, [{:::, _, [body, _]}]}) do
-    body
-    |> case do
-      {:=, _, [inner_module_ctx, _]} -> inner_module_ctx
-      outer_module_ctx -> outer_module_ctx
-    end
-    |> extract_name()
   end
 end
