@@ -58,7 +58,7 @@ defmodule Algae do
 
       {:::, _, [{:=, _, [module_ctx, default_value]}, {type, _, _} = type_ctx]} ->
         caller_module
-        |> modules(extract_name(module_ctx))
+        |> modules(module_ctx)
         |> data_ast(default_value, type_ctx)
 
       {:::, _, [module_ctx, {type, _, _} = full_type]} ->
@@ -67,15 +67,17 @@ defmodule Algae do
         |> data_ast(default_value(full_type), full_type)
 
       {type, _, _} = full_type when is_atom(type) ->
-        data_ast_full_type(caller_module, type, full_type)
-
-      [do: {:::, _, [{field, _, _}, {type, _, _} = full_type]}] ->
-        data_ast_full_type(caller_module, type, full_type)
+        data_ast(caller_module, full_type)
 
       [do: {:__block__, _, lines}] ->
         data_ast_block(lines, caller_module)
+
+      [do: line] ->
+        data_ast_block([line], caller_module)
     end
   end
+
+  def modules(top, module_ctx), do: [top | extract_name(module_ctx)]
 
   defmacro defdata(module_ctx, do: {:__block__, _, body}) do
     module_name =
@@ -92,10 +94,6 @@ defmodule Algae do
     end
   end
 
-  def modules(caller_module, module_ctx) do
-    [caller_module | extract_name(module_ctx)]
-  end
-
   def data_ast_block(lines, module_name) do
     {field_values, field_types} =
       Enum.reduce(lines, {[], []}, fn
@@ -110,9 +108,6 @@ defmodule Algae do
             [{field, nil}  | value_acc],
             [{field, type} | type_acc]
           }
-
-        (_, acc) ->
-          acc
       end)
 
     quote do
@@ -121,32 +116,6 @@ defmodule Algae do
       }
 
       defstruct unquote(field_values)
-    end
-
-  end
-
-  def data_ast_full_type(caller_module, type, full_type) do
-    module =
-      caller_module
-      |> Module.split()
-      |> Enum.map(&String.to_atom/1)
-      |> Module.concat()
-
-    field =
-      caller_module
-      |> Module.split()
-      |> List.last()
-      |> String.downcase()
-      |> String.to_atom()
-
-    default = default_value(full_type)
-
-    quote do
-      @type t :: %unquote(module){
-        unquote(field) => unquote(full_type)
-      }
-
-      defstruct [{unquote(field), unquote(default)}]
     end
   end
 
@@ -166,7 +135,29 @@ defmodule Algae do
     end
   end
 
-  def data_ast(name, default, {type, _, _} = type_ctx) when is_list(name) do
+  def data_ast(caller_module, full_type) do
+    IO.puts "HAR"
+    field =
+      caller_module
+      |> Module.split()
+      |> List.last()
+      |> String.downcase()
+      |> String.to_atom()
+
+    default = default_value(full_type)
+
+    quote do
+      @type t :: %unquote(caller_module){
+        unquote(field) => unquote(full_type)
+      }
+
+      defstruct [{unquote(field), unquote(default)}]
+    end
+  end
+
+  def data_ast(name, default, type_ctx) when is_list(name) do
+    IO.puts "A"
+    IO.inspect name
     full_module = Module.concat(name)
 
     field =
@@ -196,14 +187,16 @@ defmodule Algae do
     end
   end
 
-  def data_ast(module_ctx, default_value, ending) do
-    type =
-      case ending do
-        {inner_type, _, _} -> inner_type
-        bare_type when is_atom(bare_type) -> bare_type
-      end
+  def data_ast(module_ctx, default_value, type) do
+    # IO.puts "B"
+    # IO.inspect module_ctx
+    # type =
+    #   case ending do
+    #     {inner_type, _, _} -> inner_type
+    #     bare_type when is_atom(bare_type) -> bare_type
+    #   end
 
-    data_ast(extract_name(module_ctx), default_value, type)
+    data_ast([module_ctx], default_value, type)
   end
 
   def extract_name({_, _, inner_name}), do: List.wrap(inner_name)

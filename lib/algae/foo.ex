@@ -7,7 +7,7 @@ defdata Bar :: integer()
 defdata Baz :: none()
 
 defmodule Foo.Quux do
-  defdata do: quux :: any()
+  defdata do: quux = 42 :: any()
 end
 
 defmodule Foo.Longer do
