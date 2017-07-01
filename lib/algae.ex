@@ -51,17 +51,20 @@ defmodule Algae do
     caller_module = __CALLER__.module
 
     case ast do
-      {:::, _, [{:=, _, [module_ctx, default_value]}, {type, _, _} = type_ctx]} ->
-        IO.inspect "******"
-        IO.inspect type_ctx
-        module = extract_name(module_ctx)
-        data_ast(modules(caller_module, module), default_value, type_ctx)
-
       {:::, _, [module_ctx, {:none, _, _} = type_ctx]} ->
-        data_ast(modules(caller_module, module_ctx), type_ctx)
+        caller_module
+        |> modules(module_ctx)
+        |> data_ast(type_ctx)
+
+      {:::, _, [{:=, _, [module_ctx, default_value]}, {type, _, _} = type_ctx]} ->
+        caller_module
+        |> modules(extract_name(module_ctx))
+        |> data_ast(default_value, type_ctx)
 
       {:::, _, [module_ctx, {type, _, _} = full_type]} ->
-        data_ast(modules(caller_module, module_ctx), default_value(full_type), full_type)
+        caller_module
+        |> modules(module_ctx)
+        |> data_ast(default_value(full_type), full_type)
 
       {type, _, _} = full_type when is_atom(type) ->
         data_ast_full_type(caller_module, type, full_type)
