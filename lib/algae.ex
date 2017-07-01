@@ -79,6 +79,31 @@ defmodule Algae do
     end
   end
 
+  defmacro defdata(module_ctx, do: body) do
+    module_name =
+      __CALLER__.module
+      |> modules(module_ctx)
+      |> Module.concat()
+
+    inner =
+      body
+      |> case do
+           {:__block__, _, lines} -> lines
+           line -> List.wrap(line)
+      end
+      |> data_ast()
+
+    quote do
+      defmodule unquote(module_name) do
+        unquote(inner)
+      end
+    end
+  end
+
+  @doc """
+  Construct a data type AST
+  """
+  @spec data_ast(module() | [module()], ast()) :: ast()
   def data_ast(lines) when is_list(lines) do
     {field_values, field_types} =
       Enum.reduce(lines, {[], []}, fn
@@ -104,25 +129,6 @@ defmodule Algae do
     end
   end
 
-  defmacro defdata(module_ctx, do: {:__block__, _, body}) do
-    module_name =
-      __CALLER__.module
-      |> modules(module_ctx)
-      |> Module.concat()
-
-    inner = data_ast(body)
-
-    quote do
-      defmodule unquote(module_name) do
-        unquote(inner)
-      end
-    end
-  end
-
-  @doc """
-  Construct a data type AST
-  """
-  @spec data_ast(module() | [module()], ast()) :: ast()
   def data_ast(modules, {:none, _, _}) do
     full_module = Module.concat(modules)
 
@@ -221,11 +227,16 @@ defmodule Algae do
   @spec extract_part_name({:defdata, any(), [{:::, any(), [any()]}]})
      :: [module()]
   def extract_part_name({:defdata, _, [{:::, _, [body, _]}]}) do
-    case body do
+    body
+    |> case do
       {:=, _, [inner_module_ctx, _]} -> inner_module_ctx
       outer_module_ctx -> outer_module_ctx
     end
     |> List.wrap()
+  end
+
+  def extract_part_name({:defdata, _, [{:__aliases__, _, module}, _]}) do
+    module
   end
 
   @spec extract_name({any(), any(), atom()} | [module()]) :: [module()]
