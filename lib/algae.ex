@@ -244,7 +244,7 @@ defmodule Algae do
   def extract_name(module_chain) when is_list(module_chain), do: module_chain
 
   # credo:disable-for-lines:21 Credo.Check.Refactor.CyclomaticComplexity
-  def default_type({{:., _, [_, :t]}, [], []} = struct_type), do: struct_type
+  def default_type({{:., _, [_, :t]}, _, _} = struct_type), do: struct_type
 
   def default_value({type, _, _}) do
     case type do
