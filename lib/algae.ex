@@ -58,15 +58,20 @@ defmodule Algae do
         |> modules(module_ctx)
         |> data_ast(type_ctx)
 
-      {:::, _, [{:=, _, [module_ctx, default_value]}, type]} ->
-        caller_module
-        |> modules(module_ctx)
-        |> data_ast(default_value, type)
+      # {:::, _, [{:=, _, [module_ctx, default_value]}, type]} ->
+      #   caller_module
+      #   |> modules(module_ctx)
+      #   |> data_ast(default_value, type)
 
       {:::, _, [module_ctx, type]} ->
         caller_module
         |> modules(module_ctx)
         |> data_ast(default_value(type), type)
+
+      {:\\, _, [{:::, _, [module_ctx, type]}, default]} ->
+        caller_module
+        |> modules(module_ctx)
+        |> data_ast(default, type)
 
       {outer_type, _, _} = type when is_atom(outer_type) ->
         data_ast(caller_module, type)
@@ -105,11 +110,12 @@ defmodule Algae do
   """
   @spec data_ast(module() | [module()], ast()) :: ast()
   def data_ast(lines) when is_list(lines) do
+    # NOTE TO SELF: this func is too long & complex: split into helper functions
     {field_values, field_types, typespecs} =
       Enum.reduce(lines, {[], [], []},
         fn(line, {value_acc, type_acc, typespec_acc}) ->
           case line do
-            {:::, _, [{:=, _, [{field, _, _}, default_value]}, type]} ->
+            {:\\, _, [{:::, _, [{field, _, _}, type]}, default_value]} ->
               {
                 [{field, default_value} | value_acc],
                 [{field, type} | type_acc],
@@ -239,6 +245,10 @@ defmodule Algae do
   end
 
   @spec or_types([ast()], module()) :: [ast()]
+  def or_types({:\\, _, [{:::, _, [_, types]}, _]}, module_ctx) do
+    or_types(types, module_ctx)
+  end
+
   def or_types([head | tail], module_ctx) do
     Enum.reduce(tail, call_type(head, module_ctx), fn(module, acc) ->
       {:|, [], [call_type(module, module_ctx), acc]}
@@ -265,8 +275,12 @@ defmodule Algae do
     |> List.wrap()
   end
 
+  def extract_part_name({:defdata, _, [{:\\, _, [{:::, _, [{:__aliases__, _, module}, _]}, _]}]}) do
+    List.wrap module
+  end
+
   def extract_part_name({:defdata, _, [{:__aliases__, _, module}, _]}) do
-    module
+    List.wrap module
   end
 
   @spec extract_name({any(), any(), atom()} | [module()]) :: [module()]

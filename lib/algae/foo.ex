@@ -1,25 +1,25 @@
 import Algae
 
-defdata Ex = 42 :: ([{:ok, integer()}] | number())
+defdata Ex :: ([{:ok, integer()}] | number()) \\ 22
 
-defdata Foo = 42 :: any()
+defdata Foo :: any()
 defdata Bar :: integer()
 defdata Baz :: none()
 
 defmodule Foo.Quux do
-  defdata do: quux = 42 :: any()
+  defdata do: quux :: any() \\ 22
 end
 
 defmodule Foo.Longer do
   defdata do
     foo :: any()
-    bar = 42 :: integer()
+    bar :: integer() \\ 42
   end
 end
 
 defdata Foo.Bare do
   foo :: any()
-  bar = 22 :: non_neg_integer() # \\ 22
+  bar :: non_neg_integer() \\ 22
   baz :: any()
 end
 
@@ -27,13 +27,13 @@ defmodule Id.Foo do
   defdata any()
 end
 
-defmodule Lights do
-  defsum do
-    defdata Red = 22 :: any()
-    defdata Yellow :: any()
-    defdata Green :: none()
-  end
-end
+# defmodule Lights do
+#   defsum do
+#     defdata Red :: any() \\ 22
+#     defdata Yellow :: any()
+#     defdata Green :: none()
+#   end
+# end
 
 defmodule Maybe do
   defsum do
