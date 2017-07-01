@@ -68,33 +68,22 @@ defmodule Algae do
         data_ast_full_type(caller_module, type, full_type)
 
       [do: {:__block__, _, lines}] ->
-        {field_values, field_types} =
-          Enum.reduce(lines, {[], []}, fn
-            ({:::, _, [{:=, _, [{field, _, _}, default_value]}, type]}, {value_acc, type_acc}) ->
-              {
-                [{field, default_value}  | value_acc],
-                [{field, type}           | type_acc]
-              }
+        data_ast_block(caller_module, lines)
+    end
+  end
 
-            ({:::, _, [{field, _, _}, type]}, {value_acc, type_acc}) ->
-              {
-                [{field, nil}  | value_acc],
-                [{field, type} | type_acc]
-              }
+  defmacro defdata(module_ctx, do: {:__block__, _, body}) do
+    module_name =
+      __CALLER__.module
+      |> modules(module_ctx)
+      |> Module.concat()
 
+    inner = data_ast_block(body, module_name)
 
-            (_, acc) ->
-              acc
-          end)
-
-        quote do
-          @type t :: %__MODULE__{
-            unquote_splicing(field_types)
-            # unquote(field) => unquote(full_type)
-          }
-
-          defstruct unquote(field_values)
-        end
+    quote do
+      defmodule unquote(module_name) do
+        unquote(inner)
+      end
     end
   end
 
@@ -103,6 +92,36 @@ defmodule Algae do
 
   def modules(caller_module, module_ctx) do
     [caller_module | extract_name(module_ctx)]
+  end
+
+  def data_ast_block(lines, module_name) do
+    {field_values, field_types} =
+      Enum.reduce(lines, {[], []}, fn
+        ({:::, _, [{:=, _, [{field, _, _}, default_value]}, type]}, {value_acc, type_acc}) ->
+          {
+            [{field, default_value}  | value_acc],
+            [{field, type}           | type_acc]
+          }
+
+        ({:::, _, [{field, _, _}, type]}, {value_acc, type_acc}) ->
+          {
+            [{field, nil}  | value_acc],
+            [{field, type} | type_acc]
+          }
+
+        (_, acc) ->
+          acc
+      end)
+
+    quote do
+      @type t :: %__MODULE__{
+        unquote_splicing(field_types)
+        # unquote(field) => unquote(full_type)
+      }
+
+      defstruct unquote(field_values)
+    end
+
   end
 
   def data_ast_full_type(caller_module, type, full_type) do
