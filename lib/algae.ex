@@ -147,7 +147,7 @@ defmodule Algae do
     end
   end
 
-  def data_ast(name, :none) do
+  def data_ast(name, {:none, _, _}) do
     full_module = Module.concat(name)
 
     quote do
