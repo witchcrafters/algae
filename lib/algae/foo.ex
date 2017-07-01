@@ -1,6 +1,6 @@
 import Algae
 
-# defdata Ex = 42 :: [{:ok, integer()}] | number()
+defdata Ex = 42 :: ([{:ok, integer()}] | number())
 
 # defdata Foo = 42 :: any()
 # defdata Bar :: integer()
@@ -17,10 +17,10 @@ import Algae
 #   end
 # end
 
-defdata Foo.Bare do
-  foo :: any()
-  bar = 22 :: non_neg_integer()
-end
+# defdata Foo.Bare do
+#   foo :: any()
+#   bar = 22 :: non_neg_integer()
+# end
 
 # defmodule Id.Foo do
 #   defdata any()

@@ -51,15 +51,17 @@ defmodule Algae do
     caller_module = __CALLER__.module
 
     case ast do
-      {:::, _, [{:=, _, [module_ctx, default_value]}, {type, _, _}]} ->
+      {:::, _, [{:=, _, [module_ctx, default_value]}, {type, _, _} = type_ctx]} ->
+        IO.inspect "******"
+        IO.inspect type_ctx
         module = extract_name(module_ctx)
-        data_ast(modules(caller_module, module), default_value, type)
+        data_ast(modules(caller_module, module), default_value, type_ctx)
 
-      {:::, _, [module_ctx, {:none, _, _}]} ->
-        data_ast(modules(caller_module, module_ctx), :none)
+      {:::, _, [module_ctx, {:none, _, _} = type_ctx]} ->
+        data_ast(modules(caller_module, module_ctx), type_ctx)
 
       {:::, _, [module_ctx, {type, _, _} = full_type]} ->
-        data_ast(modules(caller_module, module_ctx), default_value(full_type), type)
+        data_ast(modules(caller_module, module_ctx), default_value(full_type), full_type)
 
       {type, _, _} = full_type when is_atom(type) ->
         data_ast_full_type(caller_module, type, full_type)
@@ -68,7 +70,7 @@ defmodule Algae do
         data_ast_full_type(caller_module, type, full_type)
 
       [do: {:__block__, _, lines}] ->
-        data_ast_block(caller_module, lines)
+        data_ast_block(lines, caller_module)
     end
   end
 
@@ -86,9 +88,6 @@ defmodule Algae do
       end
     end
   end
-
-  # def to_field() do
-  # end
 
   def modules(caller_module, module_ctx) do
     [caller_module | extract_name(module_ctx)]
@@ -116,7 +115,6 @@ defmodule Algae do
     quote do
       @type t :: %__MODULE__{
         unquote_splicing(field_types)
-        # unquote(field) => unquote(full_type)
       }
 
       defstruct unquote(field_values)
@@ -165,7 +163,7 @@ defmodule Algae do
     end
   end
 
-  def data_ast(name, default, type) when is_list(name) do
+  def data_ast(name, default, {type, _, _} = type_ctx) when is_list(name) do
     full_module = Module.concat(name)
 
     field =
@@ -179,7 +177,7 @@ defmodule Algae do
     quote do
       defmodule unquote(full_module) do
         @type t :: %unquote(full_module){
-          unquote(field) => unquote({type, [], []})
+          unquote(field) => unquote(type_ctx)
         }
 
         defstruct [{unquote(field), unquote(default)}]
@@ -189,7 +187,7 @@ defmodule Algae do
         def new, do: struct(__MODULE__)
 
         @doc "Helper for initializing struct with a specific value"
-        @spec new(unquote(type)()) :: t()
+        @spec new(unquote(type_ctx)) :: t()
         def new(value), do: struct(__MODULE__, [{unquote(field), value}])
       end
     end
