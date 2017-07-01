@@ -116,6 +116,8 @@ defmodule Algae do
       def new(unquote_splicing(args)) do
         struct(__MODULE__, unquote(defaults))
       end
+
+      defoverridable [new: unquote(Enum.count(args))]
     end
   end
 
@@ -131,6 +133,8 @@ defmodule Algae do
         @doc "Default #{__MODULE__} struct"
         @spec new() :: t()
         def new, do: struct(__MODULE__)
+
+        defoverridable [new: 0]
       end
     end
   end
@@ -159,6 +163,8 @@ defmodule Algae do
       @doc "Constructor helper for piping"
       @spec new(unquote(type)) :: t()
       def new(field), do: struct(__MODULE__, [unquote(field), field])
+
+      defoverridable [new: 0, new: 1]
     end
   end
 
