@@ -7,35 +7,7 @@ defmodule Algae.Id do
       %Algae.Id{id: "hi!"}
   """
 
-  alias __MODULE__
+  import Algae
 
-  @type t :: %Id{id: any()}
-  defstruct [:id]
-
-  @doc ~S"""
-  A value wrapped in an `Id` struct.
-
-  ## Examples
-
-      iex> id("Bourne")
-      %Algae.Id{id: "Bourne"}
-
-      iex> 42 |> id()
-      %Algae.Id{id: 42}
-
-  """
-  @spec id(any) :: Id.t()
-  def id(value), do: %Id{id: value}
-
-  @doc ~S"""
-  An alias for `id`.
-
-  ## Examples
-
-      iex> Algae.Id.new("value")
-      %Algae.Id{id: "value"}
-
-  """
-  @spec new(any) :: Id.t()
-  def new(value), do: id(value)
+  defdata any()
 end

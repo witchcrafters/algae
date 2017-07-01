@@ -26,62 +26,38 @@ defmodule Algae.Maybe do
 
   """
 
-  alias Algae.Maybe.{Just, Nothing}
+  import Algae
+  alias Algae.Maybe.{Nothing, Just}
 
-  defmacro __using__(_) do
-    quote do
-      alias Algae.Maybe
-      alias Algae.Maybe.{Just, Nothing}
+  defsum do
+    defdata Just do
+      value :: any()
     end
-  end
 
-  @type t :: Just.t() | Nothing.t()
+    defdata Nothing :: none()
+  end
 
   @doc ~S"""
   Put no value into the `Maybe` context (ie: make it a `Nothing`)
 
   ## Examples
 
-      iex> maybe()
+      iex> new()
       %Algae.Maybe.Nothing{}
 
   """
-  @spec maybe() :: Nothing.t()
-  defdelegate maybe, to: Nothing, as: :new
-
-  @doc ~S"""
-  Alias for `maybe/0`
-
-  ## Examples
-
-      iex> Algae.Maybe.nothing()
-      %Algae.Maybe.Nothing{}
-
-  """
-  @spec nothing() :: Nothing.t()
-  defdelegate nothing, to: Nothing, as: :new
+  @spec new() :: Nothing.t()
+  defdelegate new, to: Nothing, as: :new
 
   @doc ~S"""
   Put a value into the `Maybe` context (ie: make it a `Just`)
 
   ## Examples
 
-      iex> maybe(9)
+      iex> new(9)
       %Algae.Maybe.Just{just: 9}
 
   """
-  @spec maybe(any) :: Just.t()
-  defdelegate maybe(value), to: Just, as: :new
-
-  @doc ~S"""
-  Alias for `maybe/1`
-
-  ## Examples
-
-      iex> Algae.Maybe.Just.new(9)
-      %Algae.Maybe.Just{just: 9}
-
-  """
-  @spec just(any) :: Just.t()
-  defdelegate just(value), to: Just, as: :new
+  @spec new(any) :: Just.t()
+  defdelegate new(value), to: Just, as: :new
 end

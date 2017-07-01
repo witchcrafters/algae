@@ -9,9 +9,9 @@ defmodule Algae.Either do
       ...>
       ...> even_odd = fn(value) ->
       ...>   if Integer.is_even(value) do
-      ...>     right(value)
+      ...>     Algae.Either.Right.new(value)
       ...>   else
-      ...>     left(value)
+      ...>     Algae.Either.Left.new(value)
       ...>   end
       ...> end
       ...>
@@ -21,37 +21,10 @@ defmodule Algae.Either do
       %Algae.Either.Left{left: 11}
   """
 
-  alias Algae.Either.Left
-  alias Algae.Either.Right
+  import Algae
 
-  defmacro __using__(_) do
-    quote do
-      alias Algae.Either
-      alias Algae.Either.{Left, Right}
-    end
+  defsum do
+    defdata Left  :: any()
+    defdata Right :: any()
   end
-
-  @type t :: Left.t() | Right.t()
-
-  @doc ~S"""
-  Wrap a value in the `Left` branch
-
-  ## Examples
-
-      iex> left(13)
-      %Algae.Either.Left{left: 13}
-  """
-  @spec left(any) :: Left.t()
-  def left(value), do: Left.new(value)
-
-  @doc ~S"""
-  Wrap a value in the `Right` branch
-
-  ## Examples
-
-      iex> right(7)
-      %Algae.Either.Right{right: 7}
-  """
-  @spec right(any) :: Right.t()
-  def right(value), do: Right.new(value)
 end
