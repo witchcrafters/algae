@@ -204,29 +204,18 @@ defmodule Algae do
 
   @spec or_types([ast()], module()) :: [ast()]
   def or_types([head | tail], module_ctx) do
-    seed =
-      module_ctx
-      |> List.wrap()
-      |> Kernel.++(extract_part_name(head))
-      |> call_type()
-
-    Enum.reduce(tail, seed, fn(module, acc) ->
-      normalized_module =
-        module_ctx
-        |> List.wrap()
-        |> Kernel.++(extract_part_name(module))
-        |> call_type()
-
-      {:|, [], [normalized_module, acc]}
+    Enum.reduce(tail, call_type(head, module_ctx), fn(module, acc) ->
+      {:|, [], [call_type(module, module_ctx), acc]}
     end)
   end
 
   @spec modules(module(), [module()]) :: [module()]
   def modules(top, module_ctx), do: [top | extract_name(module_ctx)]
 
-  @spec call_type([module()]) :: ast()
-  def call_type(module) do
-    {{:., [], [{:__aliases__, [alias: false], module}, :t]}, [], []}
+  @spec call_type(module(), [module()]) :: ast()
+  def call_type(new_module, module_ctx) do
+    full_module = List.wrap(module_ctx) ++ extract_part_name(new_module)
+    {{:., [], [{:__aliases__, [alias: false], full_module}, :t]}, [], []}
   end
 
   @spec extract_part_name({:defdata, any(), [{:::, any(), [any()]}]})
