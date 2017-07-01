@@ -188,6 +188,7 @@ defmodule Algae do
   def extract_name({_, _, inner_name}), do: List.wrap(inner_name)
   def extract_name(module_chain) when is_list(module_chain), do: module_chain
 
+  # credo:disable-for-lines:19 Credo.Check.Refactor.CyclomaticComplexity
   def default_value({type, _, _}) do
     case type do
       :float -> 0.0
