@@ -123,13 +123,13 @@ Fields will automatically default to a sensible value (a typical "zero" for
 that datatype). For example, `non_neg_integer()` will default to `0`,
 and `String.t()` will default to `""`.
 
-You may also overwrite these defaults with the `\\\\` syntax.
+You may also overwrite these defaults with the `\\` syntax.
 
 ```elixir
 defmodule Pet do
   defdata do
     name      :: String.t()
-    leg_count :: non_neg_integer() \\\\ 4
+    leg_count :: non_neg_integer() \\ 4
   end
 end
 
@@ -150,7 +150,7 @@ This overwriting syntax is _required_ for complex types:
 
 ```elixir
 defdata Grocery do
-  item :: {String.t(), integer(), boolean()} \\\\ {"Apple", 4, false}
+  item :: {String.t(), integer(), boolean()} \\ {"Apple", 4, false}
 end
 
 Grocery.new()
@@ -165,7 +165,7 @@ The `new` constructor function may be overwritten.
 
 ```elixir
 defmodule Constant do
-  defdata :: fun() \\\\ fn _ -> nil end
+  defdata :: fun() \\ fn _ -> nil end
 
   def new(value), do: %Constant{constant: fn _ -> value end}
 end
@@ -260,13 +260,13 @@ Sums join existing types with tags: new types to help distibguish the context
 that they are in (the sum type)
 
 ```elixir
-defdata Book  :: String.t() \\\\ "War and Peace"
-defdata Video :: String.t() \\\\ "2001: A Space Odyssey"
+defdata Book  :: String.t() \\ "War and Peace"
+defdata Video :: String.t() \\ "2001: A Space Odyssey"
 
 defmodule Media do
   defsum do
     defdata Paper :: Book.t()
-    defdata Film  :: Video.t() \\\\ Video.new("A Clockwork Orange")
+    defdata Film  :: Video.t() \\ Video.new("A Clockwork Orange")
   end
 end
 
