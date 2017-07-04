@@ -26,6 +26,10 @@ end
 - [Sum Builder](#sum-builder)
   - [Default Constructor](#default-constructor)
   - [Tagged Unions](#tagged-unions)
+- [A Sampling of ADTs](#a-sampling-of-adts)
+  - [`Id`](#algaeid)
+  - [`Maybe`](#algaemaybe)
+  - [`Tree.Binary`](#algaetreebinary)
 
 # Product Builder
 Build a product type
@@ -304,7 +308,7 @@ Algae.Maybe.new(42)
 #=> %Algae.Maybe.Just{just: 42}
 ```
 
-## Binary Tree
+## `Tree.Binary`
 
 ```elixir
 alias Algae.Tree.Binary, as: BTree
