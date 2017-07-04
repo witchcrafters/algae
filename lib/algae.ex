@@ -1,55 +1,59 @@
 defmodule Algae do
   @moduledoc """
-  """
-
-  @type ast() :: {atom(), any(), any()}
-
-  @doc """
   --- Id --
 
   defmodule Id do
-    defdata do: id :: any()
+  defdata do: id :: any()
   end
 
   --- Sum ---
 
   defmodule Either do
-    defsum do
-      defdata Left  :: any()
-      defdata Right :: any()
-    end
+  defsum do
+  defdata Left  :: any()
+  defdata Right :: any()
+  end
   end
 
   defmodule Either do
-    defdata do: Left :: any() | Right :: any()
+  defdata do: Left :: any() | Right :: any()
   end
 
   --- Product --
 
   defmodule Rectangle do
-    data do: width :: number(), height :: number()
+  data do: width :: number(), height :: number()
   end
 
   -- Both --
 
   data Stree a = Tip | Node (Stree a) a (Stree a)
   defmodule Stree do
-    defdata do
-      Tip :: any() | Node :: (left :: t()), (middle = 42 :: any()), (right :: t())
-    end
+  defdata do
+  Tip :: any() | Node :: (left :: t()), (middle = 42 :: any()), (right :: t())
+  end
   end
 
   defmodule Stree do
-    defsum do
-      defdata Tip :: any()
+  defsum do
+  defdata Tip :: any()
 
-      defproduct Node do
-        left :: Stree.t()
-        middle = 42 :: any()
-        right :: Stree.t()
-      end
-    end
+  defproduct Node do
+  left :: Stree.t()
+  middle = 42 :: any()
+  right :: Stree.t()
   end
+  end
+  end
+  """
+
+  @type ast() :: {atom(), any(), any()}
+
+  # ============= #
+  # Top-level API #
+  # ============= #
+
+  @doc """
   """
   defmacro defdata(ast) do
     caller_module = __CALLER__.module
@@ -101,6 +105,35 @@ defmodule Algae do
       end
     end
   end
+
+  @doc """
+  Generate the AST for a sum type definition
+  """
+  @spec defsum([do: {:__block__, [any()], ast()}]) :: ast()
+  defmacro defsum(do: {:__block__, _, [first | _] = parts} = block) do
+    module_ctx = __CALLER__.module
+    types = or_types(parts, module_ctx)
+
+    default_module =
+      module_ctx
+      |> List.wrap()
+      |> Kernel.++(submodule_name(first))
+      |> Module.concat()
+
+    quote do
+      @type t :: unquote(types)
+      unquote(block)
+
+      @spec new() :: t()
+      def new, do: unquote(default_module).new()
+
+      defoverridable [new: 0]
+    end
+  end
+
+  # ======= #
+  # Helpers #
+  # ======= #
 
   @doc """
   Construct a data type AST
@@ -232,31 +265,6 @@ defmodule Algae do
   def normalize_elements({:::, _, [{field, _, _}, type]}), do: {field, type, nil}
   def normalize_elements({:\\, _, [{:::, _, [{field, _, _}, type]}, default]}) do
     {field, type, default}
-  end
-
-  @doc """
-  Generate the AST for a sum type definition
-  """
-  @spec defsum([do: {:__block__, [any()], ast()}]) :: ast()
-  defmacro defsum(do: {:__block__, _, [first | _] = parts} = block) do
-    module_ctx = __CALLER__.module
-    types = or_types(parts, module_ctx)
-
-    default_module =
-      module_ctx
-      |> List.wrap()
-      |> Kernel.++(submodule_name(first))
-      |> Module.concat()
-
-    quote do
-      @type t :: unquote(types)
-      unquote(block)
-
-      @spec new() :: t()
-      def new, do: unquote(default_module).new()
-
-      defoverridable [new: 0]
-    end
   end
 
   @spec or_types([ast()], module()) :: [ast()]
