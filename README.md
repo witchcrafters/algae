@@ -16,6 +16,16 @@ end
 
 ```
 
+# Table of Contents
+
+- [Product Builder](#product-builder)
+  - [Definition DSL](#definition-dsl)
+  - [Constructor](#constructor)
+  - [Empty Tag](#empty-tag)
+- [Sum Builder](#sum-builder)
+  - [Default Constructor](#default-constructor)
+  - [Tagged Unions](#tagged-unions)
+
 # Product Builder
 Build a product type
 
@@ -26,7 +36,7 @@ Includes:
 * Constructor function (for piping and defaults)
 * Implicit defaults for simple values
 
-## Definition
+## Definition DSL
 
 For convenveniece, several variants of the DSL are available.
 
