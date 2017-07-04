@@ -1,57 +1,43 @@
 defmodule AlgaeTest do
+  alias Example.{Light, Wrapper, Media, Book, Animal, Pet}
   use ExUnit.Case
 
-  Example.Light.new()
-  #=> %Light.Red{}
+  test "constructor for empty type" do
+    assert Example.Light.new() == %Example.Light.Red{}
+  end
 
+  test "constructor with one field" do
+    assert %Example.Wrapper{} == %Wrapper{wrapper: nil}
+  end
 
-  Example.Option.new()
-  #=> %Option.None{}
+  test "constructor with multiple fields uses defaults" do
+    crookshanks =
+      %Animal{
+        name: "Crookshanks",
+        leg_count: 4
+      }
 
+    assert Animal.new("Crookshanks") == crookshanks
+  end
 
-  media = Example.Media.new()
-  #=> %Paper{
-  #      paper: %Book{
-  #        book: "War and Peace"
-  #      }
-  #   }
+  test "constructor with multiple fields can overwrite all fields" do
+    paul =
+      %Animal{
+        name: "Paul the Psychic Octopus",
+        leg_count: 8
+      }
 
+    assert Animal.new("Paul the Psychic Octopus", 8) == paul
+  end
 
-  Example.Nothing.new()
-  #=> %Nothing{}
-  %Example.Wrapper{}
-  #=> %Wrapper{wrapper: nil}
+  test "sum constructor uses the first tagged type" do
+    paper =
+      %Media.Paper{
+        paper: %Book{
+          book: "War and Peace"
+        }
+      }
 
-  %Example.Id{}
-  #=> %Id{id: nil}
-
-
-  Example.Person.new("Rachel Weintraub")
-  #=> %Person{
-  #     name: "Rachel Weintraub",
-  #     age:  0
-  #   }
-
-
-  Example.Animal.new("Crookshanks")
-  #=> %Pet{
-  #     name: "Crookshanks",
-  #     leg_count: 4
-  #   }
-
-  Example.Animal.new("Paul the Psychic Octopus", 8)
-  #=> %Pet{
-  #     name: "Paul the Psychic Octopus",
-  #     leg_count: 8
-  #   }
-
-  Example.Grocery.new()
-  #=> %Grocery{
-  #     item: {"Apple", 4, false}
-  #   }
-  fourty_two = Example.Constant.new(42)
-  fourty_two.constant.(33)
-  #=> 42
-
-  assert media == media
+    assert Media.new() == paper
+  end
 end

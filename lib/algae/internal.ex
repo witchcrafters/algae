@@ -146,7 +146,15 @@ defmodule Algae.Internal do
   end
 
   @spec normalize_elements(ast()) :: {atom(), type(), any()}
-  def normalize_elements({:::, _, [{field, _, _}, type]}), do: {field, type, nil}
+  def normalize_elements({:::, _, [{field, _, _}, {{:., _, [type_module, :t]} = type, _, _}]}) do
+    default = {{:., [], [type_module, :new]}, [], []}
+    {field, type, default}
+  end
+
+  def normalize_elements({:::, _, [{field, _, _}, type]}) do
+    {field, type, default_value(type)}
+  end
+
   def normalize_elements({:\\, _, [{:::, _, [{field, _, _}, type]}, default]}) do
     {field, type, default}
   end
@@ -220,6 +228,8 @@ defmodule Algae.Internal do
     Module.concat(adt).new()
   end
 
+  def default_value([_]), do: []
+
   def default_value({type, _, _}) do
     case type do
       :boolean -> false
@@ -235,14 +245,17 @@ defmodule Algae.Internal do
       :bitstring  -> ""
       :charlist   -> []
 
-      :map  -> %{}
       []    -> []
       :list -> []
+
+      :map  -> %{}
 
       :fun -> &Quark.id/1
       :->  -> &Quark.id/1
 
       :any -> nil
+      :t   -> raise %Algae.Internal.NeedsExplicitDefaultError{message: "Type is lone `t`"}
+
       atom -> atom
     end
   end

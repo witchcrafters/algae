@@ -13,7 +13,6 @@ defmodule Algae.Tree.Binary do
   """
 
   alias __MODULE__
-  alias Algae.Tree.Binary.Empty
 
   import Algae
 

@@ -149,13 +149,13 @@ defmodule Example do
     end
   end
 
-  defdata Book :: String.t() \\ "War and Peace"
+  defdata Book  :: String.t() \\ "War and Peace"
   defdata Video :: String.t() \\ "2001: A Space Odyssey"
 
   defmodule Media do
     defsum do
-      defdata Paper :: String.t()
-      defdata Film  :: Video.t() \\ Video.new("A Clockwork Orange")
+      defdata Paper :: Example.Book.t()
+      defdata Film  :: Example.Video.t() \\ Example.Video.new("A Clockwork Orange")
     end
   end
 end
