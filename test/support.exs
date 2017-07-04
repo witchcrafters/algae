@@ -154,7 +154,7 @@ defmodule Example do
 
   defmodule Media do
     defsum do
-      defdata Paper :: Example.Book.t()
+      defdata Paper :: Example.Book.t()  \\ Example.Book.new()
       defdata Film  :: Example.Video.t() \\ Example.Video.new("A Clockwork Orange")
     end
   end

@@ -146,11 +146,6 @@ defmodule Algae.Internal do
   end
 
   @spec normalize_elements(ast()) :: {atom(), type(), any()}
-  def normalize_elements({:::, _, [{field, _, _}, {{:., _, [type_module, :t]} = type, _, _}]}) do
-    default = {{:., [], [type_module, :new]}, [], []}
-    {field, type, default}
-  end
-
   def normalize_elements({:::, _, [{field, _, _}, type]}) do
     {field, type, default_value(type)}
   end
@@ -220,12 +215,10 @@ defmodule Algae.Internal do
   end
 
   # credo:disable-for-lines:21 Credo.Check.Refactor.CyclomaticComplexity
-  def default_value({:., _, [{_, _, [:String]}, :t]}), do: ""
   def default_value({{:., _, [{_, _, [:String]}, :t]}, _, _}), do: ""
 
-  def default_value({:., _, [{_, _, adt}, :t]}), do: Module.concat(adt).new()
   def default_value({{:., _, [{_, _, adt}, :t]}, _, []}) do
-    Module.concat(adt).new()
+    quote do: unquote(Module.concat(adt)).new()
   end
 
   def default_value([_]), do: []
