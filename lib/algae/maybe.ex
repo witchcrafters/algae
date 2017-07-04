@@ -30,11 +30,11 @@ defmodule Algae.Maybe do
   alias Algae.Maybe.{Nothing, Just}
 
   defsum do
+    defdata Nothing :: none()
+
     defdata Just do
       value :: any()
     end
-
-    defdata Nothing :: none()
   end
 
   @doc ~S"""

@@ -5,6 +5,8 @@ defmodule Algae.Tree.Search do
 
   alias __MODULE__
 
+  import Algae
+
   defsum do
     defdata Tip :: none()
 

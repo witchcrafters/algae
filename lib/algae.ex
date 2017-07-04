@@ -238,12 +238,24 @@ defmodule Algae do
   Generate the AST for a sum type definition
   """
   @spec defsum([do: {:__block__, [any()], ast()}]) :: ast()
-  defmacro defsum(do: {:__block__, _, parts} = block) do
-    types = or_types(parts, __CALLER__.module)
+  defmacro defsum(do: {:__block__, _, [first | _] = parts} = block) do
+    module_ctx = __CALLER__.module
+    types = or_types(parts, module_ctx)
+
+    default_module =
+      module_ctx
+      |> List.wrap()
+      |> Kernel.++(submodule_name(first))
+      |> Module.concat()
 
     quote do
       @type t :: unquote(types)
       unquote(block)
+
+      @spec new() :: t()
+      def new, do: unquote(default_module).new()
+
+      defoverridable [new: 0]
     end
   end
 
@@ -272,8 +284,9 @@ defmodule Algae do
   def submodule_name({:defdata, _, [{:::, _, [body, _]}]}) do
     body
     |> case do
-      {:=, _, [inner_module_ctx, _]} -> inner_module_ctx
-      outer_module_ctx -> outer_module_ctx
+      {:\\, _, [inner_module_ctx, _]} -> inner_module_ctx
+      {:__aliases__, _, module} -> module
+      outer_module_ctx -> outer_module_ctx |> IO.inspect
     end
     |> List.wrap()
   end
