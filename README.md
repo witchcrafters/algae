@@ -285,6 +285,8 @@ media = Media.new()
 
 # A Sampling of ADTs
 
+See [complete docs](https://hexdocs.pm/algae) for more
+
 ## `Algae.Id`
 
 The simplest ADT: a simple wrapper for some data
