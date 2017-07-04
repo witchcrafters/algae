@@ -44,13 +44,7 @@ defmodule Algae.Internal do
 
   def data_ast(caller_module, type) do
     default = default_value(type)
-
-    field =
-      caller_module
-      |> Module.split()
-      |> List.last()
-      |> String.downcase()
-      |> String.to_atom()
+    field = module_to_field(caller_module)
 
     quote do
       @type t :: %unquote(caller_module){
@@ -74,14 +68,7 @@ defmodule Algae.Internal do
   @spec data_ast([module()], any(), ast()) :: ast()
   def data_ast(name, default, type_ctx) do
     full_module = Module.concat(name)
-
-    field =
-      name
-      |> List.last()
-      |> Atom.to_string()
-      |> String.downcase()
-      |> String.trim_leading("elixir.")
-      |> String.to_atom()
+    field = module_to_field(name)
 
     quote do
       defmodule unquote(full_module) do
@@ -99,6 +86,37 @@ defmodule Algae.Internal do
         @spec new(unquote(type_ctx)) :: t()
         def new(value), do: struct(__MODULE__, [{unquote(field), value}])
       end
+    end
+  end
+
+  @spec embedded_data_ast() :: ast()
+  def embedded_data_ast do
+    quote do
+      @type t :: %__MODULE__{}
+      defstruct []
+
+      @doc "Default #{__MODULE__} struct"
+      @spec new() :: t()
+      def new, do: struct(__MODULE__)
+    end
+  end
+
+  def embedded_data_ast(module_ctx, default, type_ctx) do
+    field = module_to_field(module_ctx)
+    IO.inspect default
+
+    quote do
+      @type t :: %__MODULE__{
+        unquote(field) => unquote(type_ctx)
+      }
+
+      defstruct [{unquote(field), unquote(default)}]
+
+      @doc "Default #{__MODULE__} struct"
+      @spec new(unquote(type_ctx)) :: t()
+      def new(field \\ unquote(default)), do: struct(__MODULE__, [field])
+
+      defoverridable [new: 1]
     end
   end
 
@@ -178,6 +196,22 @@ defmodule Algae.Internal do
   @spec extract_name({any(), any(), atom()} | [module()]) :: [module()]
   def extract_name({_, _, inner_name}), do: List.wrap(inner_name)
   def extract_name(module_chain) when is_list(module_chain), do: module_chain
+
+  def module_to_field(modules) when is_list(modules) do
+    modules
+    |> List.last()
+    |> module_to_field()
+  end
+
+  def module_to_field(module) do
+    module
+    |> Atom.to_string()
+    |> String.split(".")
+    |> List.last()
+    |> String.downcase()
+    |> String.trim_leading("elixir.")
+    |> String.to_atom()
+  end
 
   # credo:disable-for-lines:21 Credo.Check.Refactor.CyclomaticComplexity
   def default_value({:., _, [{_, _, [:String]}, :t]}), do: ""

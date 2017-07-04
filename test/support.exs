@@ -86,7 +86,7 @@ defmodule Example do
     end
   end
 
-  defmodule Pet do
+  defmodule Animal do
     defdata do
       name      :: String.t()
       leg_count :: non_neg_integer() \\ 4
@@ -98,14 +98,14 @@ defmodule Example do
   end
 
   defmodule Constant do
-    # defdata fun() \\ (fn _ -> nil end)
+    defdata fun()
 
-    # def new(value), do: %Constant{constant: fn _ -> value end}
+    def new(value), do: %Constant{constant: fn _ -> value end}
   end
 
-  # defmodule Nothing do
-  #   defdata none()
-  # end
+  defmodule Nothing do
+    defdata none()
+  end
 
   defmodule Light do
     # ============== #
@@ -152,7 +152,7 @@ defmodule Example do
   defdata Book :: String.t() \\ "War and Peace"
   defdata Video :: String.t() \\ "2001: A Space Odyssey"
 
-  defmodule Mediay do
+  defmodule Media do
     defsum do
       defdata Paper :: String.t()
       defdata Film  :: Video.t() \\ Video.new("A Clockwork Orange")

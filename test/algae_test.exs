@@ -33,13 +33,13 @@ defmodule AlgaeTest do
   #   }
 
 
-  Example.Pet.new("Crookshanks")
+  Example.Animal.new("Crookshanks")
   #=> %Pet{
   #     name: "Crookshanks",
   #     leg_count: 4
   #   }
 
-  Example.Pet.new("Paul the Psychic Octopus", 8)
+  Example.Animal.new("Paul the Psychic Octopus", 8)
   #=> %Pet{
   #     name: "Paul the Psychic Octopus",
   #     leg_count: 8
