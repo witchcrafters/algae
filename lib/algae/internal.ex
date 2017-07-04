@@ -103,8 +103,6 @@ defmodule Algae.Internal do
 
   def embedded_data_ast(module_ctx, default, type_ctx) do
     field = module_to_field(module_ctx)
-    IO.inspect default
-
     quote do
       @type t :: %__MODULE__{
         unquote(field) => unquote(type_ctx)
