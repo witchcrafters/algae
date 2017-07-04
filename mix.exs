@@ -34,7 +34,7 @@ defmodule Algae.Mixfile do
 
      docs: [
        extras: ["README.md"],
-       logo: "./brand/logo.png",
+       logo: "./brand/mini-logo.png",
        main: "readme"
      ]
     ]

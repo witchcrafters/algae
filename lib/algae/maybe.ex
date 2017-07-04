@@ -1,7 +1,7 @@
 defmodule Algae.Maybe do
   @moduledoc ~S"""
   The sum of `Algae.Maybe.Just` and `Algae.Maybe.Nothing`.
-  May represents the presence or absence of something.
+  Maybe represents the presence or absence of something.
 
   Please note that `nil` is actually a value, as it can be passed to functions!
   `nil` is not bottom!
@@ -11,77 +11,50 @@ defmodule Algae.Maybe do
       iex> [1,2,3]
       ...> |> List.first()
       ...> |> case do
-      ...>      nil  -> nothing()
-      ...>      head -> just(head)
+      ...>      nil  -> new()
+      ...>      head -> new(head)
       ...>    end
       %Algae.Maybe.Just{just: 1}
 
       iex> []
       ...> |> List.first()
       ...> |> case do
-      ...>      nil  -> nothing()
-      ...>      head -> just(head)
+      ...>      nil  -> new()
+      ...>      head -> new(head)
       ...>    end
       %Algae.Maybe.Nothing{}
 
   """
 
-  alias Algae.Maybe.{Just, Nothing}
+  import Algae
+  alias Algae.Maybe.{Nothing, Just}
 
-  defmacro __using__(_) do
-    quote do
-      alias Algae.Maybe
-      alias Algae.Maybe.{Just, Nothing}
-    end
+  defsum do
+    defdata Nothing :: none()
+    defdata Just    :: any()
   end
-
-  @type t :: Just.t() | Nothing.t()
 
   @doc ~S"""
   Put no value into the `Maybe` context (ie: make it a `Nothing`)
 
   ## Examples
 
-      iex> maybe()
+      iex> new()
       %Algae.Maybe.Nothing{}
 
   """
-  @spec maybe() :: Nothing.t()
-  defdelegate maybe, to: Nothing, as: :new
-
-  @doc ~S"""
-  Alias for `maybe/0`
-
-  ## Examples
-
-      iex> Algae.Maybe.nothing()
-      %Algae.Maybe.Nothing{}
-
-  """
-  @spec nothing() :: Nothing.t()
-  defdelegate nothing, to: Nothing, as: :new
+  @spec new() :: Nothing.t()
+  defdelegate new, to: Nothing, as: :new
 
   @doc ~S"""
   Put a value into the `Maybe` context (ie: make it a `Just`)
 
   ## Examples
 
-      iex> maybe(9)
+      iex> new(9)
       %Algae.Maybe.Just{just: 9}
 
   """
-  @spec maybe(any) :: Just.t()
-  defdelegate maybe(value), to: Just, as: :new
-
-  @doc ~S"""
-  Alias for `maybe/1`
-
-  ## Examples
-
-      iex> Algae.Maybe.Just.new(9)
-      %Algae.Maybe.Just{just: 9}
-
-  """
-  @spec just(any) :: Just.t()
-  defdelegate just(value), to: Just, as: :new
+  @spec new(any) :: Just.t()
+  defdelegate new(value), to: Just, as: :new
 end
