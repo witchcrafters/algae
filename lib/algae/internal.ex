@@ -25,7 +25,7 @@ defmodule Algae.Internal do
   end
 
   def data_ast(modules, {:none, _, _}) do
-    full_module = Module.concat(modules)
+    full_module = modules |> List.wrap() |> Module.concat()
 
     quote do
       defmodule unquote(full_module) do
@@ -162,7 +162,7 @@ defmodule Algae.Internal do
     |> case do
       {:\\, _, [inner_module_ctx, _]} -> inner_module_ctx
       {:__aliases__, _, module} -> module
-      outer_module_ctx -> outer_module_ctx |> IO.inspect
+      outer_module_ctx -> outer_module_ctx
     end
     |> List.wrap()
   end
@@ -180,10 +180,11 @@ defmodule Algae.Internal do
   def extract_name(module_chain) when is_list(module_chain), do: module_chain
 
   # credo:disable-for-lines:21 Credo.Check.Refactor.CyclomaticComplexity
-  def default_type({{:., _, [_, :t]}, _, _} = struct_type), do: struct_type
+  def default_value({:., _, [{_, _, [:String]}, :t]}), do: ""
+  def default_value({{:., _, [{_, _, [:String]}, :t]}, _, _}), do: ""
 
-  def default_value({{:., _, [{_, _, [:String]}, :t]}, [], []}), do: ""
-  def default_value({{:., _, [{_, _, adt}, :t]}, [], []}) do
+  def default_value({:., _, [{_, _, adt}, :t]}), do: Module.concat(adt).new()
+  def default_value({{:., _, [{_, _, adt}, :t]}, _, []}) do
     Module.concat(adt).new()
   end
 

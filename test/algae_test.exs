@@ -1,39 +1,57 @@
-# import Algae
-
-# defmodule Player do
-#   defdata do
-#     name       :: String.t()
-#     hit_points :: non_neg_integer()
-#     experience :: non_neg_integer()
-#   end
-
-#   @spec attack(t(), t()) :: {t(), t()}
-#   def attack(%{experience: xp} = player, %{hit_points: hp} = target) do
-#     {
-#       %{player | experience: xp + 50},
-#       %{target | hit_points: hp - 10}
-#     }
-#   end
-# end
-
-# %Player{name: "Sir Bob", hit_points: 10, experience: 500}
-
 defmodule AlgaeTest do
   use ExUnit.Case
 
-  # doctest Algae, import: true
+  Example.Light.new()
+  #=> %Light.Red{}
 
-  # assert Player.new("hi") == %Player{}
 
-  # doctest Algae.Id, import: true
+  Example.Option.new()
+  #=> %Option.None{}
 
-  # doctest Algae.Maybe, import: true
-  # doctest Algae.Maybe.Nothing, import: true
-  # doctest Algae.Maybe.Just, import: true
 
-  # doctest Algae.Either, import: true
-  # doctest Algae.Either.Left, import: true
-  # doctest Algae.Either.Right, import: true
+  media = Example.Media.new()
+  #=> %Paper{
+  #      paper: %Book{
+  #        book: "War and Peace"
+  #      }
+  #   }
 
-  # doctest Algae.Reader, import: true
+
+  Example.Nothing.new()
+  #=> %Nothing{}
+  %Example.Wrapper{}
+  #=> %Wrapper{wrapper: nil}
+
+  %Example.Id{}
+  #=> %Id{id: nil}
+
+
+  Example.Person.new("Rachel Weintraub")
+  #=> %Person{
+  #     name: "Rachel Weintraub",
+  #     age:  0
+  #   }
+
+
+  Example.Pet.new("Crookshanks")
+  #=> %Pet{
+  #     name: "Crookshanks",
+  #     leg_count: 4
+  #   }
+
+  Example.Pet.new("Paul the Psychic Octopus", 8)
+  #=> %Pet{
+  #     name: "Paul the Psychic Octopus",
+  #     leg_count: 8
+  #   }
+
+  Example.Grocery.new()
+  #=> %Grocery{
+  #     item: {"Apple", 4, false}
+  #   }
+  fourty_two = Example.Constant.new(42)
+  fourty_two.constant.(33)
+  #=> 42
+
+  assert media == media
 end
