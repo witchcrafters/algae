@@ -339,9 +339,9 @@ BTree.Branch.new(
 #       right: %Algae.Tree.Binary.Empty{}
 #     },
 #     right: %Algae.Tree.Binary.Branch{
-#       value: 98,
+#       value: 1234,
 #       left:  %Algae.Tree.Binary.Branch{
-#         value: 1234,
+#         value: 98,
 #         left:  %Algae.Tree.Binary.Empty{},
 #         right: %Algae.Tree.Binary.Empty{}
 #       },

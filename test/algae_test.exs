@@ -3,6 +3,8 @@ defmodule AlgaeTest do
   use ExUnit.Case
 
   doctest Algae.Maybe, import: true
+  doctest Algae.Either, import: true
+  doctest Algae.Tree.Binary, import: true
 
   test "constructor for empty type" do
     assert Example.Light.new() == %Example.Light.Red{}
