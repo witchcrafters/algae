@@ -313,6 +313,12 @@ Algae.Maybe.new(42)
 ```elixir
 alias Algae.Tree.Binary, as: BTree
 
+#   42
+#  /  \
+# 77  122
+#     /
+#    98
+
 BTree.Branch.new(
   42,
   BTree.Branch.new(77),
@@ -336,12 +342,4 @@ BTree.Branch.new(
 #       right: %Algae.Tree.Binary.Empty{}
 #     }
 #   }
-```
-
-```
-  42
- /  \
-77  122
-    /
-   98
 ```
