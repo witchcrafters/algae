@@ -12,15 +12,16 @@ defmodule Algae.Tree.Binary do
 
   """
 
+  alias __MODULE__
   import Algae
 
   defsum do
     defdata Empty :: none()
-    defdata Leaf  :: any()
 
     defdata Branch do
-      left  :: any()
-      right :: any()
+      value :: any()
+      left  :: Binary.t() \\ Binary.Empty.t()
+      right :: Binary.t() \\ Binary.Empty.t()
     end
   end
 end

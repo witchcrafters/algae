@@ -1,7 +1,7 @@
 defmodule Algae.Maybe do
   @moduledoc ~S"""
   The sum of `Algae.Maybe.Just` and `Algae.Maybe.Nothing`.
-  May represents the presence or absence of something.
+  Maybe represents the presence or absence of something.
 
   Please note that `nil` is actually a value, as it can be passed to functions!
   `nil` is not bottom!
@@ -11,16 +11,16 @@ defmodule Algae.Maybe do
       iex> [1,2,3]
       ...> |> List.first()
       ...> |> case do
-      ...>      nil  -> nothing()
-      ...>      head -> just(head)
+      ...>      nil  -> new()
+      ...>      head -> new(head)
       ...>    end
       %Algae.Maybe.Just{just: 1}
 
       iex> []
       ...> |> List.first()
       ...> |> case do
-      ...>      nil  -> nothing()
-      ...>      head -> just(head)
+      ...>      nil  -> new()
+      ...>      head -> new(head)
       ...>    end
       %Algae.Maybe.Nothing{}
 

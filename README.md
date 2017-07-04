@@ -278,3 +278,66 @@ media = Media.new()
 #      }
 #   }
 ```
+
+# A Sampling of ADTs
+
+## `Algae.Id`
+
+The simplest ADT: a simple wrapper for some data
+
+```elixir
+%Algae.Id{id: "hi!"}
+```
+
+## `Algae.Maybe`
+
+Maybe represents the presence or absence of something.
+
+Please note that `nil` is actually a value, as it can be passed to functions!
+`nil` is not bottom!
+
+```elixir
+Algae.Maybe.new()
+#=> %Algae.Maybe.Nothing{}
+
+Algae.Maybe.new(42)
+#=> %Algae.Maybe.Just{just: 42}
+```
+
+## Binary Tree
+
+```elixir
+alias Algae.Tree.Binary, as: BTree
+
+BTree.Branch.new(
+  42,
+  BTree.Branch.new(77),
+  BTree.Branch.new(98, BTree.Branch.new(122))
+)
+
+#=> %Algae.Tree.Binary.Branch{
+#     value: 42,
+#     left: %Algae.Tree.Binary.Branch{
+#       value: 77,
+#       left:  %Algae.Tree.Binary.Empty{},
+#       right: %Algae.Tree.Binary.Empty{}
+#     },
+#     right: %Algae.Tree.Binary.Branch{
+#       value: 98,
+#       left:  %Algae.Tree.Binary.Branch{
+#         value: 122,
+#         left:  %Algae.Tree.Binary.Empty{},
+#         right: %Algae.Tree.Binary.Empty{}
+#       },
+#       right: %Algae.Tree.Binary.Empty{}
+#     }
+#   }
+```
+
+```
+  42
+ /  \
+77  122
+    /
+   98
+```

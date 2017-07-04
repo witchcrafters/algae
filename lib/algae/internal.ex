@@ -130,7 +130,7 @@ defmodule Algae.Internal do
           [{field(), any()}]
         }
   def module_elements(lines) do
-    Enum.reduce(lines, {[], [], [], [], []},
+    List.foldr(lines, {[], [], [], [], []},
       fn(line, {value_acc, type_acc, typespec_acc, acc_arg, acc_mapping}) ->
         {field, type, default_value} = normalize_elements(line)
         arg = {field, [], Elixir}

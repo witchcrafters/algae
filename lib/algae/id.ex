@@ -5,6 +5,7 @@ defmodule Algae.Id do
   ## Examples
 
       %Algae.Id{id: "hi!"}
+
   """
 
   import Algae
