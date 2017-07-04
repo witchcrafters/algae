@@ -1,59 +1,152 @@
 defmodule Algae do
   @moduledoc """
-  --- Id --
-
-  defmodule Id do
-  defdata do: id :: any()
-  end
-
-  --- Sum ---
-
-  defmodule Either do
-  defsum do
-  defdata Left  :: any()
-  defdata Right :: any()
-  end
-  end
-
-  defmodule Either do
-  defdata do: Left :: any() | Right :: any()
-  end
-
-  --- Product --
-
-  defmodule Rectangle do
-  data do: width :: number(), height :: number()
-  end
-
-  -- Both --
-
-  data Stree a = Tip | Node (Stree a) a (Stree a)
-  defmodule Stree do
-  defdata do
-  Tip :: any() | Node :: (left :: t()), (middle = 42 :: any()), (right :: t())
-  end
-  end
-
-  defmodule Stree do
-  defsum do
-  defdata Tip :: any()
-
-  defproduct Node do
-  left :: Stree.t()
-  middle = 42 :: any()
-  right :: Stree.t()
-  end
-  end
-  end
+  Builder DSL to handle common ADT definition use cases
   """
+
+  import Algae.Internal
 
   @type ast() :: {atom(), any(), any()}
 
-  # ============= #
-  # Top-level API #
-  # ============= #
+  @doc ~S"""
+  Build a product type
 
-  @doc """
+  Includes:
+
+  * Struct
+  * Type definition
+  * Constructor function (for piping and defaults)
+  * Implicit defaults for simple values
+
+  ## Definition
+
+  For convenveniece, several variants of the DSL are available.
+
+  ### Standard
+
+      defmodule Player do
+        # =============== #
+        # Data Definition #
+        # =============== #
+
+        defdata do
+          name       :: String.t()
+          hit_points :: non_neg_integer()
+          experience :: non_neg_integer()
+        end
+
+        # =================== #
+        #    Rest of Module   #
+        # (business as usual) #
+        # =================== #
+
+        @spec attack(t(), t()) :: {t(), t()}
+        def attack(%{experience: xp} = player, %{hit_points: hp} = target) do
+          {
+            %{player | experience: xp + 50},
+            %{target | hit_points: hp - 10}
+          }
+        end
+      end
+
+      #=> %Player{name: "Sir Bob", hit_points: 10, experience: 500}
+
+  ### Single Field Shorthand
+
+  Without any fields specified, Algae will default to a single field with
+  the same name as the module (essentially a "wrapper type"). You must still
+  provide the type for this field, however.
+
+  Embedded in another module:
+
+      defmodule Id do
+        defdata any()
+      end
+
+      %Id{}
+      #=> %Id{id: nil}
+
+  Standalone:
+
+      defdata Wrapper :: any()
+
+      %Wrapper{}
+      #=> %Wrapper{wrapper: nil}
+
+  ## Constructor
+
+  A helper function, especially useful for piping. The order of arguments is
+  the same as the order that they are defined in.
+
+      defmodule Person do
+        defdata do
+          name :: String.t()
+          age  :: non_neg_integer()
+        end
+      end
+
+      Person.new("Rachel Weintraub")
+      #=> %Person{
+      #     name: "Rachel Weintraub",
+      #     age:  0
+      #   }
+
+  ### Constructor Defaults
+
+  Fields will automatically default to a sensible value (a typical "zero" for
+  that datatype). For example, `non_neg_integer()` will default to `0`,
+  and `String.t()` will default to `""`.
+
+  You may also overwrite these defaults with the `\\` syntax.
+
+      defmodule Pet do
+        defdata do
+          name      :: String.t()
+          leg_count :: non_neg_integer() \\ 4
+        end
+      end
+
+      Pet.new("Crookshanks")
+      #=> %Pet{
+      #     name: "Crookshanks",
+      #     leg_count: 4
+      #   }
+
+  This overwriting syntax is _required_ for complex types:
+
+      defdata Grocery do
+        item :: {String.t(), integer(), boolean()} \\ {"Apple", 4, false}
+      end
+
+      Grocery.new()
+      #=> %Grocery{
+      #     item: {"Apple", 4, false}
+      #   }
+
+  ### Overwrite Constructor
+
+  The `new` constructor function may be overwritten.
+
+      defmodule Constant do
+        defdata :: fun() \\ fn _ -> nil end
+
+        def new(value), do: %Constant{constant: fn _ -> value end}
+      end
+
+      fourty_two = Constant.new(42)
+      fourty_two.constant.(33)
+      #=> 42
+
+  ## Empty Tag
+
+  An empty type (with no fields) is definable using the `none`() type
+
+      defmodule Nothing do
+        defdata :: none()
+      end
+
+      Nothing.new()
+      #=> %Nothing{}
+
   """
   defmacro defdata(ast) do
     caller_module = __CALLER__.module
@@ -107,7 +200,86 @@ defmodule Algae do
   end
 
   @doc """
-  Generate the AST for a sum type definition
+  Build a sum (coproduct) type from product types
+
+      defmodule Light do
+        # ============== #
+        # Sum Definition #
+        # ============== #
+
+        defsum do
+          defdata Red    :: none()
+          defdata Yellow :: none()
+          defdata Green  :: none()
+        end
+
+        # =================== #
+        #    Rest of Module   #
+        # (business as usual) #
+        # =================== #
+
+        def from_number(1), do: %Light.Red{}
+        def from_number(2), do: %Light.Yellow{}
+        def from_number(3), do: %Light.Green{}
+      end
+
+      Light.new()
+      #=> %Light.Red{}
+
+  ## Embedded Products
+
+  Data with multiple fileds can be defined directly as part of a sum
+
+      defmodule Pet do
+        defsum do
+          defdata Cat do
+            name :: String.t()
+            claw_sharpness :: String.t()
+          end
+
+          defdata Dog do
+            name :: String.t()
+            bark_loudness :: non_neg_integer()
+          end
+        end
+      end
+
+  ## Default Constructor
+
+  The first `defdata`'s constructor will be the default constructor for the sum
+
+      defmodule Maybe do
+        defsum do
+          defdata Nothing :: none()
+          defdata Just    :: any()
+        end
+      end
+
+      Maybe.new()
+      #=> %Maybe.Nothing{}
+
+  ## Tagged Unions
+
+  Sums join existing types with tags: new types to help distibguish the context
+  that they are in (the sum type)
+
+      defdata Book  :: String.t() \\ "War and Peace"
+      defdata Video :: String.t() \\ "2001: A Space Odyssey"
+
+      defmodule Media do
+        defsum do
+          defdata Paper :: Book.t()
+          defdata Film  :: Video.t() \\ Video.new("A Clockwork Orange")
+        end
+      end
+
+      media = Media.new()
+      #=> %Paper{
+      #      paper: %Book{
+      #        book: "War and Peace"
+      #      }
+      #   }
+
   """
   @spec defsum([do: {:__block__, [any()], ast()}]) :: ast()
   defmacro defsum(do: {:__block__, _, [first | _] = parts} = block) do
@@ -128,214 +300,6 @@ defmodule Algae do
       def new, do: unquote(default_module).new()
 
       defoverridable [new: 0]
-    end
-  end
-
-  # ======= #
-  # Helpers #
-  # ======= #
-
-  @doc """
-  Construct a data type AST
-  """
-  @spec data_ast(module() | [module()], ast()) :: ast()
-  def data_ast(lines) when is_list(lines) do
-    {field_values, field_types, specs, args, defaults} = module_elements(lines)
-
-    quote do
-      @type t :: %__MODULE__{unquote_splicing(field_types)}
-      defstruct unquote(field_values)
-
-      @doc "Positional constructor, with args in the same order as they were defined in"
-      @spec new(unquote_splicing(specs)) :: t()
-      def new(unquote_splicing(args)) do
-        struct(__MODULE__, unquote(defaults))
-      end
-
-      defoverridable [new: unquote(Enum.count(args))]
-    end
-  end
-
-  def data_ast(modules, {:none, _, _}) do
-    full_module = Module.concat(modules)
-
-    quote do
-      defmodule unquote(full_module) do
-        @type t :: %__MODULE__{}
-
-        defstruct []
-
-        @doc "Default #{__MODULE__} struct"
-        @spec new() :: t()
-        def new, do: struct(__MODULE__)
-
-        defoverridable [new: 0]
-      end
-    end
-  end
-
-  def data_ast(caller_module, type) do
-    default = default_value(type)
-
-    field =
-      caller_module
-      |> Module.split()
-      |> List.last()
-      |> String.downcase()
-      |> String.to_atom()
-
-    quote do
-      @type t :: %unquote(caller_module){
-        unquote(field) => unquote(type)
-      }
-
-      defstruct [{unquote(field), unquote(default)}]
-
-      @doc "Default #{__MODULE__} struct"
-      @spec new() :: t()
-      def new, do: struct(__MODULE__)
-
-      @doc "Constructor helper for piping"
-      @spec new(unquote(type)) :: t()
-      def new(field), do: struct(__MODULE__, [unquote(field), field])
-
-      defoverridable [new: 0, new: 1]
-    end
-  end
-
-  @spec data_ast([module()], any(), ast()) :: ast()
-  def data_ast(name, default, type_ctx) do
-    full_module = Module.concat(name)
-
-    field =
-      name
-      |> List.last()
-      |> Atom.to_string()
-      |> String.downcase()
-      |> String.trim_leading("elixir.")
-      |> String.to_atom()
-
-    quote do
-      defmodule unquote(full_module) do
-        @type t :: %unquote(full_module){
-          unquote(field) => unquote(type_ctx)
-        }
-
-        defstruct [{unquote(field), unquote(default)}]
-
-        @doc "Default #{__MODULE__} struct. Value defaults to #{inspect unquote(default)}."
-        @spec new() :: t()
-        def new, do: struct(__MODULE__)
-
-        @doc "Helper for initializing struct with a specific value"
-        @spec new(unquote(type_ctx)) :: t()
-        def new(value), do: struct(__MODULE__, [{unquote(field), value}])
-      end
-    end
-  end
-
-  @type field :: {atom(), [any()], [any()]}
-  @type type  :: {atom(), [any()], [any()]}
-
-  @spec module_elements([ast()])
-     :: {
-          [{field(), any()}],
-          [{field(), type()}],
-          [type],
-          [{:\\, [], any()}],
-          [{field(), any()}]
-        }
-  def module_elements(lines) do
-    Enum.reduce(lines, {[], [], [], [], []},
-      fn(line, {value_acc, type_acc, typespec_acc, acc_arg, acc_mapping}) ->
-        {field, type, default_value} = normalize_elements(line)
-        arg = {field, [], Elixir}
-
-        {
-          [{field, default_value} | value_acc],
-          [{field, type} | type_acc],
-          [type | typespec_acc],
-          [{:\\, [], [arg, default_value]} | acc_arg],
-          [{field, arg} | acc_mapping]
-        }
-      end)
-  end
-
-  @spec normalize_elements(ast()) :: {atom(), type(), any()}
-  def normalize_elements({:::, _, [{field, _, _}, type]}), do: {field, type, nil}
-  def normalize_elements({:\\, _, [{:::, _, [{field, _, _}, type]}, default]}) do
-    {field, type, default}
-  end
-
-  @spec or_types([ast()], module()) :: [ast()]
-  def or_types({:\\, _, [{:::, _, [_, types]}, _]}, module_ctx) do
-    or_types(types, module_ctx)
-  end
-
-  def or_types([head | tail], module_ctx) do
-    Enum.reduce(tail, call_type(head, module_ctx), fn(module, acc) ->
-      {:|, [], [call_type(module, module_ctx), acc]}
-    end)
-  end
-
-  @spec modules(module(), [module()]) :: [module()]
-  def modules(top, module_ctx), do: [top | extract_name(module_ctx)]
-
-  @spec call_type(module(), [module()]) :: ast()
-  def call_type(new_module, module_ctx) do
-    full_module = List.wrap(module_ctx) ++ submodule_name(new_module)
-    {{:., [], [{:__aliases__, [alias: false], full_module}, :t]}, [], []}
-  end
-
-  @spec submodule_name({:defdata, any(), [{:::, any(), [any()]}]})
-     :: [module()]
-  def submodule_name({:defdata, _, [{:::, _, [body, _]}]}) do
-    body
-    |> case do
-      {:\\, _, [inner_module_ctx, _]} -> inner_module_ctx
-      {:__aliases__, _, module} -> module
-      outer_module_ctx -> outer_module_ctx |> IO.inspect
-    end
-    |> List.wrap()
-  end
-
-  def submodule_name({:defdata, _, [{:\\, _, [{:::, _, [{:__aliases__, _, module}, _]}, _]}]}) do
-    List.wrap(module)
-  end
-
-  def submodule_name({:defdata, _, [{:__aliases__, _, module}, _]}) do
-    List.wrap(module)
-  end
-
-  @spec extract_name({any(), any(), atom()} | [module()]) :: [module()]
-  def extract_name({_, _, inner_name}), do: List.wrap(inner_name)
-  def extract_name(module_chain) when is_list(module_chain), do: module_chain
-
-  # credo:disable-for-lines:21 Credo.Check.Refactor.CyclomaticComplexity
-  def default_type({{:., _, [_, :t]}, _, _} = struct_type), do: struct_type
-
-  def default_value({type, _, _}) do
-    case type do
-      :number  -> 0
-      :integer -> 0
-
-      :float -> 0.0
-
-      :pos_integer     -> 1
-      :non_neg_integer -> 0
-
-      :bitstring  -> ""
-      :list -> []
-
-      :map  -> %{}
-      []    -> []
-      :list -> []
-
-      :fun -> &Quark.id/1
-      :->  -> &Quark.id/1
-
-      :any -> nil
-      atom -> atom
     end
   end
 end
