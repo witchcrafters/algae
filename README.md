@@ -315,14 +315,18 @@ alias Algae.Tree.Binary, as: BTree
 
 #   42
 #  /  \
-# 77  122
-#     /
-#    98
+# 77  1234
+#     /  \
+#    98  32
 
 BTree.Branch.new(
   42,
   BTree.Branch.new(77),
-  BTree.Branch.new(98, BTree.Branch.new(122))
+  BTree.Branch.new(
+    1234,
+    BTree.Branch.new(98),
+    BTree.Branch.new(32)
+  )
 )
 
 #=> %Algae.Tree.Binary.Branch{
@@ -335,11 +339,15 @@ BTree.Branch.new(
 #     right: %Algae.Tree.Binary.Branch{
 #       value: 98,
 #       left:  %Algae.Tree.Binary.Branch{
-#         value: 122,
+#         value: 1234,
 #         left:  %Algae.Tree.Binary.Empty{},
 #         right: %Algae.Tree.Binary.Empty{}
 #       },
-#       right: %Algae.Tree.Binary.Empty{}
+#       right: %Algae.Tree.Binary.Branch{
+#         value: 32,
+#         left:  %Algae.Tree.Binary.Empty{},
+#         right: %Algae.Tree.Binary.Empty{}
+#       }
 #     }
 #   }
 ```
