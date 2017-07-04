@@ -22,8 +22,8 @@ defmodule Algae.Tree.Binary do
 
     defdata Branch do
       value :: any()
-      left  :: Binary.t() \\ Empty.t()
-      right :: Binary.t() \\ Empty.t()
+      left  :: Binary.t() \\ Empty.new()
+      right :: Binary.t() \\ Empty.new()
     end
   end
 end
