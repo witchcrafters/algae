@@ -1,4 +1,6 @@
 defmodule Algae do
+  @moduledoc """
+  """
 
   @type ast() :: {atom(), any(), any()}
 
@@ -304,7 +306,12 @@ defmodule Algae do
       :bitstring  -> ""
       :list -> []
 
-      :map -> %{}
+      :map  -> %{}
+      []    -> []
+      :list -> []
+
+      :fun -> &Quark.id/1
+      :->  -> &Quark.id/1
 
       :any -> nil
       atom -> atom
