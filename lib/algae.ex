@@ -133,7 +133,7 @@ defmodule Algae do
   The `new` constructor function may be overwritten.
 
       defmodule Constant do
-        defdata :: fun() \\\\ fn _ -> nil end
+        defdata :: fun()
 
         def new(value), do: %Constant{constant: fn _ -> value end}
       end
