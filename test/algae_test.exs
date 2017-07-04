@@ -2,6 +2,8 @@ defmodule AlgaeTest do
   alias Example.{Light, Wrapper, Media, Book, Animal, Pet}
   use ExUnit.Case
 
+  doctest Algae.Maybe, import: true
+
   test "constructor for empty type" do
     assert Example.Light.new() == %Example.Light.Red{}
   end

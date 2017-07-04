@@ -31,10 +31,7 @@ defmodule Algae.Maybe do
 
   defsum do
     defdata Nothing :: none()
-
-    defdata Just do
-      value :: any()
-    end
+    defdata Just    :: any()
   end
 
   @doc ~S"""
