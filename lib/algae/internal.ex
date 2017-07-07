@@ -251,5 +251,6 @@ defmodule Algae.Internal do
 
       atom -> atom
     end
+    |> Macro.escape()
   end
 end
