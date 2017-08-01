@@ -51,3 +51,25 @@ definst Witchcraft.Traversable, for: Algae.Id do
     |> Witchcraft.Functor.map(fn x -> %Algae.Id{id: x} end)
   end
 end
+
+definst Witchcraft.Apply, for: Algae.Id do
+  def ap(%{id: fun}, data), do: Witchcraft.Functor.map(data, fun)
+end
+
+definst Witchcraft.Applicative, for: Algae.Id do
+  def of(_, data), do: %Algae.Id{id: data}
+end
+
+definst Witchcraft.Chain, for: Algae.Id do
+  def chain(%{id: data}, link), do: link.(data)
+end
+
+definst Witchcraft.Monad, for: Algae.Id
+
+definst Witchcraft.Extend, for: Algae.Id do
+  def nest(inner), do: %Algae.Id{id: inner}
+end
+
+definst Witchcraft.Comonad, for: Algae.Id do
+  def extract(%{id: inner}), do: inner
+end
