@@ -2,6 +2,9 @@ defmodule AlgaeTest do
   alias Example.{Light, Wrapper, Media, Book, Animal, Pet}
   use ExUnit.Case
 
+  doctest Algae.Id, import: true
+  doctest Witchcraft.Setoid.Proto.Algae.Id, import: true
+
   doctest Algae.Maybe, import: true
   doctest Algae.Either, import: true
   doctest Algae.Tree.Binary, import: true
