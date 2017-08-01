@@ -3,7 +3,6 @@ defmodule AlgaeTest do
   use ExUnit.Case
 
   doctest Algae.Id, import: true
-  doctest Witchcraft.Setoid.Proto.Algae.Id, import: true
 
   doctest Algae.Maybe, import: true
   doctest Algae.Either, import: true
