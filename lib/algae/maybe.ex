@@ -161,6 +161,7 @@ end
 ############
 
 definst Witchcraft.Foldable, for: Algae.Maybe.Nothing do
+  @force_type_instance true
   def right_fold(_, seed, _), do: seed
 end
 
@@ -173,6 +174,7 @@ end
 ###############
 
 definst Witchcraft.Traversable, for: Algae.Maybe.Nothing do
+  @force_type_instance true
   def traverse(_, link), do: %Algae.Maybe.Nothing{}
 end
 
@@ -201,11 +203,11 @@ end
 ###############
 
 definst Witchcraft.Applicative, for: Algae.Maybe.Nothing do
-  def of(_, data), do: %Algae.Maybe.Just{id: data}
+  def of(_, data), do: %Algae.Maybe.Just{just: data}
 end
 
 definst Witchcraft.Applicative, for: Algae.Maybe.Just do
-  def of(_, data), do: %Algae.Maybe.Just{id: data}
+  def of(_, data), do: %Algae.Maybe.Just{just: data}
 end
 
 #########
