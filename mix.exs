@@ -7,7 +7,7 @@ defmodule Algae.Mixfile do
 
      description: "Bootstrapped algebraic data types for Elixir",
      version: "1.1.0",
-     elixir:  "~> 1.4",
+     elixir:  "~> 1.5",
 
      package: [
        maintainers: ["Brooklyn Zelenka"],
