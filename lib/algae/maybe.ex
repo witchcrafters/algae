@@ -90,7 +90,7 @@ definst Witchcraft.Setoid, for: Algae.Maybe.Nothing do
 end
 
 definst Witchcraft.Setoid, for: Algae.Maybe.Just do
-  def equivalent?(%Just{just: a}, %Just{just: b}), do: a == b
+  def equivalent?(%Just{just: a}, %Just{just: b}), do: Witchcraft.Setoid.equivalent?(a, b)
   def equivalent?(%Just{}, %Nothing{}), do: false
 end
 
