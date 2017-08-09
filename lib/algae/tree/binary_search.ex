@@ -240,11 +240,54 @@ end
 
 definst Witchcraft.Apply, for: Algae.Tree.BinarySearch.Node do
   def convey(_, %Empty{}), do: %Empty{}
-  def convey(%{node: node, left: left, right: right}, %Node{node: fun, left: l_funs, right: r_funs}) do
+  def convey(%{node: node, left: left, right: right}, tree_funs = %Node{node: fun}) do
     %Node{
       node:  fun.(node),
-      left:  Witchcraft.Apply.convey(left,  l_funs),
-      right: Witchcraft.Apply.convey(right, r_funs)
+      left:  Witchcraft.Apply.convey(left,  tree_funs),
+      right: Witchcraft.Apply.convey(right, tree_funs)
+    }
+  end
+end
+
+###############
+# Applicative #
+###############
+
+definst Witchcraft.Applicative, for: Algae.Tree.BinarySearch.Empty do
+  def of(_, data), do: %Node{node: data}
+end
+
+definst Witchcraft.Applicative, for: Algae.Tree.BinarySearch.Node do
+  @force_type_instance true
+  def of(_, data), do: %Node{node: data}
+end
+
+#########
+# Chain #
+#########
+
+definst Witchcraft.Chain, for: Algae.Tree.BinarySearch.Empty do
+  def chain(_, _), do: %Empty{}
+end
+
+definst Witchcraft.Chain, for: Algae.Tree.BinarySearch.Node do
+  def chain(%Node{node: node}, link), do: link.(node)
+end
+
+##########
+# Extend #
+##########
+
+definst Witchcraft.Extend, for: Algae.Tree.BinarySearch.Empty do
+  def nest(_), do: %Empty{}
+end
+
+definst Witchcraft.Extend, for: Algae.Tree.BinarySearch.Node do
+  def nest(tree = %Node{node: node, left: left, right: right}) do
+    %Node{
+      node:  tree,
+      left:  Witchcraft.Extend.nest(left),
+      right: Witchcraft.Extend.nest(right)
     }
   end
 end
