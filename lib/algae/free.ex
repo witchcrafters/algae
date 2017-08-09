@@ -49,14 +49,19 @@ defmodule Algae.Free do
       iex> 13
       ...> |> new()
       ...> |> layer(42)
-      0
+      %Algae.Free.Deep{
+        deep: 42,
+        deeper: %Algae.Free.Shallow{
+          shallow: 13
+        }
+      }
 
   """
   @spec layer(t(), any()) :: t()
-  def layer(free, value), do: %Deep{deep: value, deeper: %Free.Deep{deep: free}}
+  def layer(free, value), do: %Deep{deep: value, deeper: free}
 end
 
-alias Alage.Free.{Deep, Shallow}
+alias Algae.Free.{Deep, Shallow}
 import TypeClass
 use Witchcraft
 
@@ -79,5 +84,26 @@ defimpl TypeClass.Property.Generator, for: Deep do
     |> Enum.random()
     |> TypeClass.Property.Generator.generate()
     |> Deep.new()
+  end
+end
+
+##########
+# Setoid #
+##########
+
+definst Witchcraft.Setoid, for: Algae.Free.Shallow do
+  def equivalent?(_, %Deep{}), do: false
+
+  def equivalent?(%Shallow{shallow: a}, %Shallow{shallow: b}) do
+    Witchcraft.Setoid.equivalent?(a, b)
+  end
+end
+
+definst Witchcraft.Setoid, for: Algae.Free.Deep do
+  def equivalent?(_, %Shallow{}), do: false
+
+  def equivalent?(%Deep{deep: deep_a, deeper: deeper_a}, %Deep{deep: deep_b, deeper: deeper_b}) do
+    Witchcraft.Setoid.equivalent?(deep_a, deep_b)
+    and Witchcraft.Setoid.equivalent?(deeper_a, deeper_b)
   end
 end
