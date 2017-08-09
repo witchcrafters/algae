@@ -5,6 +5,7 @@ defmodule AlgaeTest do
   doctest Algae.Id,          import: true
   doctest Algae.Maybe,       import: true
   doctest Algae.Either,      import: true
+  doctest Algae.Free,        import: true
   doctest Algae.Tree.Binary, import: true
   doctest Algae.Tree.Rose,   import: true
 
