@@ -41,8 +41,8 @@ defmodule Algae.Tree.BinarySearch do
   """
 
   alias __MODULE__
-
   import Algae
+  use Witchcraft, except: [to_list: 1]
 
   defsum do
     defdata Empty :: none()
@@ -59,6 +59,77 @@ defmodule Algae.Tree.BinarySearch do
 
   @spec new(any()) :: Node.t()
   def new(value), do: %Node{node: value}
+
+  def insert(%Empty{}, value), do: new(value)
+  def insert(tree = %Node{node: node, left: left, right: right}, orderable) do
+    cond do
+      equal?(orderable,   node) -> tree
+      greater?(orderable, node) -> %{tree | right: insert(right, orderable)}
+      lesser?(orderable,  node) -> %{tree | left:  insert(left,  orderable)}
+    end
+  end
+
+  def delete(%Empty{}, _), do: %Empty{}
+  def delete(tree = %Node{node: node, left: left, right: right}, orderable) do
+    case compare(orderable, node) do
+      :greater ->
+        %{tree | right: delete(right, orderable)}
+
+      :lesser ->
+        %{tree | left:  delete(left, orderable)}
+
+      :equal ->
+        case tree do
+          %{left:  %Empty{}}       -> right
+          %{right: %Empty{}}       -> left
+          %{right: %{node: shift}} -> %{tree | node: shift, right: delete(right, shift)}
+        end
+    end
+  end
+
+  def to_list(tree), do: Witchcraft.Foldable.to_list(tree)
+
+  def to_ordered_list(%Empty{}), do: []
+  def to_ordered_list(%Node{node: node, left: left, right: right}) do
+    to_ordered_list(left) ++ [node] ++ to_ordered_list(right)
+  end
+
+  def from_list([]),            do: %Empty{}
+  def from_list([head | tail]), do: head |> new() |> from_list(tail)
+
+  def from_list([],            seed), do: seed
+  def from_list([head | tail], seed), do: from_list(tail, insert(seed, head))
+
+  def sorted_from_list(list), do: list |> Enum.sort() |> from_list()
+
+  def sorted_from_list(list, seed), do: list |> Enum.sort() |> from_list(seed)
+
+  def balance(tree) do
+    tree
+    |> to_list()
+    |> balanced_from_list()
+  end
+
+  def balanced_from_list([]), do: []
+  def balanced_from_list(list) do
+    list
+    |> Enum.sort()
+    |> balanced_from_list(new())
+  end
+
+  def balanced_from_list([],   seed), do: seed
+  def balanced_from_list(list, seed) do
+    center    = get_center(list, list)
+    remaining = List.delete(center, list)
+
+    seed
+    |> insert(center)
+    |> balanced_from_list(remaining)
+  end
+
+  def get_center([],               [head | _]),  do: head
+  def get_center([_],              [head | _]),  do: head
+  def get_center([_ | [_ | left]], [_ | right]), do: get_center(left, right)
 
 end
 
@@ -283,7 +354,7 @@ definst Witchcraft.Extend, for: Algae.Tree.BinarySearch.Empty do
 end
 
 definst Witchcraft.Extend, for: Algae.Tree.BinarySearch.Node do
-  def nest(tree = %Node{node: node, left: left, right: right}) do
+  def nest(tree = %Node{left: left, right: right}) do
     %Node{
       node:  tree,
       left:  Witchcraft.Extend.nest(left),
