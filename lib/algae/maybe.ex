@@ -161,7 +161,6 @@ end
 ############
 
 definst Witchcraft.Foldable, for: Algae.Maybe.Nothing do
-  @force_type_instance true
   def right_fold(_, seed, _), do: seed
 end
 
@@ -173,18 +172,7 @@ end
 # Traversable #
 ###############
 
-definst Witchcraft.Traversable, for: Algae.Maybe.Nothing do
-  @force_type_instance true
-  def traverse(_, link), do: %Algae.Maybe.Nothing{}
-end
-
-definst Witchcraft.Traversable, for: Algae.Maybe.Just do
-  def traverse(%{just: data}, link) do
-    data
-    |> link.()
-    |> Witchcraft.Functor.map(&Algae.Maybe.Just.new/1)
-  end
-end
+# Not traversable because we don't have enough type information for Nothing
 
 #########
 # Apply #
