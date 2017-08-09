@@ -191,11 +191,14 @@ end
 #########
 
 definst Witchcraft.Apply, for: Algae.Maybe.Nothing do
-  def ap(_, _), do: %Algae.Maybe.Nothing{}
+  def convey(_, _), do: %Algae.Maybe.Nothing{}
 end
 
 definst Witchcraft.Apply, for: Algae.Maybe.Just do
-  def ap(%{just: fun}, data), do: Witchcraft.Functor.map(data, fun)
+  alias Algae.Maybe.{Just, Nothing}
+
+  def convey(data, %Nothing{}), do: %Nothing{}
+  def convey(data, %Just{just: fun}), do: Witchcraft.Functor.map(data, fun)
 end
 
 ###############

@@ -83,7 +83,7 @@ definst Witchcraft.Traversable, for: Algae.Id do
 end
 
 definst Witchcraft.Apply, for: Algae.Id do
-  def ap(%{id: fun}, data), do: Witchcraft.Functor.map(data, fun)
+  def convey(data, %{id: fun}), do: Witchcraft.Functor.map(data, fun)
 end
 
 definst Witchcraft.Applicative, for: Algae.Id do
