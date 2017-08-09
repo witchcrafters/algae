@@ -59,6 +59,7 @@ defmodule Algae.Maybe do
   defdelegate new(value), to: Just, as: :new
 end
 
+alias Algae.Maybe.{Just, Nothing}
 import TypeClass
 use Witchcraft
 
@@ -67,7 +68,7 @@ use Witchcraft
 #############
 
 defimpl TypeClass.Property.Generator, for: Algae.Maybe.Nothing do
-  def generate(_), do: %Algae.Maybe.Nothing{}
+  def generate(_), do: Nothing.new()
 end
 
 defimpl TypeClass.Property.Generator, for: Algae.Maybe.Just do
@@ -75,7 +76,7 @@ defimpl TypeClass.Property.Generator, for: Algae.Maybe.Just do
     [1, 1.1, "", []]
     |> Enum.random()
     |> TypeClass.Property.Generator.generate()
-    |> Algae.Maybe.Just.new()
+    |> Just.new()
   end
 end
 
@@ -84,13 +85,13 @@ end
 ##########
 
 definst Witchcraft.Setoid, for: Algae.Maybe.Nothing do
-  def equivalent?(_, %Algae.Maybe.Nothing{}), do: true
-  def equivalent?(_, %Algae.Maybe.Just{}),    do: false
+  def equivalent?(_, %Nothing{}), do: true
+  def equivalent?(_, %Just{}),    do: false
 end
 
 definst Witchcraft.Setoid, for: Algae.Maybe.Just do
-  def equivalent?(%{just: a}, %{just: b}), do: a == b
-  def equivalent?(%{just: a}, %Algae.Maybe.Nothing{}), do: false
+  def equivalent?(%Just{just: a}, %Just{just: b}), do: a == b
+  def equivalent?(%Just{}, %Nothing{}), do: false
 end
 
 #######
@@ -98,19 +99,19 @@ end
 #######
 
 definst Witchcraft.Ord, for: Algae.Maybe.Nothing do
-  def compare(_, %Algae.Maybe.Nothing{}), do: :equal
-  def compare(_, %Algae.Maybe.Just{}),    do: :lesser
+  def compare(_, %Nothing{}), do: :equal
+  def compare(_, %Just{}),    do: :lesser
 end
 
 definst Witchcraft.Ord, for: Algae.Maybe.Just do
   custom_generator(_) do
     1
     |> TypeClass.Property.Generator.generate()
-    |> Algae.Maybe.Just.new()
+    |> Just.new()
   end
 
-  def compare(%{just: a}, %{just: b}), do: Witchcraft.Ord.compare(a, b)
-  def compare(%{just: a}, %Algae.Maybe.Nothing{}), do: :greater
+  def compare(%Just{just: a}, %Just{just: b}), do: Witchcraft.Ord.compare(a, b)
+  def compare(%Just{}, %Nothing{}), do: :greater
 end
 
 #############
@@ -125,11 +126,11 @@ definst Witchcraft.Semigroup, for: Algae.Maybe.Just do
   custom_generator(_) do
     1
     |> TypeClass.Property.Generator.generate()
-    |> Algae.Maybe.Just.new()
+    |> Just.new()
   end
 
-  def append(%{just: a}, %{just: b}), do: %Algae.Maybe.Just{just: a <> b}
-  def append(just = %{just: _}, _), do: just
+  def append(%Just{just: a}, %Just{just: b}), do: %Just{just: a <> b}
+  def append(just, %Nothing{}), do: just
 end
 
 ##########
@@ -165,7 +166,7 @@ definst Witchcraft.Foldable, for: Algae.Maybe.Nothing do
 end
 
 definst Witchcraft.Foldable, for: Algae.Maybe.Just do
-  def right_fold(%{just: inner}, seed, fun), do: fun.(inner, seed)
+  def right_fold(%Just{just: inner}, seed, fun), do: fun.(inner, seed)
 end
 
 ###############
@@ -186,7 +187,7 @@ definst Witchcraft.Apply, for: Algae.Maybe.Just do
   alias Algae.Maybe.{Just, Nothing}
 
   def convey(data, %Nothing{}), do: %Nothing{}
-  def convey(data, %Just{just: fun}), do: Witchcraft.Functor.map(data, fun)
+  def convey(data, %Just{just: fun}), do: data ~> fun
 end
 
 ###############
@@ -194,11 +195,11 @@ end
 ###############
 
 definst Witchcraft.Applicative, for: Algae.Maybe.Nothing do
-  def of(_, data), do: %Algae.Maybe.Just{just: data}
+  def of(_, data), do: Just.new(data)
 end
 
 definst Witchcraft.Applicative, for: Algae.Maybe.Just do
-  def of(_, data), do: %Algae.Maybe.Just{just: data}
+  def of(_, data), do: Just.new(data)
 end
 
 #########
@@ -206,7 +207,7 @@ end
 #########
 
 definst Witchcraft.Chain, for: Algae.Maybe.Nothing do
-  def chain(_, _), do: %Algae.Maybe.Nothing{}
+  def chain(_, _), do: %Nothing{}
 end
 
 definst Witchcraft.Chain, for: Algae.Maybe.Just do
@@ -225,9 +226,9 @@ definst Witchcraft.Monad, for: Algae.Maybe.Just
 ##########
 
 definst Witchcraft.Extend, for: Algae.Maybe.Nothing do
-  def nest(_), do: %Algae.Maybe.Nothing{}
+  def nest(_), do: %Nothing{}
 end
 
 definst Witchcraft.Extend, for: Algae.Maybe.Just do
-  def nest(inner), do: Algae.Maybe.Just.new(inner)
+  def nest(inner), do: Just.new(inner)
 end
