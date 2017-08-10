@@ -1,8 +1,5 @@
-alias Algae.Tree.BinarySearch, as: BST
 alias Algae.Tree.BinarySearch.{Empty, Node}
-
 import TypeClass
-
 use Witchcraft
 
 definst Witchcraft.Apply, for: Algae.Tree.BinarySearch.Empty do
