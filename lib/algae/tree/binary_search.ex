@@ -260,6 +260,32 @@ defmodule Algae.Tree.BinarySearch do
   def from_list([head | tail], seed), do: from_list(tail, insert(seed, head))
 
   @doc """
+  Build a balanced & sorted `BinarySearch` tree from a list.
+
+  ## Examples
+
+      iex> Algae.Tree.BinarySearch.ordered_from_list([42, 77, 1234, 98, 32])
+      %Algae.Tree.BinarySearch.Node{
+        node: 77,
+        left: %Algae.Tree.BinarySearch.Node{
+          node: 42,
+          left: %Algae.Tree.BinarySearch.Node{
+            node: 32
+          }
+        },
+        right: %Algae.Tree.BinarySearch.Node{
+          node: 98,
+          right: %Algae.Tree.BinarySearch.Node{
+            node: 1234
+          }
+        }
+      }
+
+  """
+  @spec ordered_from_list(list()) :: t()
+  def ordered_from_list(list), do: list |> Enum.sort() |> balanced_from_list()
+
+  @doc """
   Balance the binary tree.
 
   ## Examples
@@ -276,17 +302,17 @@ defmodule Algae.Tree.BinarySearch do
       ...>   )
       ...> ) |> balance()
       %Algae.Tree.BinarySearch.Node{
-        node: 77,
+        node: 1234,
         left: %Algae.Tree.BinarySearch.Node{
-          node: 42,
-          left: %Algae.Tree.BinarySearch.Node{
-            node: 32
-          }
-        },
-        right: %Algae.Tree.BinarySearch.Node{
           node: 98,
-          right: %Algae.Tree.BinarySearch.Node{
-            node: 1234
+          left: %Algae.Tree.BinarySearch.Node{
+            node: 77,
+            left: %Algae.Tree.BinarySearch.Node{
+              node: 32,
+              right: %Algae.Tree.BinarySearch.Node{
+                node: 42
+              }
+            }
           }
         }
       }
@@ -306,18 +332,18 @@ defmodule Algae.Tree.BinarySearch do
 
       iex> balanced_from_list([32, 1234, 98, 77, 42])
       %Algae.Tree.BinarySearch.Node{
-        node: 77,
+        node: 98,
         left: %Algae.Tree.BinarySearch.Node{
-          node: 42,
+          node: 77,
           left: %Algae.Tree.BinarySearch.Node{
-            node: 32
+            node: 42,
+            left: %Algae.Tree.BinarySearch.Node{
+              node: 32
+            }
           }
         },
         right: %Algae.Tree.BinarySearch.Node{
-          node: 98,
-          right: %Algae.Tree.BinarySearch.Node{
-            node: 1234
-          }
+          node: 1234
         }
       }
 
@@ -367,234 +393,4 @@ defmodule Algae.Tree.BinarySearch do
   def get_center([_],              [head | _]),  do: head
   def get_center([_ | [_ | left]], [_ | right]), do: get_center(left, right)
 
-end
-
-alias Algae.Tree.BinarySearch, as: BST
-alias Algae.Tree.BinarySearch.{Empty, Node}
-import TypeClass
-use Witchcraft
-
-#############
-# Generator #
-#############
-
-defimpl TypeClass.Property.Generator, for: Algae.Tree.BinarySearch.Empty do
-  def generate(_), do: Empty.new()
-end
-
-defimpl TypeClass.Property.Generator, for: Algae.Tree.BinarySearch.Node do
-  def generate(_) do
-    random_node()
-  end
-
-  def random_node do
-    case Enum.random(Enum.to_list(0..5)) do
-      0 ->
-        %Node{node: random_value()}
-
-      1 ->
-        %Node{node: random_value()}
-
-      2 ->
-        %Node{
-          node:  random_value(),
-          left:  random_node(),
-          right: random_node()
-        }
-
-      _ ->
-        %Empty{}
-    end
-  end
-
-  def random_value do
-    [1, 1.1, "", []]
-    |> Enum.random()
-    |> TypeClass.Property.Generator.generate()
-  end
-end
-
-##########
-# Setoid #
-##########
-
-definst Witchcraft.Setoid, for: Algae.Tree.BinarySearch.Empty do
-  def equivalent?(_, %Empty{}), do: true
-  def equivalent?(_, %Node{}),  do: false
-end
-
-definst Witchcraft.Setoid, for: Algae.Tree.BinarySearch.Node do
-  def equivalent?(%Node{}, %Empty{}), do: false
-  def equivalent?(%Node{node: a}, %Node{node: b}) do
-    Witchcraft.Setoid.equivalent?(a, b)
-  end
-end
-
-#######
-# Ord #
-#######
-
-definst Witchcraft.Ord, for: Algae.Tree.BinarySearch.Empty do
-  def compare(_, %Empty{}), do: :equal
-  def compare(_, %Node{}),  do: :lesser
-end
-
-definst Witchcraft.Ord, for: Algae.Tree.BinarySearch.Node do
-  custom_generator(_) do
-    random_node()
-  end
-
-  def random_node do
-    Enum.random([
-      %Empty{},
-      %Empty{},
-      %Empty{},
-      %Node{
-        node: random_value()
-      },
-      %Node{
-        node:  random_value(),
-        left:  random_value(),
-        right: random_value()
-      }
-    ])
-  end
-
-  def random_value, do: TypeClass.Property.Generator.generate(1)
-
-  def compare(%Node{}, %Empty{}), do: :greater
-  def compare(%Node{node: a}, %Node{node: b}), do: Witchcraft.Ord.compare(a, b)
-end
-
-# #############
-# # Semigroup #
-# #############
-
-definst Witchcraft.Semigroup, for: Algae.Tree.BinarySearch.Empty do
-  def append(_, right), do: right
-end
-
-definst Witchcraft.Semigroup, for: Algae.Tree.BinarySearch.Node do
-  def append(node, %Empty{}), do: node
-  def append(node_a, node_b) do
-    node_a
-    |> BST.to_list()
-    |> Enum.concat(to_list(node_b))
-    |> BST.balanced_from_list()
-  end
-end
-
-# ##########
-# # Monoid #
-# ##########
-
-definst Witchcraft.Monoid, for: Algae.Tree.BinarySearch.Empty do
-  def empty(empty), do: empty
-end
-
-definst Witchcraft.Monoid, for: Algae.Tree.BinarySearch.Node do
-  def empty(_), do: %Empty{}
-end
-
-###########
-# Functor #
-###########
-
-definst Witchcraft.Functor, for: Algae.Tree.BinarySearch.Empty do
-  def map(_, _), do: %Empty{}
-end
-
-definst Witchcraft.Functor, for: Algae.Tree.BinarySearch.Node do
-  def map(%Node{node: node, left: left, right: right}, fun) do
-    %Node{
-      node:  fun.(node),
-      left:  left ~> fun,
-      right: right ~> fun
-    }
-  end
-end
-
-############
-# Foldable #
-############
-
-definst Witchcraft.Foldable, for: Algae.Tree.BinarySearch.Empty do
-  def right_fold(_, seed, _), do: seed
-end
-
-definst Witchcraft.Foldable, for: Algae.Tree.BinarySearch.Node do
-  def right_fold(%Node{node: node, left: left, right: right}, seed, fun) do
-    folded_right = Witchcraft.Foldable.right_fold(right, seed,         fun)
-    folded_left  = Witchcraft.Foldable.right_fold(left,  folded_right, fun)
-
-    fun.(node, folded_left)
-  end
-end
-
-###############
-# Traversable #
-###############
-
-# Not traversable because we don't have enough type information for Nothing
-
-#########
-# Apply #
-#########
-
-definst Witchcraft.Apply, for: Algae.Tree.BinarySearch.Empty do
-  def convey(_, _), do: %Empty{}
-end
-
-definst Witchcraft.Apply, for: Algae.Tree.BinarySearch.Node do
-  def convey(_, %Empty{}), do: %Empty{}
-  def convey(%{node: node, left: left, right: right}, tree_funs = %Node{node: fun}) do
-    %Node{
-      node:  fun.(node),
-      left:  Witchcraft.Apply.convey(left,  tree_funs),
-      right: Witchcraft.Apply.convey(right, tree_funs)
-    }
-  end
-end
-
-###############
-# Applicative #
-###############
-
-definst Witchcraft.Applicative, for: Algae.Tree.BinarySearch.Empty do
-  def of(_, data), do: %Node{node: data}
-end
-
-definst Witchcraft.Applicative, for: Algae.Tree.BinarySearch.Node do
-  @force_type_instance true
-  def of(_, data), do: %Node{node: data}
-end
-
-#########
-# Chain #
-#########
-
-definst Witchcraft.Chain, for: Algae.Tree.BinarySearch.Empty do
-  def chain(_, _), do: %Empty{}
-end
-
-definst Witchcraft.Chain, for: Algae.Tree.BinarySearch.Node do
-  def chain(%Node{node: node}, link), do: link.(node)
-end
-
-##########
-# Extend #
-##########
-
-definst Witchcraft.Extend, for: Algae.Tree.BinarySearch.Empty do
-  def nest(_), do: %Empty{}
-end
-
-definst Witchcraft.Extend, for: Algae.Tree.BinarySearch.Node do
-  def nest(tree = %Node{left: left, right: right}) do
-    %Node{
-      node:  tree,
-      left:  Witchcraft.Extend.nest(left),
-      right: Witchcraft.Extend.nest(right)
-    }
-  end
 end
