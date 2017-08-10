@@ -259,16 +259,70 @@ defmodule Algae.Tree.BinarySearch do
   def from_list([],            seed), do: seed
   def from_list([head | tail], seed), do: from_list(tail, insert(seed, head))
 
-  def sorted_from_list(list), do: list |> Enum.sort() |> from_list()
+  @doc """
+  Balance the binary tree.
 
-  def sorted_from_list(list, seed), do: list |> Enum.sort() |> from_list(seed)
+  ## Examples
 
+      iex> alias Algae.Tree.BinarySearch, as: BSTree
+      ...>
+      ...> BSTree.Node.new(
+      ...>   42,
+      ...>   BSTree.Node.new(77),
+      ...>   BSTree.Node.new(
+      ...>     1234,
+      ...>     BSTree.Node.new(98),
+      ...>     BSTree.Node.new(32)
+      ...>   )
+      ...> ) |> balance()
+      %Algae.Tree.BinarySearch.Node{
+        node: 77,
+        left: %Algae.Tree.BinarySearch.Node{
+          node: 42,
+          left: %Algae.Tree.BinarySearch.Node{
+            node: 32
+          }
+        },
+        right: %Algae.Tree.BinarySearch.Node{
+          node: 98,
+          right: %Algae.Tree.BinarySearch.Node{
+            node: 1234
+          }
+        }
+      }
+
+  """
+  @spec balance(t()) :: t()
   def balance(tree) do
     tree
     |> to_list()
     |> balanced_from_list()
   end
 
+  @doc """
+  Generate a balanced binary tree from a list.
+
+  ## Examples
+
+      iex> balanced_from_list([32, 1234, 98, 77, 42])
+      %Algae.Tree.BinarySearch.Node{
+        node: 77,
+        left: %Algae.Tree.BinarySearch.Node{
+          node: 42,
+          left: %Algae.Tree.BinarySearch.Node{
+            node: 32
+          }
+        },
+        right: %Algae.Tree.BinarySearch.Node{
+          node: 98,
+          right: %Algae.Tree.BinarySearch.Node{
+            node: 1234
+          }
+        }
+      }
+
+  """
+  @spec balanced_from_list(list()) :: t()
   def balanced_from_list([]), do: []
   def balanced_from_list(list) do
     list
@@ -276,16 +330,43 @@ defmodule Algae.Tree.BinarySearch do
     |> balanced_from_list(new())
   end
 
+  @doc """
+  Generate a balanced binary tree from a list and append to an existing tree.
+
+  ## Examples
+
+      iex> balanced_from_list([32, 1234, 98, 77, 42], new(-9))
+      %Algae.Tree.BinarySearch.Node{
+        node: -9,
+        right: %Algae.Tree.BinarySearch.Node{
+          node: 98,
+          left: %Algae.Tree.BinarySearch.Node{
+            node: 77,
+            left: %Algae.Tree.BinarySearch.Node{
+              node: 42,
+              left: %Algae.Tree.BinarySearch.Node{
+                node: 32
+              }
+            }
+          },
+          right: %Algae.Tree.BinarySearch.Node{
+            node: 1234
+          }
+        }
+      }
+
+  """
+  @spec balanced_from_list(list(), t()) :: t()
   def balanced_from_list([],   seed), do: seed
   def balanced_from_list(list, seed) do
-    center    = get_center(list, list)
-    remaining = List.delete(center, list)
+    center = get_center(list, list)
 
-    seed
-    |> insert(center)
-    |> balanced_from_list(remaining)
+    list
+    |> List.delete(center)
+    |> balanced_from_list(insert(seed, center))
   end
 
+  @doc false
   def get_center([],               [head | _]),  do: head
   def get_center([_],              [head | _]),  do: head
   def get_center([_ | [_ | left]], [_ | right]), do: get_center(left, right)
