@@ -5,15 +5,15 @@ defmodule Algae.Tree.BinarySearch do
 
   ## Examples
 
-      iex> alias Algae.Tree.BinarySearch, as: BTree
+      iex> alias Algae.Tree.BinarySearch, as: BSTree
       ...>
-      ...> BTree.Node.new(
+      ...> BSTree.Node.new(
       ...>   42,
-      ...>   BTree.Node.new(77),
-      ...>   BTree.Node.new(
+      ...>   BSTree.Node.new(77),
+      ...>   BSTree.Node.new(
       ...>     1234,
-      ...>     BTree.Node.new(98),
-      ...>     BTree.Node.new(32)
+      ...>     BSTree.Node.new(98),
+      ...>     BSTree.Node.new(32)
       ...>   )
       ...> )
       %Algae.Tree.BinarySearch.Node{
@@ -54,18 +54,40 @@ defmodule Algae.Tree.BinarySearch do
     end
   end
 
+  @doc """
+  Create an empty tree.
+
+  ## Examples
+
+      iex> new()
+      %Algae.Tree.BinarySearch.Empty{}
+
+  """
   @spec new() :: Empty.t()
   def new, do: %Empty{}
 
+  @doc """
+  Bring a value into an otherwise empty tree.
+
+  ## Examples
+
+      iex> new(42)
+      %Algae.Tree.BinarySearch.Node{
+        node:  42,
+        left:  %Algae.Tree.BinarySearch.Empty{},
+        right: %Algae.Tree.BinarySearch.Empty{}
+      }
+
+  """
   @spec new(any()) :: Node.t()
   def new(value), do: %Node{node: value}
 
   def insert(%Empty{}, value), do: new(value)
   def insert(tree = %Node{node: node, left: left, right: right}, orderable) do
-    cond do
-      equal?(orderable,   node) -> tree
-      greater?(orderable, node) -> %{tree | right: insert(right, orderable)}
-      lesser?(orderable,  node) -> %{tree | left:  insert(left,  orderable)}
+    case compare(orderable, node) do
+      :equal   -> tree
+      :greater -> %{tree | right: insert(right, orderable)}
+      :lesser  -> %{tree | left:  insert(left,  orderable)}
     end
   end
 
@@ -87,15 +109,84 @@ defmodule Algae.Tree.BinarySearch do
     end
   end
 
+  @doc """
+  Flatten a tree into a list.
+
+  ## Examples
+
+      iex> alias Algae.Tree.BinarySearch, as: BSTree
+      ...>
+      ...> BSTree.Node.new(
+      ...>   42,
+      ...>   BSTree.Node.new(77),
+      ...>   BSTree.Node.new(
+      ...>     1234,
+      ...>     BSTree.Node.new(98),
+      ...>     BSTree.Node.new(32)
+      ...>   )
+      ...> )
+      ...> |> BSTree.to_list()
+      [42, 77, 1234, 98, 32]
+
+  """
+  @spec to_list(t()) :: list()
   def to_list(tree), do: Witchcraft.Foldable.to_list(tree)
 
-  def to_ordered_list(%Empty{}), do: []
-  def to_ordered_list(%Node{node: node, left: left, right: right}) do
-    to_ordered_list(left) ++ [node] ++ to_ordered_list(right)
-  end
+  @doc """
+  Flatten a tree into a list with elements sorted.
 
+  ## Examples
+
+      iex> alias Algae.Tree.BinarySearch, as: BSTree
+      ...>
+      ...> BSTree.Node.new(
+      ...>   42,
+      ...>   BSTree.Node.new(77),
+      ...>   BSTree.Node.new(
+      ...>     1234,
+      ...>     BSTree.Node.new(98),
+      ...>     BSTree.Node.new(32)
+      ...>   )
+      ...> )
+      ...> |> BSTree.to_ordered_list()
+      [32, 42, 77, 98, 1234]
+
+  """
+  @spec to_ordered_list(t()) :: list()
+  def to_ordered_list(tree), do: tree |> to_list() |> Enum.sort()
+
+  @doc """
+  Build a `BinarySearch` tree from a list.
+
+  ## Examples
+
+      iex> Algae.Tree.BinarySearch.from_list([42, 77, 1234, 98, 32])
+      %Algae.Tree.BinarySearch.Node{
+        node: 42,
+        left: %Algae.Tree.BinarySearch.Node{
+          node:  32,
+          left:  %Algae.Tree.BinarySearch.Empty{},
+          right: %Algae.Tree.BinarySearch.Empty{}
+        },
+        right: %Algae.Tree.BinarySearch.Node{
+          node: 77,
+          left: %Algae.Tree.BinarySearch.Empty{},
+          right: %Algae.Tree.BinarySearch.Node{
+            node: 1234,
+            left: %Algae.Tree.BinarySearch.Node{
+              node:  98,
+              left:  %Algae.Tree.BinarySearch.Empty{},
+              right: %Algae.Tree.BinarySearch.Empty{}
+            },
+            right: %Algae.Tree.BinarySearch.Empty{}
+          }
+        }
+      }
+
+  """
+  @spec from_list(list()) :: t()
   def from_list([]),            do: %Empty{}
-  def from_list([head | tail]), do: head |> new() |> from_list(tail)
+  def from_list([head | tail]), do: from_list(tail, new(head))
 
   def from_list([],            seed), do: seed
   def from_list([head | tail], seed), do: from_list(tail, insert(seed, head))
