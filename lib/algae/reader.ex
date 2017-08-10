@@ -26,8 +26,9 @@ defmodule Algae.Reader do
   #     putStr $ "Count is correct for bindings " ++ (show sampleBindings) ++ ": ";
   #     putStrLn $ show (isCountCorrect sampleBindings);
 
-  alias __MODULE__
+  alias  __MODULE__
   import Algae
+  use    Witchcraft
 
   defdata fun()
 
@@ -70,7 +71,7 @@ defmodule Algae.Reader do
   # = id
 
   @doc """
-  Get the environment. Especially useful in monadic do-notation.
+  Get the wrapped environment. Especially useful in monadic do-notation.
 
   ## Examples
 
@@ -95,4 +96,30 @@ defmodule Algae.Reader do
   """
   @spec ask() :: t()
   def ask, do: Reader.new(fn x -> x end)
+
+  # ask lets us read the environment and then play with it.
+  # asks takes a complementary approach: given a function it returns
+  # a Reader which evaluates that function and returns the result.
+
+  # runR (asks length) "Banana"
+  # #=> 6
+  def asks(fun) do
+    monad %Reader{} do
+      e <- ask
+      return fun.(e)
+    end
+  end
+
+  # local transforms the environment a Reader sees:
+  # *Main> runR ask "Chocolate"
+  # "Chocolate"
+
+  # *Main> runR (local (++ " sauce") ask) "Chocolate"
+  # "Chocolate sauce"
+  def local(reader, fun) do
+    monad %Reader{} do
+      e <- ask
+      return run(reader, fun.(e))
+    end
+  end
 end
