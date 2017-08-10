@@ -185,7 +185,7 @@ An empty type (with no fields) is definable using the `none`() type
 
 ```elixir
 defmodule Nothing do
-  defdata :: none()
+  defdata none()
 end
 
 Nothing.new()

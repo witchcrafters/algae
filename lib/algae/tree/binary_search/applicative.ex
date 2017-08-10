@@ -1,6 +1,6 @@
-alias Algae.Tree.BinarySearch.Node
+alias  Algae.Tree.BinarySearch.Node
 import TypeClass
-use Witchcraft
+use    Witchcraft
 
 definst Witchcraft.Applicative, for: Algae.Tree.BinarySearch.Empty do
   def of(_, data), do: %Node{node: data}
