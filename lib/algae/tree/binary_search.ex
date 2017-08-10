@@ -323,12 +323,8 @@ defmodule Algae.Tree.BinarySearch do
 
   """
   @spec balanced_from_list(list()) :: t()
-  def balanced_from_list([]), do: []
-  def balanced_from_list(list) do
-    list
-    |> Enum.sort()
-    |> balanced_from_list(new())
-  end
+  def balanced_from_list([]),   do: []
+  def balanced_from_list(list), do: balanced_from_list(list, new())
 
   @doc """
   Generate a balanced binary tree from a list and append to an existing tree.
@@ -373,6 +369,7 @@ defmodule Algae.Tree.BinarySearch do
 
 end
 
+alias Algae.Tree.BinarySearch, as: BST
 alias Algae.Tree.BinarySearch.{Empty, Node}
 import TypeClass
 use Witchcraft
@@ -473,32 +470,31 @@ end
 # # Semigroup #
 # #############
 
-# definst Witchcraft.Semigroup, for: Algae.Tree.BinarySearch.Empty do
-#   def append(_, right), do: right
-# end
+definst Witchcraft.Semigroup, for: Algae.Tree.BinarySearch.Empty do
+  def append(_, right), do: right
+end
 
-# definst Witchcraft.Semigroup, for: Algae.Maybe.Just do
-#   custom_generator(_) do
-#     1
-#     |> TypeClass.Property.Generator.generate()
-#     |> Just.new()
-#   end
-
-#   def append(%Just{just: a}, %Just{just: b}), do: %Just{just: a <> b}
-#   def append(just, %Nothing{}), do: just
-# end
+definst Witchcraft.Semigroup, for: Algae.Tree.BinarySearch.Node do
+  def append(node, %Empty{}), do: node
+  def append(node_a, node_b) do
+    node_a
+    |> BST.to_list()
+    |> Enum.concat(to_list(node_b))
+    |> BST.balanced_from_list()
+  end
+end
 
 # ##########
 # # Monoid #
 # ##########
 
-# definst Witchcraft.Monoid, for: Algae.Tree.BinarySearch.Empty do
-#   def empty(empty), do: empty
-# end
+definst Witchcraft.Monoid, for: Algae.Tree.BinarySearch.Empty do
+  def empty(empty), do: empty
+end
 
-# definst Witchcraft.Monoid, for: Algae.Tree.BinarySearch.Node do
-#   def empty(_), do: %Empty{}
-# end
+definst Witchcraft.Monoid, for: Algae.Tree.BinarySearch.Node do
+  def empty(_), do: %Empty{}
+end
 
 ###########
 # Functor #
