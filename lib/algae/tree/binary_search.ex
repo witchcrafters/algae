@@ -82,6 +82,21 @@ defmodule Algae.Tree.BinarySearch do
   @spec new(any()) :: Node.t()
   def new(value), do: %Node{node: value}
 
+  @doc """
+  Insert a new element into a tree.
+
+  ## Examples
+
+      iex> insert(new(42), 43)
+      %Algae.Tree.BinarySearch.Node{
+        node: 42,
+        right: %Algae.Tree.BinarySearch.Node{
+          node: 43
+        }
+      }
+
+  """
+  @spec insert(t(), any()) :: t()
   def insert(%Empty{}, value), do: new(value)
   def insert(tree = %Node{node: node, left: left, right: right}, orderable) do
     case compare(orderable, node) do
@@ -91,6 +106,37 @@ defmodule Algae.Tree.BinarySearch do
     end
   end
 
+  @doc """
+  Remove an element from a tree by value.
+
+  ## Examples
+
+      iex> alias Algae.Tree.BinarySearch, as: BSTree
+      ...>
+      ...> BSTree.Node.new(
+      ...>   42,
+      ...>   BSTree.Node.new(77),
+      ...>   BSTree.Node.new(
+      ...>     1234,
+      ...>     BSTree.Node.new(98),
+      ...>     BSTree.Node.new(32)
+      ...>   )
+      ...> ) |> delete(98)
+      %Algae.Tree.BinarySearch.Node{
+        node: 42,
+        left: %Algae.Tree.BinarySearch.Node{
+          node: 77
+        },
+        right: %Algae.Tree.BinarySearch.Node{
+          node: 1234,
+          right: %Algae.Tree.BinarySearch.Node{
+            node: 32
+          }
+        }
+      }
+
+  """
+  @spec delete(t(), any()) :: t()
   def delete(%Empty{}, _), do: %Empty{}
   def delete(tree = %Node{node: node, left: left, right: right}, orderable) do
     case compare(orderable, node) do
@@ -164,21 +210,15 @@ defmodule Algae.Tree.BinarySearch do
       %Algae.Tree.BinarySearch.Node{
         node: 42,
         left: %Algae.Tree.BinarySearch.Node{
-          node:  32,
-          left:  %Algae.Tree.BinarySearch.Empty{},
-          right: %Algae.Tree.BinarySearch.Empty{}
+          node:  32
         },
         right: %Algae.Tree.BinarySearch.Node{
           node: 77,
-          left: %Algae.Tree.BinarySearch.Empty{},
           right: %Algae.Tree.BinarySearch.Node{
             node: 1234,
             left: %Algae.Tree.BinarySearch.Node{
-              node:  98,
-              left:  %Algae.Tree.BinarySearch.Empty{},
-              right: %Algae.Tree.BinarySearch.Empty{}
-            },
-            right: %Algae.Tree.BinarySearch.Empty{}
+              node:  98
+            }
           }
         }
       }
@@ -188,6 +228,34 @@ defmodule Algae.Tree.BinarySearch do
   def from_list([]),            do: %Empty{}
   def from_list([head | tail]), do: from_list(tail, new(head))
 
+  @doc """
+  Build a `BinarySearch` tree from a list and attach to an existing tree.
+
+  ## Examples
+
+      iex> Algae.Tree.BinarySearch.from_list([42, 77, 1234, 98, 32], new(-9))
+      %Algae.Tree.BinarySearch.Node{
+        node:  -9,
+        right: %Algae.Tree.BinarySearch.Node{
+          left: %Algae.Tree.BinarySearch.Node{
+            node:  32
+          },
+          node: 42,
+          right: %Algae.Tree.BinarySearch.Node{
+            node: 77,
+            right: %Algae.Tree.BinarySearch.Node{
+              node: 1234,
+              left: %Algae.Tree.BinarySearch.Node{
+                node: 98
+              },
+              right: %Algae.Tree.BinarySearch.Empty{}
+            }
+          }
+        }
+      }
+
+  """
+  @spec from_list(list(), t()) :: t()
   def from_list([],            seed), do: seed
   def from_list([head | tail], seed), do: from_list(tail, insert(seed, head))
 
