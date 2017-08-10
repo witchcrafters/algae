@@ -1,7 +1,6 @@
 defmodule Algae.Tree.BinarySearch do
   @moduledoc """
-  Represent a BinarySearch tree.
-  Nodes may be empty, a leaf, or a branch (recursive subtree).
+  Represent a `BinarySearch` tree.
 
   ## Examples
 
