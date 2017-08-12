@@ -57,6 +57,22 @@ defmodule Algae.Maybe do
   """
   @spec new(any) :: Just.t()
   defdelegate new(value), to: Just, as: :new
+
+  @doc """
+  Extract a value from a `Maybe`, falling back to a set value in the `Nothing` case.
+
+  ## Examples
+
+      iex> from_maybe(%Algae.Maybe.Nothing{}, else: 42)
+      42
+
+      iex> %Algae.Maybe.Just{just: 1955} |> from_maybe(else: 42)
+      1955
+
+  """
+  @spec from_maybe(t(), any()) :: any()
+  def from_maybe(%Nothing{}, [else: fallback]), do: fallback
+  def from_maybe(%Just{just: inner}, _), do: inner
 end
 
 alias Algae.Maybe.{Just, Nothing}

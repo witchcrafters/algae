@@ -1,30 +1,35 @@
 defmodule Algae.Reader do
-  @moduledoc """
+  @moduledoc ~S"""
+  `Reader` allow you to pass some readable context around through actions.
+
+  This is useful in a number of situations, but the most common case is to weave
+  access to environment variables monadically.
+
+  ## Examples
+
+      iex> defmodule Count do
+      ...>   import Algae.Reader
+      ...>   use Witchcraft
+      ...>
+      ...>   def correct?(bindings), do: run(calc_correct(), bindings)
+      ...>
+      ...>   def calc_correct do
+      ...>     monad %Algae.Reader{} do
+      ...>       count    <- asks &Map.get(&1, :count)
+      ...>       bindings <- ask()
+      ...>       return (count == Map.size(bindings))
+      ...>     end
+      ...>   end
+      ...> end
+      ...>
+      ...> sample_bindings = %{count: 3, a: 1, b: 2}
+      ...> correct_count   = Count.correct?(sample_bindings)
+      ...> "Count is correct for bindings #{inspect sample_bindings}: #{correct_count}"
+      "Count is correct for bindings %{a: 1, b: 2, count: 3}: true"
+
+  [Example source](https://hackage.haskell.org/package/mtl-2.2.1/docs/Control-Monad-Reader.html)
+
   """
-
-  # type Bindings = Map String Int;
-
-  # -- Returns True if the "count" variable contains correct bindings size.
-  # isCountCorrect :: Bindings -> Bool
-  # isCountCorrect bindings = runReader calc_isCountCorrect bindings
-
-  # -- The Reader monad, which implements this complicated check.
-  # calc_isCountCorrect :: Reader Bindings Bool
-  # calc_isCountCorrect = do
-  #   count <- asks (lookupVar "count")
-  #   bindings <- ask
-  #   return (count == (Map.size bindings))
-
-  #   -- The selector function to  use with 'asks'.
-  #   -- Returns value of the variable with specified name.
-  #   lookupVar :: String -> Bindings -> Int
-  #   lookupVar name bindings = fromJust (Map.lookup name bindings)
-
-  #   sampleBindings = Map.fromList [("count",3), ("1",1), ("b",2)]
-
-  #   main = do
-  #     putStr $ "Count is correct for bindings " ++ (show sampleBindings) ++ ": ";
-  #     putStrLn $ show (isCountCorrect sampleBindings);
 
   alias  __MODULE__
   import Algae
@@ -97,12 +102,31 @@ defmodule Algae.Reader do
   @spec ask() :: t()
   def ask, do: Reader.new(fn x -> x end)
 
-  # ask lets us read the environment and then play with it.
-  # asks takes a complementary approach: given a function it returns
-  # a Reader which evaluates that function and returns the result.
+  @doc ~S"""
+  Similar to `new`, construct a `Reader` from a function, reading from the passed context.
 
-  # runR (asks length) "Banana"
-  # #=> 6
+  ## Examples
+
+      iex> fn x -> x * 10 end
+      ...> |> asks()
+      ...> |> run(5)
+      50
+
+      iex> use Witchcraft
+      ...>
+      ...> foo =
+      ...>   fn words ->
+      ...>     monad %Algae.Reader{} do
+      ...>       loud <- asks &(&1 == String.upcase(&1))
+      ...>       return(words <> (if loud, do: "!", else: "."))
+      ...>     end
+      ...>   end
+      ...>
+      ...> "Hello" |> foo.() |> run("WORLD") # "WORLD" is the context being asked for
+      "Hello!"
+
+  """
+  @spec asks((any() -> any())) :: t()
   def asks(fun) do
     monad %Reader{} do
       e <- ask
@@ -110,12 +134,22 @@ defmodule Algae.Reader do
     end
   end
 
-  # local transforms the environment a Reader sees:
-  # *Main> runR ask "Chocolate"
-  # "Chocolate"
+  @doc """
+  Locally composes a function into a `Reader`.
 
-  # *Main> runR (local (++ " sauce") ask) "Chocolate"
-  # "Chocolate sauce"
+  Often the idea is to temporarily adapt the `Reader` without continuing this
+  change in later `run`s.
+
+  ## Examples
+
+      iex> ask()
+      ...> |> local(fn word -> word <> "!" end)
+      ...> |> local(&String.upcase/1)
+      ...> |> run("o hai thar")
+      "O HAI THAR!"
+
+  """
+  @spec local(t(), (any() -> any())) :: any()
   def local(reader, fun) do
     monad %Reader{} do
       e <- ask
