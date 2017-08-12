@@ -7,23 +7,17 @@ defmodule Algae.Reader do
 
   ## Examples
 
-      iex> defmodule Count do
-      ...>   import Algae.Reader
-      ...>   use Witchcraft
+      iex> use Witchcraft
       ...>
-      ...>   def correct?(bindings), do: run(calc_correct(), bindings)
-      ...>
-      ...>   def calc_correct do
-      ...>     monad %Algae.Reader{} do
-      ...>       count    <- asks &Map.get(&1, :count)
-      ...>       bindings <- ask()
-      ...>       return (count == Map.size(bindings))
-      ...>     end
+      ...> correct =
+      ...>   monad %Algae.Reader{} do
+      ...>     count    <- asks &Map.get(&1, :count)
+      ...>     bindings <- ask()
+      ...>     return (count == Map.size(bindings))
       ...>   end
-      ...> end
       ...>
       ...> sample_bindings = %{count: 3, a: 1, b: 2}
-      ...> correct_count   = Count.correct?(sample_bindings)
+      ...> correct_count   = run(correct, sample_bindings)
       ...> "Count is correct for bindings #{inspect sample_bindings}: #{correct_count}"
       "Count is correct for bindings %{a: 1, b: 2, count: 3}: true"
 
