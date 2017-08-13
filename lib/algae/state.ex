@@ -19,6 +19,21 @@ defmodule Algae.State do
   @spec state(State.runner()) :: State.t()
   def state(runner), do: new(runner)
 
+  @doc """
+
+
+
+
+
+
+  ## Examples
+
+      iex> inner = fn x -> {0, x} end
+      ...>
+      ...> run(%Algae.State{state: inner}).(42) == inner.(42)
+      true
+
+  """
   @spec run(State.t()) :: State.runner()
   def run(%State{state: fun}), do: fun
 
