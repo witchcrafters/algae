@@ -1,11 +1,12 @@
 defmodule Algae.Writer do
   @moduledoc ~S"""
-  `Algae.Writer` helps capture some ...
+  `Algae.Writer` helps capture the pattern of writing to a pure log or accumulated
+  value, handling the bookkeeping for you
 
-  This is often used for loggers, but doesn't have to be.
+  This is often used for loggers, but could be anything as long as the hidden value
+  is a `Witchcraft.Monoid`.
 
   ## Examples
-
 
       iex> use Witchcraft
       ...>
@@ -31,6 +32,19 @@ defmodule Algae.Writer do
       ...>
       ...> logs
       "Hi -> Hi! ; Hi! -> Hi!! ; Hi!! -> Hi!!!"
+
+      iex> use Witchcraft
+      ...>
+      ...> square_and_sum =
+      ...>   fn num ->
+      ...>     monad writer({0.0, 0.0}) do
+      ...>       tell num
+      ...>       return num * num
+      ...>     end
+      ...>   end
+      ...>
+      ...> run(square_and_sum(42) >>> square_and_sum >>> square_and_sum)
+      0
 
   """
 
