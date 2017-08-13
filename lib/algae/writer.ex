@@ -32,7 +32,7 @@ defmodule Algae.Writer do
       ...>       tell string
       ...>
       ...>       excited <- return "#{string}!"
-      ...>       tell " -> #{excited} ; "
+      ...>       tell " => #{excited} ... "
       ...>
       ...>       return excited
       ...>     end
@@ -43,11 +43,11 @@ defmodule Algae.Writer do
       ...>   |> excite.()
       ...>   >>> excite
       ...>   >>> excite
-      ...>   |> censor(&String.trim_trailing(&1, " ; "))
+      ...>   |> censor(&String.trim_trailing(&1, " ... "))
       ...>   |> run()
       ...>
       ...> logs
-      "Hi -> Hi! ; Hi! -> Hi!! ; Hi!! -> Hi!!!"
+      "Hi => Hi! ... Hi! => Hi!! ... Hi!! => Hi!!!"
 
       iex> use Witchcraft
       ...>
