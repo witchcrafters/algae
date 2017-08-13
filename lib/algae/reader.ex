@@ -11,7 +11,7 @@ defmodule Algae.Reader do
       ...>
       ...> correct =
       ...>   monad %Algae.Reader{} do
-      ...>     count    <- asks &Map.get(&1, :count)
+      ...>     count    <- ask &Map.get(&1, :count)
       ...>     bindings <- ask()
       ...>     return (count == Map.size(bindings))
       ...>   end
@@ -61,20 +61,12 @@ defmodule Algae.Reader do
   @spec run(t(), any()) :: any()
   def run(%Reader{reader: fun}, arg), do: fun.(arg)
 
-  # *Main> runR ask 1234
-  # 1234
-
-  # runR ask = runR (R $ \e -> e)
-  # = runR (R id)
-  # = (runR . R) id
-  # = id
-
   @doc """
   Get the wrapped environment. Especially useful in monadic do-notation.
 
   ## Examples
 
-      iex> run(ask, 42)
+      iex> run(ask(), 42)
       42
 
       iex> use Witchcraft
@@ -82,7 +74,7 @@ defmodule Algae.Reader do
       ...> example_fun =
       ...>   fn x ->
       ...>     monad %Algae.Reader{} do
-      ...>       e <- ask
+      ...>       e <- ask()
       ...>       return {x, e}
       ...>     end
       ...>   end
@@ -97,12 +89,15 @@ defmodule Algae.Reader do
   def ask, do: Reader.new(fn x -> x end)
 
   @doc ~S"""
-  Similar to `new`, construct a `Reader` from a function, reading from the passed context.
+  Similar to `new/1` and `ask/0`. Construct an `Algae.Reader`,
+  but apply a function to the constructed envoronment.
+
+  The pun here is that you're "asking" a function for something.
 
   ## Examples
 
       iex> fn x -> x * 10 end
-      ...> |> asks()
+      ...> |> ask()
       ...> |> run(5)
       50
 
@@ -111,7 +106,7 @@ defmodule Algae.Reader do
       ...> foo =
       ...>   fn words ->
       ...>     monad %Algae.Reader{} do
-      ...>       loud <- asks &(&1 == String.upcase(&1))
+      ...>       loud <- ask &(&1 == String.upcase(&1))
       ...>       return(words <> (if loud, do: "!", else: "."))
       ...>     end
       ...>   end
@@ -120,8 +115,8 @@ defmodule Algae.Reader do
       "Hello!"
 
   """
-  @spec asks((any() -> any())) :: t()
-  def asks(fun) do
+  @spec ask((any() -> any())) :: t()
+  def ask(fun) do
     monad %Reader{} do
       e <- ask
       return fun.(e)
