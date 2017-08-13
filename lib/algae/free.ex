@@ -54,8 +54,10 @@ defmodule Algae.Free do
       ...> |> new()
       ...> |> layer(%Algae.Id{})
       %Algae.Free.Roll{
-        roll: %Algae.Free.Pure{
-          pure: 13
+        roll: %Algae.Id{
+          id: %Algae.Free.Pure{
+            pure: 13
+          }
         }
       }
 
