@@ -14,6 +14,7 @@ defmodule AlgaeTest do
 
   doctest Algae.Reader, import: true
   doctest Algae.Writer, import: true
+  doctest Algae.State,  import: true
 
   test "constructor for empty type" do
     assert Example.Light.new() == %Example.Light.Red{}

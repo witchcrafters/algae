@@ -3,10 +3,11 @@ import TypeClass
 
 definst Witchcraft.Chain, for: Algae.State do
   @force_type_instance true
-  def chain(%State{state: inner}, link) do
-    fn s ->
-      {x, s} = inner.(s)
-      link.(x)
-    end
+
+  def chain(state, link) do
+    State.state(fn s ->
+      {x, z} = State.run(state, s)
+      State.run(link.(x), z)
+    end)
   end
 end
