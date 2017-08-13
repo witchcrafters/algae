@@ -1,8 +1,9 @@
 defmodule Algae.Writer do
   @moduledoc ~S"""
   `Algae.Writer` helps capture the pattern of writing to a pure log or accumulated
-  value, handling the bookkeeping for you
+  value, handling the bookkeeping for you.
 
+  If `Algae.Reader` is quasi-read-only, `Algae.Writer` is quasi-write-only.
   This is often used for loggers, but could be anything as long as the hidden value
   is a `Witchcraft.Monoid`.
 
@@ -35,16 +36,19 @@ defmodule Algae.Writer do
 
       iex> use Witchcraft
       ...>
-      ...> square_and_sum =
+      ...> exponent =
       ...>   fn num ->
-      ...>     monad writer({0.0, 0.0}) do
-      ...>       tell num
+      ...>     monad writer({0, 0}) do
+      ...>       tell 1
       ...>       return num * num
       ...>     end
       ...>   end
       ...>
-      ...> run(square_and_sum(42) >>> square_and_sum >>> square_and_sum)
-      0
+      ...> initial = 42
+      ...> {result, times} = run(exponent.(initial) >>> exponent >>> exponent)
+      ...>
+      ...> "#{initial}^#{2 |> :math.pow(times) |> round()} = #{result}"
+      "42^8 = 9682651996416"
 
   """
 
