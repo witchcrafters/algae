@@ -1,20 +1,17 @@
-# alias  Algae.Free.{Deep, Shallow}
-# import TypeClass
+alias  Algae.Free.{Pure, Roll}
+alias  Witchcraft.Functor
 
-# definst Witchcraft.Functor, for: Algae.Free.Shallow do
-#   def map(%Shallow{shallow: data}, fun) do
-#     %Shallow{shallow: Witchcraft.Functor.map(data, fun)}
-#   end
-# end
+import Algae.Free
+import TypeClass
 
-# definst Witchcraft.Functor, for: Algae.Free.Deep do
-#   # fmap f (Roll x) = Roll (fmap (fmap f) x)
-#   def map(deep = %Deep{deep: data}, fun) do
-#     new_deep =
-#       Witchcraft.Functor.map(data, fn x ->
-#         Witchcraft.Functor.map(fun, x)
-#       end)
+definst Witchcraft.Functor, for: Algae.Free.Pure do
+  def map(%Pure{pure: data}, fun), do: %Pure{pure: fun.(data)}
+end
 
-#     %{deep | deep: new_deep}
-#   end
-# end
+definst Witchcraft.Functor, for: Algae.Free.Roll do
+  def map(roll = %Roll{roll: data}, fun) do
+    data
+    |> Functor.map(&Functor.map(&1, fun))
+    |> Roll.new()
+  end
+end

@@ -1,26 +1,29 @@
 alias  Algae.Free.{Pure, Roll}
+alias  TypeClass.Property.Generator
+
 import Algae.Free
 
 defimpl TypeClass.Property.Generator, for: Algae.Free.Pure do
   def generate(_) do
     [1, 1.1, "", []]
     |> Enum.random()
-    |> TypeClass.Property.Generator.generate()
+    |> Generator.generate()
     |> Pure.new()
   end
 end
 
 defimpl TypeClass.Property.Generator, for: Algae.Free.Roll do
   def generate(_) do
-    sample = Enum.random([1, 1.1, "", []])
+    inner = Algae.Id.new()
 
-    a = TypeClass.Property.Generator.generate(sample)
-    b = TypeClass.Property.Generator.generate(sample)
-    c = TypeClass.Property.Generator.generate(sample)
+    seed =
+      [1, 1.1, "", []]
+      |> Enum.random()
+      |> Generator.generate()
 
-    a
+    seed
     |> new()
-    |> layer(new(b))
-    |> layer(new(c))
+    |> layer(inner)
+    |> layer(inner)
   end
 end

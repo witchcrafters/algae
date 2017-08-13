@@ -1,10 +1,13 @@
 defmodule Algae.Free do
   @moduledoc """
-  A "free" structure, similar to lists but with the ability to add a struct
-  "tag" at each level. Often used for DSLs, interpreters,
-  or building structured data.
+  A "free" structure that converts functors into monads by embedding them in
+  a special structure with all of the monadic heavy lifting done for you.
+
+  Similar to lists but with the ability to add a struct "tag" at each level.
+  Often used for DSLs, interpreters, or building structured data.
 
   ## Pure
+
   `Pure` simply holds a plain value.
 
       %Free.Pure{pure: 42}
@@ -30,7 +33,7 @@ defmodule Algae.Free do
 
   defsum do
     defdata Pure :: any()
-    defdata Roll :: any() # Algae.Free.t()
+    defdata Roll :: any() # Witchcraft.Functor.t()
   end
 
   @doc """

@@ -1,5 +1,6 @@
 alias  Algae.Free.{Pure, Roll}
 alias  Witchcraft.Setoid
+alias  TypeClass.Property.Generator
 
 import Algae.Free
 import TypeClass
@@ -7,8 +8,8 @@ import TypeClass
 definst Witchcraft.Setoid, for: Algae.Free.Pure do
   custom_generator(_) do
     1
-    |> TypeClass.Property.Generator.generate()
-    |> Algae.Free.new()
+    |> Generator.generate()
+    |> Pure.new()
   end
 
   def equivalent?(_, %Roll{}), do: false
@@ -17,14 +18,13 @@ end
 
 definst Witchcraft.Setoid, for: Algae.Free.Roll do
   custom_generator(_) do
-    a = TypeClass.Property.Generator.generate(1)
-    b = TypeClass.Property.Generator.generate(1)
-    c = TypeClass.Property.Generator.generate(1)
+    inner = Algae.Id.new()
+    seed  = Generator.generate(1)
 
-    a
+    seed
     |> new()
-    |> layer(new(b))
-    |> layer(new(c))
+    |> layer(inner)
+    |> layer(inner)
   end
 
   def equivalent?(_, %Pure{}), do: false

@@ -1,34 +1,32 @@
-# alias  Algae.Free.{Deep, Shallow}
-# import TypeClass
+alias  Algae.Free.{Pure, Roll}
+alias  Witchcraft.Ord
+alias  TypeClass.Property.Generator
 
-# definst Witchcraft.Ord, for: Algae.Free.Shallow do
-#   custom_generator(_) do
-#     1
-#     |> TypeClass.Property.Generator.generate()
-#     |> Algae.Free.new()
-#   end
+import Algae.Free
+import TypeClass
 
-#   def compare(_, %Deep{}), do: :lesser
-#   def compare(%Shallow{shallow: a}, %Shallow{shallow: b}), do: Witchcraft.Ord.compare(a, b)
-# end
+definst Witchcraft.Ord, for: Algae.Free.Pure do
+  custom_generator(_) do
+    1
+    |> TypeClass.Property.Generator.generate()
+    |> Algae.Free.new()
+  end
 
-# definst Witchcraft.Ord, for: Algae.Free.Deep do
-#   custom_generator(_) do
-#     a = TypeClass.Property.Generator.generate(1)
-#     b = TypeClass.Property.Generator.generate(1)
-#     c = TypeClass.Property.Generator.generate(1)
+  def compare(_, %Roll{}), do: :lesser
+  def compare(%Pure{pure: a}, %Pure{pure: b}), do: Ord.compare(a, b)
+end
 
-#     a
-#     |> Algae.Free.new()
-#     |> Algae.Free.layer(Algae.Free.new(b))
-#     |> Algae.Free.layer(Algae.Free.new(c))
-#   end
+definst Witchcraft.Ord, for: Algae.Free.Roll do
+  custom_generator(_) do
+    inner = Algae.Id.new()
+    seed  = Generator.generate(1)
 
-#   def compare(%Deep{}, %Shallow{}), do: :greater
-#   def compare(%Deep{deep: deep_a, deeper: deeper_a}, %Deep{deep: deep_b, deeper: deeper_b}) do
-#     case Witchcraft.Ord.compare(deep_a, deep_b) do
-#       :equal -> Witchcraft.Ord.compare(deeper_a, deeper_b)
-#       result -> result
-#     end
-#   end
-# end
+    seed
+    |> new()
+    |> layer(inner)
+    |> layer(inner)
+  end
+
+  def compare(%Roll{}, %Pure{}), do: :greater
+  def compare(%Roll{roll: a}, %Roll{roll: b}), do: Ord.compare(a, b)
+end
