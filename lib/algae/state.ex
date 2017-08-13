@@ -28,24 +28,27 @@ defmodule Algae.State do
 
       iex> use Witchcraft
       ...>
-      ...> push = fn x -> state(fn(xs) -> {%Witchcraft.Unit{}, [x | xs]} end) end
-      ...> pop  = fn -> state(fn([x | xs]) -> {x, xs} end) end
-      ...> tos  = fn -> state(fn(list) = [x | _] -> {x, list} end) end
+      ...> pop  = fn -> state(fn([x | xs])       -> {x, xs}   end) end
+      ...> pull = fn -> state(fn(list = [x | _]) -> {x, list} end) end
+      ...> push = &state(fn(xs) -> {%Witchcraft.Unit{}, [&1 | xs]} end)
       ...>
       ...> %Algae.State{}
       ...> |> monad do
-      ...>   push.(10)
-      ...>   push.(20)
+      ...>   push.(["a"])
+      ...>   push.(["b"])
+      ...>   push.(["c"])
+      ...>   push.(["d"])
+      ...>   push.(["e"])
       ...>
-      ...>   a <- pop.()
-      ...>   b <- pop.()
+      ...>   z <- pop.()
+      ...>   y <- pop.()
+      ...>   x <- pop.()
       ...>
-      ...>   push.(a + b)
-      ...>
-      ...>   tos.()
+      ...>   push.(x <> y <> z)
+      ...>   pull.()
       ...> end
       ...> |> evaluate([])
-      30
+      ["c", "d", "e"]
 
   """
 
@@ -161,7 +164,7 @@ defmodule Algae.State do
     end
   end
 
-  @doc """
+  @doc ~S"""
 
 
 
@@ -169,7 +172,16 @@ defmodule Algae.State do
 
   ## Examples
 
-      # iex>
+      iex> use Witchcraft
+      ...>
+      ...> %Algae.State{}
+      ...> |> monad do
+      ...>   name <- get()
+      ...>   put "Ignored"
+      ...>   return "Hello, #{name}!"
+      ...> end
+      ...> |> evaluate("world")
+      "Hello, world!"
 
   """
   @spec evaluate(State.t(), any()) :: any()
@@ -192,6 +204,17 @@ defmodule Algae.State do
       ...> |> get()
       ...> |> execute(1)
       1
+
+      # iex> use Witchcraft
+      # ...>
+      # ...> %Algae.State{}
+      # ...> |> monad do
+      # ...>   name <- get()
+      # ...>   put "WAT"
+      # ...>   return "Hello, #{name}!"
+      # ...> end
+      # ...> |> execute("world")
+      # "Hello, world!"
 
   """
   @spec execute(State.t(), any()) :: any()
