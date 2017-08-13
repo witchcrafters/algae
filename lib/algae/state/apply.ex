@@ -3,7 +3,7 @@ import TypeClass
 
 definst Witchcraft.Apply, for: Algae.State do
   @force_type_instance true
-  def convey(%State{state: state_g}, %State{state: state_f}) do
+  def convey(%State{runner: state_g}, %State{runner: state_f}) do
     fg =
       fn(s) ->
         {x, t} = state_f.(s)

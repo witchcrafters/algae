@@ -58,16 +58,35 @@ defmodule Algae.State do
   use Witchcraft
 
   @type runner :: (any() -> {any(), any()})
-  @type t :: %State{state: runner()}
+  @type t :: %State{runner: runner()}
 
-  defstruct [state: &State.default/1]
+  defstruct [runner: &State.default/1]
 
   @spec default(any()) :: {integer(), any()}
-  defp default(s), do: {0, s}
+  defp default(s), do: {s, s}
 
+  @doc """
+  Construct a new `Algae.State` struct from a state runner in the form
+  `fn x -> {y, z} end`
+
+  ## Examples
+
+      iex> new(fn x -> {x + 1, x} end).runner.(42)
+      {43, 42}
+
+  """
   @spec new(State.runner()) :: State.t()
-  def new(runner), do: %State{state: runner}
+  def new(runner), do: %State{runner: runner}
 
+  @doc """
+  Alias for `new/1` that reads better when importing the module.
+
+  ## Examples
+
+      iex> state(fn x -> {x + 1, x} end).runner.(42)
+      {43, 42}
+
+  """
   @spec state(State.runner()) :: State.t()
   def state(runner), do: new(runner)
 
@@ -82,14 +101,17 @@ defmodule Algae.State do
 
       iex> inner = fn x -> {0, x} end
       ...>
-      ...> run(%Algae.State{state: inner}).(42) == inner.(42)
+      ...> run(%Algae.State{runner: inner}).(42) == inner.(42)
       true
 
   """
   @spec run(State.t()) :: State.runner()
-  def run(%State{state: fun}), do: fun
+  def run(%State{runner: fun}), do: fun
 
   @doc """
+
+
+
 
 
 
@@ -105,7 +127,7 @@ defmodule Algae.State do
 
   """
   @spec run(State.t(), any()) :: any()
-  def run(%State{state: fun}, arg), do: fun.(arg)
+  def run(%State{runner: fun}, arg), do: fun.(arg)
 
   @doc """
 
@@ -205,17 +227,6 @@ defmodule Algae.State do
       ...> |> execute(1)
       1
 
-      # iex> use Witchcraft
-      # ...>
-      # ...> %Algae.State{}
-      # ...> |> monad do
-      # ...>   name <- get()
-      # ...>   put "WAT"
-      # ...>   return "Hello, #{name}!"
-      # ...> end
-      # ...> |> execute("world")
-      # "Hello, world!"
-
   """
   @spec execute(State.t(), any()) :: any()
   def execute(state, value) do
@@ -224,6 +235,20 @@ defmodule Algae.State do
     |> elem(1)
   end
 
+  @doc """
+
+
+
+
+
+
+
+  ## Examples
+
+      iex> run(modify(fn x -> x + 1 end), 42)
+      {%Witchcraft.Unit{}, 43}
+
+  """
   @spec modify((any() -> any())) :: State.t()
   def modify(fun), do: State.new(fn s -> {%Unit{}, fun.(s)} end)
 end
