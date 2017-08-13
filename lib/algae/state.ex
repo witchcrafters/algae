@@ -1,4 +1,53 @@
 defmodule Algae.State do
+  @moduledoc ~S"""
+
+
+
+
+
+
+
+
+
+
+
+
+  ## Examples
+
+      iex> use Witchcraft
+      ...>
+      ...> greeter =
+      ...>   monad %Algae.State{} do
+      ...>     name <- get()
+      ...>     put "tintin"
+      ...>     return "hello, #{name}!"
+      ...>   end
+      ...>
+      ...> run(greeter, "adit")
+      {"hello, adit!", "tintin"}
+
+      iex> use Witchcraft
+      ...>
+      ...> push = fn x -> state(fn(xs) -> {%Witchcraft.Unit{}, [x | xs]} end) end
+      ...> pop  = fn -> state(fn([x | xs]) -> {x, xs} end) end
+      ...> tos  = fn -> state(fn(list) = [x | _] -> {x, list} end) end
+      ...>
+      ...> %Algae.State{}
+      ...> |> monad do
+      ...>   push.(10)
+      ...>   push.(20)
+      ...>
+      ...>   a <- pop.()
+      ...>   b <- pop.()
+      ...>
+      ...>   push.(a + b)
+      ...>
+      ...>   tos.()
+      ...> end
+      ...> |> evaluate([])
+      30
+
+  """
 
   alias __MODULE__
   alias Witchcraft.Unit
@@ -123,8 +172,8 @@ defmodule Algae.State do
       # iex>
 
   """
-  @spec eval(State.t(), any()) :: any()
-  def eval(state, value) do
+  @spec evaluate(State.t(), any()) :: any()
+  def evaluate(state, value) do
     state
     |> run(value)
     |> elem(0)
@@ -141,12 +190,12 @@ defmodule Algae.State do
 
       iex> fn x -> x + 1 end
       ...> |> get()
-      ...> |> exec(1)
+      ...> |> execute(1)
       1
 
   """
-  @spec exec(State.t(), any()) :: any()
-  def exec(state, value) do
+  @spec execute(State.t(), any()) :: any()
+  def execute(state, value) do
     state
     |> run(value)
     |> elem(1)
