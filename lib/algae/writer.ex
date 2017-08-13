@@ -109,8 +109,9 @@ defmodule Algae.Writer do
       ...> half =
       ...>   fn num ->
       ...>     monad writer({0.0, ["log"]}) do
-      ...>       tell ["#{num} / 2 = #{num / 2}"]
-      ...>       return(num / 2)
+      ...>       let half = num / 2
+      ...>       tell ["#{num} / 2 = #{half}"]
+      ...>       return half
       ...>     end
       ...>   end
       ...>
@@ -150,8 +151,9 @@ defmodule Algae.Writer do
       ...> half =
       ...>   fn num ->
       ...>     monad writer({0.0, ["log"]}) do
-      ...>       tell ["#{num} / 2 = #{num / 2}"]
-      ...>       return(num / 2)
+      ...>       let half = num / 2
+      ...>       tell ["#{num} / 2 = #{half}"]
+      ...>       return half
       ...>     end
       ...>   end
       ...>
