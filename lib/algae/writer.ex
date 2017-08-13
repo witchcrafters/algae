@@ -7,6 +7,21 @@ defmodule Algae.Writer do
   This is often used for loggers, but could be anything as long as the hidden value
   is a `Witchcraft.Monoid`.
 
+  There are many applications of `Writer`s, but as an illustrative point,
+  one could use it for logging across processes and time, since the log
+  is carried around with the result in a pure fashion. The monadic DSL
+  helps make using these feel more natural.
+
+  For an illustrated guide to `Writer`s,
+  see [Thee Useful Monads](http://adit.io/posts/2013-06-10-three-useful-monads.html#the-state-monad).
+
+  ## Anatomy
+
+        %Algae.Writer{writer: {value, log}}
+                                 ↑     ↑
+       # "explicit" value position    "hidden" position,
+       #                               commonly used as a log
+
   ## Examples
 
       iex> use Witchcraft
@@ -47,7 +62,7 @@ defmodule Algae.Writer do
       ...> initial = 42
       ...> {result, times} = run(exponent.(initial) >>> exponent >>> exponent)
       ...>
-      ...> "#{initial}^#{2 |> :math.pow(times) |> round()} = #{result}"
+      ...> "#{initial}^#{round(:math.pow(2, times))} = #{result}"
       "42^8 = 9682651996416"
 
   """

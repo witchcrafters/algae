@@ -1,30 +1,43 @@
 defmodule Algae.State do
   @moduledoc ~S"""
+  `Algae.State` describes a wrapped function that can be used to pass around some
+  "hidden" pure state.
 
+  This has numerous applications, but the primary advantage is purity. The state
+  gets passed around with the value, and the monadic DSL helps it feel more
+  natural than passing everything around by hand.
 
+  In many ways, `Algae.State` is a generalization of `Algae.Reader` and `Algae.Writer`.
+  See [Thee Useful Monads](http://adit.io/posts/2013-06-10-three-useful-monads.html#the-state-monad)
+  a nice, illustrated guide to how these work and relate.
 
+  ## Anatomy
 
-
-
-
-
-
-
-
+                # To pass in concrete values
+                                ↓
+      %Algae.State{runner: fn access -> {value, state} end}
+                                           ↑      ↑
+                 # "explicit" value position     "hidden" state position
 
   ## Examples
 
       iex> use Witchcraft
       ...>
-      ...> greeter =
-      ...>   monad %Algae.State{} do
-      ...>     name <- get()
-      ...>     put "tintin"
-      ...>     return "hello, #{name}!"
-      ...>   end
+      ...> %Algae.State{}
+      ...> |> monad do
+      ...>   name <- get()
+      ...>   let result = "Hello, #{name}!"
       ...>
-      ...> run(greeter, "adit")
-      {"hello, adit!", "tintin"}
+      ...>   put result
+      ...>   modify &String.upcase/1
+      ...>
+      ...>   return result
+      ...> end
+      ...> |> run("world")
+      {
+        "Hello, world!",
+        "HELLO, WORLD!"
+      }
 
       iex> use Witchcraft
       ...>
@@ -91,11 +104,9 @@ defmodule Algae.State do
   def state(runner), do: new(runner)
 
   @doc """
+  Extract the runner from an `Algae.State`.
 
-
-
-
-
+  Can be used as a curried version of `run/2`.
 
   ## Examples
 
@@ -109,12 +120,8 @@ defmodule Algae.State do
   def run(%State{runner: fun}), do: fun
 
   @doc """
-
-
-
-
-
-
+  Run an `Algae.State` by passing in some initial state to actualy run the enclosed
+  state runner.
 
   ## Examples
 
@@ -130,10 +137,9 @@ defmodule Algae.State do
   def run(%State{runner: fun}, arg), do: fun.(arg)
 
   @doc """
+  Set the stateful position of an `Algae.Struct`.
 
-
-
-
+  Not unlike `Algae.Writer.tell/1`.
 
   ## Examples
 
@@ -146,13 +152,37 @@ defmodule Algae.State do
   @spec put(any()) :: State.t()
   def put(s), do: State.new(fn _ -> {%Unit{}, s} end)
 
-  # -- >>> runState get 0
-  # -- (0,0)
+  @doc ~S"""
+  Run a function over the "state" portion of the runner.
+
+  ## Examples
+
+      iex> fn x -> x + 1 end
+      ...> |> modify()
+      ...> |> run(42)
+      {%Witchcraft.Unit{}, 43}
+
+      iex> use Witchcraft
+      ...>
+      ...> %Algae.State{}
+      ...> |> monad do
+      ...>   name <- get()
+      ...>
+      ...>   put "State"
+      ...>   modify &String.upcase/1
+      ...>
+      ...>   return "Hello, #{name}!"
+      ...> end
+      ...> |> run("world")
+      {"Hello, world!", "STATE"}
+
+
+  """
+  @spec modify((any() -> any())) :: State.t()
+  def modify(fun), do: State.new(fn s -> {%Unit{}, fun.(s)} end)
 
   @doc """
-
-
-
+  Set both sides of an `Algae.State` struct.
 
   ## Examples
 
@@ -164,11 +194,8 @@ defmodule Algae.State do
   def get, do: State.new(fn a -> {a, a} end)
 
   @doc """
-
-
-
-
-
+  Set both sides of an `Algae.State` struct, plus running a function over the
+  value portion of the inner state.
 
   ## Examples
 
@@ -187,10 +214,7 @@ defmodule Algae.State do
   end
 
   @doc ~S"""
-
-
-
-
+  Run the enclosed `Algae.State` runner, and return the value (no state).
 
   ## Examples
 
@@ -213,12 +237,8 @@ defmodule Algae.State do
     |> elem(0)
   end
 
-  @doc """
-
-
-
-
-
+  @doc ~S"""
+  Run the enclosed `Algae.State` runner, and return the state (no value).
 
   ## Examples
 
@@ -227,6 +247,17 @@ defmodule Algae.State do
       ...> |> execute(1)
       1
 
+      iex> use Witchcraft
+      ...>
+      ...> %Algae.State{}
+      ...> |> monad do
+      ...>   whatevs <- get()
+      ...>   put "State"
+      ...>   return "Hello, #{whatevs}!"
+      ...> end
+      ...> |> execute("world")
+      "State"
+
   """
   @spec execute(State.t(), any()) :: any()
   def execute(state, value) do
@@ -234,21 +265,4 @@ defmodule Algae.State do
     |> run(value)
     |> elem(1)
   end
-
-  @doc """
-
-
-
-
-
-
-
-  ## Examples
-
-      iex> run(modify(fn x -> x + 1 end), 42)
-      {%Witchcraft.Unit{}, 43}
-
-  """
-  @spec modify((any() -> any())) :: State.t()
-  def modify(fun), do: State.new(fn s -> {%Unit{}, fun.(s)} end)
 end

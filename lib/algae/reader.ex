@@ -5,6 +5,9 @@ defmodule Algae.Reader do
   This is useful in a number of situations, but the most common case is to weave
   access to environment variables monadically.
 
+  For an illustrated guide to `Reader`s,
+  see [Thee Useful Monads](http://adit.io/posts/2013-06-10-three-useful-monads.html#the-state-monad).
+
   ## Examples
 
       iex> use Witchcraft
@@ -18,10 +21,15 @@ defmodule Algae.Reader do
       ...>
       ...> sample_bindings = %{count: 3, a: 1, b: 2}
       ...> correct_count   = run(correct, sample_bindings)
-      ...> "Count is correct for bindings #{inspect sample_bindings}: #{correct_count}"
-      "Count is correct for bindings %{a: 1, b: 2, count: 3}: true"
+      ...> "Correct count for #{inspect sample_bindings}? #{correct_count}"
+      "Correct count for %{a: 1, b: 2, count: 3}? true"
+      ...>
+      ...> bad_bindings = %{count: 100, a: 1, b: 2}
+      ...> bad_count    = run(correct, bad_bindings)
+      ...> "Correct count for #{inspect bad_bindings}? #{bad_count}"
+      "Correct count for %{a: 1, b: 2, count: 100}? false"
 
-  [Example source](https://hackage.haskell.org/package/mtl-2.2.1/docs/Control-Monad-Reader.html)
+  Example adapted from [source](https://hackage.haskell.org/package/mtl-2.2.1/docs/Control-Monad-Reader.html)
 
   """
 
