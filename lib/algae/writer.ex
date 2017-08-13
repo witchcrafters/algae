@@ -1,6 +1,38 @@
 defmodule Algae.Writer do
+  @moduledoc ~S"""
+  `Algae.Writer` helps capture some ...
+
+  This is often used for loggers, but doesn't have to be.
+
+  ## Examples
 
 
+      iex> use Witchcraft
+      ...>
+      ...> excite =
+      ...>   fn string ->
+      ...>     monad writer({0.0, "log"}) do
+      ...>       tell string
+      ...>
+      ...>       excited <- return "#{string}!"
+      ...>       tell " -> #{excited} ; "
+      ...>
+      ...>       return excited
+      ...>     end
+      ...>   end
+      ...>
+      ...> {_, logs} =
+      ...>   "Hi"
+      ...>   |> excite.()
+      ...>   >>> excite
+      ...>   >>> excite
+      ...>   |> censor(&String.trim_trailing(&1, " ; "))
+      ...>   |> run()
+      ...>
+      ...> logs
+      "Hi -> Hi! ; Hi! -> Hi!! ; Hi!! -> Hi!!!"
+
+  """
 
   alias  __MODULE__
   alias Witchcraft.{Monoid, Unit}

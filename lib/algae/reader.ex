@@ -1,6 +1,6 @@
 defmodule Algae.Reader do
   @moduledoc ~S"""
-  `Reader` allow you to pass some readable context around through actions.
+  `Algae.Reader` allows you to pass some readable context around through actions.
 
   This is useful in a number of situations, but the most common case is to weave
   access to environment variables monadically.
