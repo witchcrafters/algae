@@ -1,89 +1,51 @@
 defmodule Algae.State do
 
   alias __MODULE__
+  alias Witchcraft.Unit
 
-  defstruct [state: &Algae.State.default/1]
+  use Witchcraft
 
+  @type stepper :: (any() -> {any(), any()})
+  @type t :: %State{state: stepper()}
+
+  defstruct [state: &State.default/1]
+
+  @spec default(any()) :: {integer(), any()}
   defp default(s), do: {0, s}
 
+  @spec new(State.stepper()) :: State.t()
   def new(stepper), do: %State{state: stepper}
 
+  @spec state(State.stepper()) :: State.t()
+  def state(stepper), do: new(stepper)
+
+  @spec run(State.t()) :: State.stepper()
   def run(%State{state: fun}), do: fun
 
+  @spec run(State.t(), any()) :: any()
   def run(%State{state: fun}, arg), do: fun.(arg)
 
-  def put(s), do: State.new(fn _ -> {%Witchcraft.Unit{}, s} end)
+  @spec put(any()) :: State.t()
+  def put(s), do: State.new(fn _ -> {%Unit{}, s} end)
 
+  @spec get() :: State.t()
   def get, do: State.new(fn a -> {a, a} end)
 
+  @spec get((any() -> any())) :: State.t()
+  def get(fun) do
+    monad %State{} do
+      s <- get()
+      return fun.(s)
+    end
+  end
+
+  @spec eval(State.t(), any()) :: any()
   def eval(state, a) do
     state
     |> run(a)
     |> elem(0)
   end
-end
 
-alias Algae.State
-import TypeClass
-use Witchcraft
-
-defimpl TypeClass.Property.Generator, for: Algae.State do
-  def generate(_) do
-    inner =
-      [0, 1.1, "", []]
-      |> Enum.random()
-      |> TypeClass.Property.Generator.generate()
-
-    State.new(fn x -> {inner, x} end)
-  end
-end
-
-definst Witchcraft.Functor, for: Algae.State do
-  @force_type_instance true
-
-  def map(%State{state: inner}, fun) do
-    run_map  = fn({a, b}, f) -> {f.(a), b} end
-
-    st_tuple =
-      fn(g, s) ->
-        g
-        |> State.new()
-        |> State.run(s)
-      end
-
-    State.new(fn x ->
-      inner
-      |> st_tuple.(x)
-      |> run_map.(fun)
-    end)
-  end
-end
-
-definst Witchcraft.Apply, for: Algae.State do
-  @force_type_instance true
-  def convey(%State{state: state_g}, %State{state: state_f}) do
-    fg =
-      fn(s) ->
-        {x, t} = state_f.(s)
-        {y, u} = state_g.(t)
-        {x.(y), u}
-      end
-
-    State.new(fn x -> fg.(x) end)
-  end
-end
-
-definst Witchcraft.Applicative, for: Algae.State do
-  @force_type_instance true
-  def of(_, value), do: State.new(fn x -> {value, x} end)
-end
-
-definst Witchcraft.Chain, for: Algae.State do
-  @force_type_instance true
-  def chain(%State{state: inner}, link) do
-    fn s ->
-      {x, s} = inner.(s)
-      link.(x)
-    end
-  end
+  @spec modify((any() -> any())) :: State.t()
+  def modify(fun), do: State.new(fn s -> {%Unit{}, fun.(s)} end)
 end
