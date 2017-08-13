@@ -7,7 +7,7 @@ defmodule AlgaeTest do
   doctest Algae.Maybe,  import: true
   doctest Algae.Either, import: true
 
-  # doctest Algae.Free, import: true
+  doctest Algae.Free, import: true
 
   doctest Algae.Tree.BinarySearch, import: true
   doctest Algae.Tree.Rose,         import: true
