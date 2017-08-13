@@ -155,11 +155,11 @@ defmodule Algae.Writer do
       ...>     end
       ...>   end
       ...>
-      ...> run(half.(42) >>> half >>> half)
+      ...> run(half.(42.0) >>> half >>> half)
       {
         5.25,
         [
-          "42 / 2 = 21.0",
+          "42.0 / 2 = 21.0",
           "21.0 / 2 = 10.5",
           "10.5 / 2 = 5.25"
         ]
