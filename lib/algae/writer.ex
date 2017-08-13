@@ -108,8 +108,8 @@ defmodule Algae.Writer do
       ...>
       ...> half =
       ...>   fn num ->
-      ...>     monad writer({0.0, "log"}) do
-      ...>       tell "I just halved #{inspect num}! "
+      ...>     monad writer({0.0, ["log"]}) do
+      ...>       tell ["#{num} / 2 = #{num / 2}"]
       ...>       return(num / 2)
       ...>     end
       ...>   end
@@ -117,16 +117,18 @@ defmodule Algae.Writer do
       ...> run(half.(42) >>> half >>> half)
       {
         5.25,
-        "I just halved 42! I just halved 21.0! I just halved 10.5! "
+        [
+          "42 / 2 = 21.0",
+          "21.0 / 2 = 10.5",
+          "10.5 / 2 = 5.25"
+        ]
       }
-
-      Last example adapted from [here](http://adit.io/posts/2013-06-10-three-useful-monads.html#the-writer-monad)
 
   """
   @spec run(Writer.t()) :: Writer.value()
   def run(%Writer{writer: writer}), do: writer
 
-  @doc """
+  @doc ~S"""
   Set the "log" portion of an `Algae.Writer` step
 
   ## Examples
@@ -142,6 +144,26 @@ defmodule Algae.Writer do
       ...>   return "hey"
       ...> end
       %Algae.Writer{writer: {"hey", 85}}
+
+      iex> use Witchcraft
+      ...>
+      ...> half =
+      ...>   fn num ->
+      ...>     monad writer({0.0, ["log"]}) do
+      ...>       tell ["#{num} / 2 = #{num / 2}"]
+      ...>       return(num / 2)
+      ...>     end
+      ...>   end
+      ...>
+      ...> run(half.(42) >>> half >>> half)
+      {
+        5.25,
+        [
+          "42 / 2 = 21.0",
+          "21.0 / 2 = 10.5",
+          "10.5 / 2 = 5.25"
+        ]
+      }
 
   """
   @spec tell(Writer.log()) :: Writer.t()
@@ -234,7 +256,7 @@ defmodule Algae.Writer do
 
       iex> use Witchcraft
       ...>
-      ...> 42
+      ...> 0
       ...> |> new(["logs"])
       ...> |> monad do
       ...>   tell ["Start"]
