@@ -1,4 +1,4 @@
-alias  Algae.Free.{Pure, Roll}
+alias  Algae.Free.Pure
 import TypeClass
 
 definst Witchcraft.Applicative, for: Algae.Free.Pure do

@@ -3,16 +3,18 @@ defmodule Algae.Free do
   A "free" structure that converts functors into monads by embedding them in
   a special structure with all of the monadic heavy lifting done for you.
 
-  Similar to lists but with the ability to add a struct "tag" at each level.
-  Often used for DSLs, interpreters, or building structured data.
+  Similar to trees and lists, but with the ability to add a struct "tag",
+  at each level. Often used for DSLs, interpreters, or building structured data.
 
-  ## Pure
+  ## Anatomy
+
+  ### Pure
 
   `Pure` simply holds a plain value.
 
       %Free.Pure{pure: 42}
 
-  ## Roll
+  ### Roll
 
   `Roll` resursively containment of more `Free` structures embedded in
   a another ADT. For example, with `Id`:

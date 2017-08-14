@@ -25,10 +25,20 @@ defmodule Algae.Tree.Rose do
 
   """
 
+  alias  __MODULE__
   import Algae
 
+  @type rose :: any()
+  @type forrest :: [t()]
+
   defdata do
-    rose :: any()
-    tree :: [t()]
+    rose    :: any()
+    forrest :: [t()]
   end
+
+  def new(rose), do: %Rose{rose: rose, forrest: []}
+
+  def new(rose, forrest), do: %Rose{rose: rose, forrest: forrest}
+
+  def layer(tree, rose), do: %Rose{rose: rose, forrest: [tree]}
 end
