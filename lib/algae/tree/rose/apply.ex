@@ -14,7 +14,3 @@ definst Witchcraft.Apply, for: Algae.Tree.Rose do
     }
   end
 end
-
-
-# Node f tfs <*> tx@(Node x txs) =
-#   Node (f x) (map (f <$>) txs ++ map (<*> tx) tfs)
