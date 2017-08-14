@@ -31,7 +31,7 @@ defmodule Algae.Mixfile do
 
        {:quark,      "~> 2.3"},
        {:type_class, "~> 1.2"},
-       {:witchcraft, "1.0.0-rc.1"}
+       {:witchcraft, "~> 1.0"}
      ],
 
      docs: [
