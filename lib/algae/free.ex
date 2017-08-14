@@ -30,6 +30,27 @@ defmodule Algae.Free do
         }
       }
 
+  ## Example
+
+  Adapted from  *************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   """
 
   alias  Alage.Free.{Pure, Roll}
@@ -37,7 +58,7 @@ defmodule Algae.Free do
   use    Witchcraft
 
   defsum do
-    defdata Pure :: any()
+    defdata Pure :: any() \\ %Witchcraft.Unit{}
     defdata Roll :: any() # Witchcraft.Functor.t()
   end
 
@@ -72,4 +93,42 @@ defmodule Algae.Free do
   """
   @spec layer(t(), any()) :: t()
   def layer(free, mutual), do: %Roll{roll: of(mutual, free)}
+
+  @doc """
+  Wrap a functor in a free structure.
+
+  ## Examples
+
+      iex> wrap(%Algae.Id{id: 42})
+      %Algae.Free.Roll{
+        roll: %Algae.Id{
+          id: 42
+        }
+      }
+
+  """
+  @spec wrap(Witchcraft.Functor.t()) :: Roll.t()
+  def wrap(functor), do: %Roll{roll: functor}
+
+  @doc """
+  Lift a plain functor up into a free monad.
+
+  ## Examples
+
+      iex> free(%Algae.Id{id: 42})
+      %Algae.Free.Roll{
+        roll: %Algae.Id{
+          id: %Algae.Free.Pure{
+            pure: 42
+          }
+        }
+      }
+
+  """
+  @spec free(Witchcraft.Functor.t()) :: t()
+  def free(functor) do
+    functor
+    |> map(&of(%Roll{}, &1))
+    |> wrap()
+  end
 end
