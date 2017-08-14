@@ -6,6 +6,9 @@ defmodule Algae.Free do
   Similar to trees and lists, but with the ability to add a struct "tag",
   at each level. Often used for DSLs, interpreters, or building structured data.
 
+  For a simple introduction to the "free monad + interpreter" pattern, we recommend
+  [Why free monads matter](http://www.haskellforall.com/2012/06/you-could-have-invented-free-monads.html).
+
   ## Anatomy
 
   ### Pure
