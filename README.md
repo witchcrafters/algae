@@ -28,7 +28,7 @@ end
 - [A Sampling of ADTs](#a-sampling-of-adts)
   - [`Id`](#algaeid)
   - [`Maybe`](#algaemaybe)
-  - [`Tree.Binary`](#algaetreebinary)
+  - [`Tree.BinarySearch`](#algaetreebinarysearch)
 
 # Product Builder
 Build a product type
@@ -309,10 +309,10 @@ Algae.Maybe.new(42)
 #=> %Algae.Maybe.Just{just: 42}
 ```
 
-## `Tree.Binary`
+## `Tree.BinarySearch`
 
 ```elixir
-alias Algae.Tree.Binary, as: BTree
+alias Algae.Tree.BinarySearch, as: BTree
 
 #   42
 #  /  \
@@ -330,24 +330,24 @@ BTree.Branch.new(
   )
 )
 
-#=> %Algae.Tree.Binary.Branch{
+#=> %Algae.Tree.BinarySearch.Branch{
 #     value: 42,
-#     left: %Algae.Tree.Binary.Branch{
+#     left: %Algae.Tree.BinarySearch.Branch{
 #       value: 77,
-#       left:  %Algae.Tree.Binary.Empty{},
-#       right: %Algae.Tree.Binary.Empty{}
+#       left:  %Algae.Tree.BinarySearch.Empty{},
+#       right: %Algae.Tree.BinarySearch.Empty{}
 #     },
-#     right: %Algae.Tree.Binary.Branch{
+#     right: %Algae.Tree.BinarySearch.Branch{
 #       value: 1234,
-#       left:  %Algae.Tree.Binary.Branch{
+#       left:  %Algae.Tree.BinarySearch.Branch{
 #         value: 98,
-#         left:  %Algae.Tree.Binary.Empty{},
-#         right: %Algae.Tree.Binary.Empty{}
+#         left:  %Algae.Tree.BinarySearch.Empty{},
+#         right: %Algae.Tree.BinarySearch.Empty{}
 #       },
-#       right: %Algae.Tree.Binary.Branch{
+#       right: %Algae.Tree.BinarySearch.Branch{
 #         value: 32,
-#         left:  %Algae.Tree.Binary.Empty{},
-#         right: %Algae.Tree.Binary.Empty{}
+#         left:  %Algae.Tree.BinarySearch.Empty{},
+#         right: %Algae.Tree.BinarySearch.Empty{}
 #       }
 #     }
 #   }
