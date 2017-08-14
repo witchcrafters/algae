@@ -30,27 +30,6 @@ defmodule Algae.Free do
         }
       }
 
-  ## Example
-
-  Adapted from  *************************************************************
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   """
 
   alias  Alage.Free.{Pure, Roll}

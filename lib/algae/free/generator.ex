@@ -1,4 +1,4 @@
-alias  Algae.Free.{Pure, Roll}
+alias  Algae.Free.Pure
 alias  TypeClass.Property.Generator
 
 import Algae.Free

@@ -1,7 +1,6 @@
-alias  Algae.Free.{Pure, Roll}
-alias  Witchcraft.{Functor, Apply}
+alias Algae.Free.{Pure, Roll}
+alias Witchcraft.{Functor, Apply}
 
-import Algae.Free
 import TypeClass
 
 definst Witchcraft.Apply, for: Algae.Free.Pure do

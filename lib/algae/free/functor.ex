@@ -1,7 +1,6 @@
-alias  Algae.Free.{Pure, Roll}
-alias  Witchcraft.Functor
+alias Algae.Free.{Pure, Roll}
+alias Witchcraft.Functor
 
-import Algae.Free
 import TypeClass
 
 definst Witchcraft.Functor, for: Algae.Free.Pure do
@@ -9,7 +8,7 @@ definst Witchcraft.Functor, for: Algae.Free.Pure do
 end
 
 definst Witchcraft.Functor, for: Algae.Free.Roll do
-  def map(roll = %Roll{roll: data}, fun) do
+  def map(%Roll{roll: data}, fun) do
     data
     |> Functor.map(&Functor.map(&1, fun))
     |> Roll.new()
