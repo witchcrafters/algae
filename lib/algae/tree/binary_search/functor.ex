@@ -1,6 +1,6 @@
-alias Algae.Tree.BinarySearch.{Empty, Node}
+alias  Algae.Tree.BinarySearch.{Empty, Node}
+alias  Witchcraft.Functor
 import TypeClass
-use Witchcraft
 
 definst Witchcraft.Functor, for: Algae.Tree.BinarySearch.Empty do
   def map(_, _), do: %Empty{}
@@ -10,8 +10,8 @@ definst Witchcraft.Functor, for: Algae.Tree.BinarySearch.Node do
   def map(%Node{node: node, left: left, right: right}, fun) do
     %Node{
       node:  fun.(node),
-      left:  left ~> fun,
-      right: right ~> fun
+      left:  Functor.map(left,  fun),
+      right: Functor.map(right, fun)
     }
   end
 end
