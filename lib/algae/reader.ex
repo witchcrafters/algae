@@ -29,7 +29,8 @@ defmodule Algae.Reader do
       ...> "Correct count for #{inspect bad_bindings}? #{bad_count}"
       "Correct count for %{a: 1, b: 2, count: 100}? false"
 
-  Example adapted from [source](https://hackage.haskell.org/package/mtl-2.2.1/docs/Control-Monad-Reader.html)
+  Example adapted from
+  [source](https://hackage.haskell.org/package/mtl-2.2.1/docs/Control-Monad-Reader.html)
 
   """
 

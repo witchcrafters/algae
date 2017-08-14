@@ -176,7 +176,6 @@ defmodule Algae.State do
       ...> |> run("world")
       {"Hello, world!", "STATE"}
 
-
   """
   @spec modify((any() -> any())) :: State.t()
   def modify(fun), do: State.new(fn s -> {%Unit{}, fun.(s)} end)

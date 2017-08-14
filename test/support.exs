@@ -1,5 +1,3 @@
-## Compiles
-
 import Algae
 
 defmodule Example do
@@ -65,7 +63,7 @@ defmodule Example do
     # =================== #
 
     @spec attack(t(), t()) :: {t(), t()}
-    def attack(%{experience: xp} = player, %{hit_points: hp} = target) do
+    def attack(player = %{experience: xp}, target = %{hit_points: hp}) do
       {
         %{player | experience: xp + 50},
         %{target | hit_points: hp - 10}
