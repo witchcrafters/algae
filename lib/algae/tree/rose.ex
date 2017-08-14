@@ -6,12 +6,12 @@ defmodule Algae.Tree.Rose do
 
       %Algae.Tree.Rose{
         rose: 42,
-        forrest: [
+        forest: [
           %Algae.Tree.Rose{
             rose: "hi"
           },
           %Algae.Tree.Rose{
-            forrest: [
+            forest: [
               %Algae.Tree.Rose{
                 rose: 0.4
               }
@@ -29,48 +29,48 @@ defmodule Algae.Tree.Rose do
   import Algae
 
   @type rose :: any()
-  @type forrest :: [t()]
+  @type forest :: [t()]
 
   defdata do
     rose    :: any()
-    forrest :: [t()]
+    forest :: [t()]
   end
 
   @doc """
-  Create a simple `Algae.Rose` tree, with an empty forrest and one rose.
+  Create a simple `Algae.Rose` tree, with an empty forest and one rose.
 
   ## Examples
 
       iex> new(42)
       %Algae.Tree.Rose{
         rose: 42,
-        forrest: []
+        forest: []
       }
 
   """
   @spec new(rose()) :: t()
-  def new(rose), do: %Rose{rose: rose, forrest: []}
+  def new(rose), do: %Rose{rose: rose, forest: []}
 
   @doc """
-  Create an `Algae.Rose` tree, passing a forrest and a rose.
+  Create an `Algae.Rose` tree, passing a forest and a rose.
 
   ## Examples
 
       iex> new(42, [new(55), new(14)])
       %Algae.Tree.Rose{
         rose: 42,
-        forrest: [
+        forest: [
           %Algae.Tree.Rose{rose: 55},
           %Algae.Tree.Rose{rose: 14}
         ]
       }
 
   """
-  @spec new(rose(), forrest()) :: t()
-  def new(rose, forrest), do: %Rose{rose: rose, forrest: forrest}
+  @spec new(rose(), forest()) :: t()
+  def new(rose, forest), do: %Rose{rose: rose, forest: forest}
 
   @doc """
-  Wrap another tree around an existing one, relegating it to the forrest.
+  Wrap another tree around an existing one, relegating it to the forest.
 
   ## Examples
 
@@ -81,13 +81,13 @@ defmodule Algae.Tree.Rose do
       ...> |> layer(6)
       %Algae.Tree.Rose{
         rose: 6,
-        forrest: [
+        forest: [
           %Algae.Tree.Rose{
             rose: 99,
-            forrest: [
+            forest: [
               %Algae.Tree.Rose{
                 rose: 42,
-                forrest: [
+                forest: [
                   %Algae.Tree.Rose{
                     rose: 55
                   }
@@ -100,5 +100,5 @@ defmodule Algae.Tree.Rose do
 
   """
   @spec layer(t(), rose()) :: t()
-  def layer(tree, rose), do: %Rose{rose: rose, forrest: [tree]}
+  def layer(tree, rose), do: %Rose{rose: rose, forest: [tree]}
 end
