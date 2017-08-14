@@ -67,11 +67,9 @@ defmodule Algae.Writer do
 
   """
 
-  alias  __MODULE__
+  alias __MODULE__
   alias Witchcraft.{Monoid, Unit}
-
-  import Algae
-  use    Witchcraft
+  use   Witchcraft
 
   @type log    :: Monoid.t()
   @type value  :: any()
