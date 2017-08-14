@@ -172,11 +172,7 @@ definst Witchcraft.Traversable, for: Algae.Either.Left do
 end
 
 definst Witchcraft.Traversable, for: Algae.Either.Right do
-  def traverse(%Right{right: value}, link) do
-    value
-    |> link.()
-    ~> &Right.new/1
-  end
+  def traverse(%Right{right: value}, link), do: map(link.(value), &Right.new/1)
 end
 
 # #########
@@ -189,7 +185,7 @@ end
 
 definst Witchcraft.Apply, for: Algae.Either.Right do
   def convey(_,    %Left{}), do: %Left{}
-  def convey(data, %Right{right: fun}), do: data ~> fun
+  def convey(data, %Right{right: fun}), do: map(data, fun)
 end
 
 ###############
