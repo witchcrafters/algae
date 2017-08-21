@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/expede/algae.svg?branch=master)](https://travis-ci.org/expede/algae) [![Inline docs](http://inch-ci.org/github/expede/algae.svg?branch=master)](http://inch-ci.org/github/expede/algae) [![Deps Status](https://beta.hexfaktor.org/badge/all/github/expede/algae.svg)](https://beta.hexfaktor.org/github/expede/algae) [![hex.pm version](https://img.shields.io/hexpm/v/algae.svg?style=flat)](https://hex.pm/packages/algae) [![API Docs](https://img.shields.io/badge/api-docs-yellow.svg?style=flat)](http://hexdocs.pm/algae/) [![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/expede/algae/blob/master/LICENSE)
 
-Algae provides a biolerplate-avoiding DSL for defining algebraic data types (ADTs),
+Algae provides a boilerplate-avoiding DSL for defining algebraic data types (ADTs),
 plus several common structures
 
 # Quickstart
@@ -42,7 +42,7 @@ Includes:
 
 ## Definition DSL
 
-For convenveniece, several variants of the DSL are available.
+For convenience, several variants of the DSL are available.
 
 ### Standard
 
@@ -224,7 +224,7 @@ Light.new()
 
 ## Embedded Products
 
-Data with multiple fileds can be defined directly as part of a sum
+Data with multiple fields can be defined directly as part of a sum
 
 ```elixir
 defmodule Pet do
@@ -260,7 +260,7 @@ Maybe.new()
 
 ## Tagged Unions
 
-Sums join existing types with tags: new types to help distibguish the context
+Sums join existing types with tags: new types to help distinguish the context
 that they are in (the sum type)
 
 ```elixir
