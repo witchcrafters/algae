@@ -54,9 +54,24 @@ defmodule Algae.Maybe do
       iex> new(9)
       %Algae.Maybe.Just{just: 9}
 
+      iex> new(nil)
+      %Algae.Maybe.Just{just: nil}
+
+      iex> new(nil, nothing: nil)
+      %Algae.Maybe.Nothing{}
+
+      iex> new(9, nothing: 9)
+      %Algae.Maybe.Nothing{}
+
+      iex> new(9, nothing: 1)
+      %Algae.Maybe.Just{just: 9}
+
   """
-  @spec new(any) :: Just.t()
-  defdelegate new(value), to: Just, as: :new
+  @spec new(any(), [nothing: any()]) :: Just.t() | Nothing.t()
+  def new(nothing_value, [nothing: nothing_value]), do: Nothing.new()
+  def new(value, _), do: Just.new(value)
+
+  def new(value), do: Just.new(value)
 
   @doc """
   Extract a value from a `Maybe`, falling back to a set value in the `Nothing` case.
