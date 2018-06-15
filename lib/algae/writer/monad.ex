@@ -1,3 +1,3 @@
 import TypeClass
 
-definst(Witchcraft.Monad, for: Algae.Writer)
+definst Witchcraft.Monad, for: Algae.Writer

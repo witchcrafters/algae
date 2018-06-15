@@ -6,8 +6,8 @@
     defsum: 1
   ],
   import_deps: [
-    :operator,
     :quark,
-    :type_class
+    :type_class,
+    :witchcraft
   ]
 ]

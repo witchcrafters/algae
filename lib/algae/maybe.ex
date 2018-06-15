@@ -234,8 +234,8 @@ end
 # Monad #
 #########
 
-definst(Witchcraft.Monad, for: Algae.Maybe.Nothing)
-definst(Witchcraft.Monad, for: Algae.Maybe.Just)
+definst Witchcraft.Monad, for: Algae.Maybe.Nothing
+definst Witchcraft.Monad, for: Algae.Maybe.Just
 
 ##########
 # Extend #

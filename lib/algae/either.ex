@@ -218,8 +218,8 @@ end
 # # Monad #
 # #########
 
-definst(Witchcraft.Monad, for: Algae.Either.Left)
-definst(Witchcraft.Monad, for: Algae.Either.Right)
+definst Witchcraft.Monad, for: Algae.Either.Left
+definst Witchcraft.Monad, for: Algae.Either.Right
 
 # ##########
 # # Extend #

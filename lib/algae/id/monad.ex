@@ -1,2 +1,2 @@
 import TypeClass
-definst(Witchcraft.Monad, for: Algae.Id)
+definst Witchcraft.Monad, for: Algae.Id

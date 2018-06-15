@@ -1,3 +1,3 @@
 import TypeClass
 
-definst(Witchcraft.Monad, for: Algae.Tree.Rose)
+definst Witchcraft.Monad, for: Algae.Tree.Rose
