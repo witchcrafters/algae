@@ -1,5 +1,5 @@
-alias  Algae.Tree.Rose
-alias  Witchcraft.Foldable
+alias Algae.Tree.Rose
+alias Witchcraft.Foldable
 import TypeClass
 
 definst Witchcraft.Foldable, for: Algae.Tree.Rose do

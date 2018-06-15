@@ -20,7 +20,7 @@ defmodule Algae.Internal do
         struct(__MODULE__, unquote(defaults))
       end
 
-      defoverridable [new: unquote(Enum.count(args))]
+      defoverridable new: unquote(Enum.count(args))
     end
   end
 
@@ -37,7 +37,7 @@ defmodule Algae.Internal do
         @spec new() :: t()
         def new, do: struct(__MODULE__)
 
-        defoverridable [new: 0]
+        defoverridable new: 0
       end
     end
   end
@@ -48,8 +48,8 @@ defmodule Algae.Internal do
 
     quote do
       @type t :: %unquote(caller_module){
-        unquote(field) => unquote(type)
-      }
+              unquote(field) => unquote(type)
+            }
 
       defstruct [{unquote(field), unquote(default)}]
 
@@ -61,7 +61,7 @@ defmodule Algae.Internal do
       @spec new(unquote(type)) :: t()
       def new(field), do: struct(__MODULE__, [unquote(field), field])
 
-      defoverridable [new: 0, new: 1]
+      defoverridable new: 0, new: 1
     end
   end
 
@@ -73,12 +73,12 @@ defmodule Algae.Internal do
     quote do
       defmodule unquote(full_module) do
         @type t :: %unquote(full_module){
-          unquote(field) => unquote(type_ctx)
-        }
+                unquote(field) => unquote(type_ctx)
+              }
 
         defstruct [{unquote(field), unquote(default)}]
 
-        @doc "Default #{__MODULE__} struct. Value defaults to #{inspect unquote(default)}."
+        @doc "Default #{__MODULE__} struct. Value defaults to #{inspect(unquote(default))}."
         @spec new() :: t()
         def new, do: struct(__MODULE__)
 
@@ -103,10 +103,11 @@ defmodule Algae.Internal do
 
   def embedded_data_ast(module_ctx, default, type_ctx) do
     field = module_to_field(module_ctx)
+
     quote do
       @type t :: %__MODULE__{
-        unquote(field) => unquote(type_ctx)
-      }
+              unquote(field) => unquote(type_ctx)
+            }
 
       defstruct [{unquote(field), unquote(default)}]
 
@@ -114,15 +115,14 @@ defmodule Algae.Internal do
       @spec new(unquote(type_ctx)) :: t()
       def new(field \\ unquote(default)), do: struct(__MODULE__, [field])
 
-      defoverridable [new: 1]
+      defoverridable new: 1
     end
   end
 
   @type field :: {atom(), [any()], [any()]}
-  @type type  :: {atom(), [any()], [any()]}
+  @type type :: {atom(), [any()], [any()]}
 
-  @spec module_elements([ast()])
-     :: {
+  @spec module_elements([ast()]) :: {
           [{field(), any()}],
           [{field(), type()}],
           [type],
@@ -130,19 +130,20 @@ defmodule Algae.Internal do
           [{field(), any()}]
         }
   def module_elements(lines) do
-    List.foldr(lines, {[], [], [], [], []},
-      fn(line, {value_acc, type_acc, typespec_acc, acc_arg, acc_mapping}) ->
-        {field, type, default_value} = normalize_elements(line)
-        arg = {field, [], Elixir}
+    List.foldr(lines, {[], [], [], [], []}, fn line,
+                                               {value_acc, type_acc, typespec_acc, acc_arg,
+                                                acc_mapping} ->
+      {field, type, default_value} = normalize_elements(line)
+      arg = {field, [], Elixir}
 
-        {
-          [{field, default_value} | value_acc],
-          [{field, type} | type_acc],
-          [type | typespec_acc],
-          [{:\\, [], [arg, default_value]} | acc_arg],
-          [{field, arg} | acc_mapping]
-        }
-      end)
+      {
+        [{field, default_value} | value_acc],
+        [{field, type} | type_acc],
+        [type | typespec_acc],
+        [{:\\, [], [arg, default_value]} | acc_arg],
+        [{field, arg} | acc_mapping]
+      }
+    end)
   end
 
   @spec normalize_elements(ast()) :: {atom(), type(), any()}
@@ -160,7 +161,7 @@ defmodule Algae.Internal do
   end
 
   def or_types([head | tail], module_ctx) do
-    Enum.reduce(tail, call_type(head, module_ctx), fn(module, acc) ->
+    Enum.reduce(tail, call_type(head, module_ctx), fn module, acc ->
       {:|, [], [call_type(module, module_ctx), acc]}
     end)
   end
@@ -174,8 +175,7 @@ defmodule Algae.Internal do
     {{:., [], [{:__aliases__, [alias: false], full_module}, :t]}, [], []}
   end
 
-  @spec submodule_name({:defdata, any(), [{:::, any(), [any()]}]})
-     :: [module()]
+  @spec submodule_name({:defdata, any(), [{:::, any(), [any()]}]}) :: [module()]
   def submodule_name({:defdata, _, [{:::, _, [body, _]}]}) do
     body
     |> case do
@@ -226,29 +226,20 @@ defmodule Algae.Internal do
   def default_value({type, _, _}) do
     case type do
       :boolean -> false
-
-      :number  -> 0
+      :number -> 0
       :integer -> 0
-
       :float -> 0.0
-
-      :pos_integer     -> 1
+      :pos_integer -> 1
       :non_neg_integer -> 0
-
-      :bitstring  -> ""
-      :charlist   -> []
-
-      []    -> []
+      :bitstring -> ""
+      :charlist -> []
+      [] -> []
       :list -> []
-
-      :map  -> %{}
-
+      :map -> %{}
       :fun -> &Quark.id/1
-      :->  -> &Quark.id/1
-
+      :-> -> &Quark.id/1
       :any -> nil
-      :t   -> raise %Algae.Internal.NeedsExplicitDefaultError{message: "Type is lone `t`"}
-
+      :t -> raise %Algae.Internal.NeedsExplicitDefaultError{message: "Type is lone `t`"}
       atom -> atom
     end
   end

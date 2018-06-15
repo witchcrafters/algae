@@ -69,10 +69,10 @@ defmodule Algae.Writer do
 
   alias __MODULE__
   alias Witchcraft.{Monoid, Unit}
-  use   Witchcraft
+  use Witchcraft
 
-  @type log    :: Monoid.t()
-  @type value  :: any()
+  @type log :: Monoid.t()
+  @type value :: any()
   @type writer :: {Writer.value(), Writer.log()}
 
   @type t :: %Writer{writer: writer()}
@@ -221,8 +221,8 @@ defmodule Algae.Writer do
   @spec listen(Writer.t(), (log() -> log())) :: Writer.t()
   def listen(writer, fun) do
     monad writer do
-      {value, log} <- listen writer
-      return {value, fun.(log)}
+      {value, log} <- listen(writer)
+      return({value, fun.(log)})
     end
   end
 
@@ -289,9 +289,11 @@ defmodule Algae.Writer do
   """
   @spec censor(Writer.t(), (any() -> any())) :: Writer.t()
   def censor(writer, fun) do
-    pass(monad writer do
-      value <- writer
-      return {value, fun}
-    end)
+    pass(
+      monad writer do
+        value <- writer
+        return({value, fun})
+      end
+    )
   end
 end

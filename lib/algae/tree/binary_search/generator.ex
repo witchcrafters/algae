@@ -20,10 +20,10 @@ defimpl TypeClass.Property.Generator, for: Algae.Tree.BinarySearch.Node do
 
       2 ->
         %Node{
-          node:  random_value(),
-          left:  random_node(),
+          node: random_value(),
+          left: random_node(),
           right: random_node()
-    }
+        }
 
       _ ->
         %Empty{}

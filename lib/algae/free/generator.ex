@@ -1,5 +1,5 @@
-alias  Algae.Free.Pure
-alias  TypeClass.Property.Generator
+alias Algae.Free.Pure
+alias TypeClass.Property.Generator
 
 import Algae.Free
 

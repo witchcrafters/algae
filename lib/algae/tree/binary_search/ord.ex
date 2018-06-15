@@ -4,7 +4,7 @@ use Witchcraft
 
 definst Witchcraft.Ord, for: Algae.Tree.BinarySearch.Empty do
   def compare(_, %Empty{}), do: :equal
-  def compare(_, %Node{}),  do: :lesser
+  def compare(_, %Node{}), do: :lesser
 end
 
 definst Witchcraft.Ord, for: Algae.Tree.BinarySearch.Node do
@@ -21,8 +21,8 @@ definst Witchcraft.Ord, for: Algae.Tree.BinarySearch.Node do
         node: random_value()
       },
       %Node{
-        node:  random_value(),
-        left:  random_value(),
+        node: random_value(),
+        left: random_value(),
         right: random_value()
       }
     ])

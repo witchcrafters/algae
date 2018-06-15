@@ -1,4 +1,4 @@
-alias  Algae.Writer
+alias Algae.Writer
 import TypeClass
 
 use Quark

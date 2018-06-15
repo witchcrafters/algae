@@ -11,7 +11,7 @@ defmodule Algae.Id do
 
   import Algae
 
-  defdata any()
+  defdata(any())
 
   @doc """
   Wrap some data in an `Algae.Id` wrapper

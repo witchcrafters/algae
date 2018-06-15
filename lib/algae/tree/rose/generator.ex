@@ -1,5 +1,5 @@
-alias  Algae.Tree.Rose
-alias  TypeClass.Property.Generator
+alias Algae.Tree.Rose
+alias TypeClass.Property.Generator
 
 defimpl TypeClass.Property.Generator, for: Algae.Tree.Rose do
   def generate(_) do

@@ -9,8 +9,8 @@ end
 definst Witchcraft.Extend, for: Algae.Tree.BinarySearch.Node do
   def nest(tree = %Node{left: left, right: right}) do
     %Node{
-      node:  tree,
-      left:  Witchcraft.Extend.nest(left),
+      node: tree,
+      left: Witchcraft.Extend.nest(left),
       right: Witchcraft.Extend.nest(right)
     }
   end

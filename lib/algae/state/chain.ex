@@ -1,4 +1,4 @@
-alias  Algae.State
+alias Algae.State
 import TypeClass
 
 definst Witchcraft.Chain, for: Algae.State do

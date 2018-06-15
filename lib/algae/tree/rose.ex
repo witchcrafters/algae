@@ -25,14 +25,14 @@ defmodule Algae.Tree.Rose do
 
   """
 
-  alias  __MODULE__
+  alias __MODULE__
   import Algae
 
   @type rose :: any()
   @type forest :: [t()]
 
   defdata do
-    rose    :: any()
+    rose :: any()
     forest :: [t()]
   end
 

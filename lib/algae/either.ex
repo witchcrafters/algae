@@ -24,7 +24,7 @@ defmodule Algae.Either do
   import Algae
 
   defsum do
-    defdata Left  :: any()
+    defdata Left :: any()
     defdata Right :: any()
   end
 end
@@ -184,7 +184,7 @@ definst Witchcraft.Apply, for: Algae.Either.Left do
 end
 
 definst Witchcraft.Apply, for: Algae.Either.Right do
-  def convey(_,    %Left{}), do: %Left{}
+  def convey(_, %Left{}), do: %Left{}
   def convey(data, %Right{right: fun}), do: map(data, fun)
 end
 
@@ -218,8 +218,8 @@ end
 # # Monad #
 # #########
 
-definst Witchcraft.Monad, for: Algae.Either.Left
-definst Witchcraft.Monad, for: Algae.Either.Right
+definst(Witchcraft.Monad, for: Algae.Either.Left)
+definst(Witchcraft.Monad, for: Algae.Either.Right)
 
 # ##########
 # # Extend #

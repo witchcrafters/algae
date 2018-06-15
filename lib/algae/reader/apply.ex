@@ -1,4 +1,4 @@
-alias  Algae.Reader
+alias Algae.Reader
 import TypeClass
 
 use Quark

@@ -1,6 +1,6 @@
-alias  Algae.Reader
+alias Algae.Reader
 import TypeClass
-use    Witchcraft
+use Witchcraft
 
 definst Witchcraft.Applicative, for: Algae.Reader do
   @force_type_instance true

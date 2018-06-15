@@ -32,13 +32,14 @@ defmodule Algae.Free do
 
   """
 
-  alias  Alage.Free.{Pure, Roll}
+  alias Alage.Free.{Pure, Roll}
   import Algae
-  use    Witchcraft
+  use Witchcraft
 
   defsum do
-    defdata Roll :: any() # Witchcraft.Functor.t()
-    defdata Pure :: any() \\ %Witchcraft.Unit{}
+    # Witchcraft.Functor.t()
+    defdata(Roll :: any())
+    defdata(Pure :: any() \\ %Witchcraft.Unit{})
   end
 
   @doc """

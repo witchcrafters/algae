@@ -44,11 +44,11 @@ defmodule Algae.Tree.BinarySearch do
   use Witchcraft, except: [to_list: 1]
 
   defsum do
-    defdata Empty :: none()
+    defdata(Empty :: none())
 
     defdata Node do
       node :: any()
-      left  :: BinarySearch.t() \\ Empty.new()
+      left :: BinarySearch.t() \\ Empty.new()
       right :: BinarySearch.t() \\ Empty.new()
     end
   end
@@ -97,20 +97,22 @@ defmodule Algae.Tree.BinarySearch do
   """
   @spec insert(t(), any()) :: t()
   def insert(%Empty{}, value), do: new(value)
+
   def insert(tree = %Node{node: node, left: left, right: right}, orderable) do
     case compare(orderable, node) do
-      :equal   -> tree
+      :equal -> tree
       :greater -> %{tree | right: insert(right, orderable)}
-      :lesser  -> %{tree | left:  insert(left,  orderable)}
+      :lesser -> %{tree | left: insert(left, orderable)}
     end
   end
 
   def insert(%Empty{}, value), do: new(value)
+
   def insert(tree = %Node{node: node, left: left, right: right}, orderable) do
     case compare(orderable, node) do
-      :equal   -> tree
+      :equal -> tree
       :greater -> %{tree | right: insert(right, orderable)}
-      :lesser  -> %{tree | left:  insert(left,  orderable)}
+      :lesser -> %{tree | left: insert(left, orderable)}
     end
   end
 
@@ -146,18 +148,19 @@ defmodule Algae.Tree.BinarySearch do
   """
   @spec delete(t(), any()) :: t()
   def delete(%Empty{}, _), do: %Empty{}
+
   def delete(tree = %Node{node: node, left: left, right: right}, orderable) do
     case compare(orderable, node) do
       :greater ->
         %{tree | right: delete(right, orderable)}
 
       :lesser ->
-        %{tree | left:  delete(left, orderable)}
+        %{tree | left: delete(left, orderable)}
 
       :equal ->
         case tree do
-          %{left:  %Empty{}}       -> right
-          %{right: %Empty{}}       -> left
+          %{left: %Empty{}} -> right
+          %{right: %Empty{}} -> left
           %{right: %{node: shift}} -> %{tree | node: shift, right: delete(right, shift)}
         end
     end
@@ -233,7 +236,7 @@ defmodule Algae.Tree.BinarySearch do
 
   """
   @spec from_list(list()) :: t()
-  def from_list([]),            do: %Empty{}
+  def from_list([]), do: %Empty{}
   def from_list([head | tail]), do: from_list(tail, new(head))
 
   @doc """
@@ -264,7 +267,6 @@ defmodule Algae.Tree.BinarySearch do
 
   """
   @spec from_list(list(), t()) :: t()
-  def from_list([],            seed), do: seed
+  def from_list([], seed), do: seed
   def from_list([head | tail], seed), do: from_list(tail, insert(seed, head))
-
 end

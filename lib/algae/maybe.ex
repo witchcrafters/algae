@@ -30,8 +30,8 @@ defmodule Algae.Maybe do
   alias Algae.Maybe.{Nothing, Just}
 
   defsum do
-    defdata Nothing :: none()
-    defdata Just    :: any()
+    defdata(Nothing :: none())
+    defdata(Just :: any())
   end
 
   @doc ~S"""
@@ -71,7 +71,7 @@ defmodule Algae.Maybe do
 
   """
   @spec from_maybe(t(), any()) :: any()
-  def from_maybe(%Nothing{}, [else: fallback]), do: fallback
+  def from_maybe(%Nothing{}, else: fallback), do: fallback
   def from_maybe(%Just{just: inner}, _), do: inner
 end
 
@@ -102,7 +102,7 @@ end
 
 definst Witchcraft.Setoid, for: Algae.Maybe.Nothing do
   def equivalent?(_, %Nothing{}), do: true
-  def equivalent?(_, %Just{}),    do: false
+  def equivalent?(_, %Just{}), do: false
 end
 
 definst Witchcraft.Setoid, for: Algae.Maybe.Just do
@@ -116,7 +116,7 @@ end
 
 definst Witchcraft.Ord, for: Algae.Maybe.Nothing do
   def compare(_, %Nothing{}), do: :equal
-  def compare(_, %Just{}),    do: :lesser
+  def compare(_, %Just{}), do: :lesser
 end
 
 definst Witchcraft.Ord, for: Algae.Maybe.Just do
@@ -234,8 +234,8 @@ end
 # Monad #
 #########
 
-definst Witchcraft.Monad, for: Algae.Maybe.Nothing
-definst Witchcraft.Monad, for: Algae.Maybe.Just
+definst(Witchcraft.Monad, for: Algae.Maybe.Nothing)
+definst(Witchcraft.Monad, for: Algae.Maybe.Just)
 
 ##########
 # Extend #

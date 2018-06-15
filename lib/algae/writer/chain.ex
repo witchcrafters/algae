@@ -1,6 +1,6 @@
-alias  Algae.Writer
+alias Algae.Writer
 import TypeClass
-use    Witchcraft
+use Witchcraft
 
 definst Witchcraft.Chain, for: Algae.Writer do
   def chain(%Writer{writer: {old_value, old_log}}, link) do

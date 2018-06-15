@@ -2,7 +2,7 @@ import TypeClass
 
 definst Witchcraft.Chain, for: Algae.Reader do
   @force_type_instance true
-  alias  Algae.Reader
+  alias Algae.Reader
 
   def chain(reader, link) do
     Reader.new(fn e ->

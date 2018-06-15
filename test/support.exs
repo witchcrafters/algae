@@ -1,38 +1,38 @@
 import Algae
 
 defmodule Example do
-  defdata Complex :: ([{:ok, integer()}] | number()) \\ 22
+  defdata(Complex :: [{:ok, integer()}] | number() \\ 22)
 
-  defdata Any  :: any()
-  defdata Int  :: integer()
-  defdata None :: none()
+  defdata(Any :: any())
+  defdata(Int :: integer())
+  defdata(None :: none())
 
   defmodule Embedded.One do
-    defdata do: quux :: any() \\ 22
+    defdata(do: quux :: any() \\ 22)
   end
 
   defmodule Embedded.Many do
     defdata do
-      first  :: any()
+      first :: any()
       second :: integer() \\ 42
     end
   end
 
   defdata Bare do
-    first  :: any()
+    first :: any()
     second :: non_neg_integer() \\ 22
-    third  :: any()
+    third :: any()
   end
 
   defmodule Simple do
-    defdata any()
+    defdata(any())
   end
 
   defmodule Sum.Lights do
     defsum do
-      defdata Red    :: any() \\ 22
-      defdata Yellow :: any()
-      defdata Green  :: none()
+      defdata(Red :: any() \\ 22)
+      defdata(Yellow :: any())
+      defdata(Green :: none())
     end
   end
 
@@ -42,7 +42,7 @@ defmodule Example do
         value :: any()
       end
 
-      defdata Nada :: none()
+      defdata(Nada :: none())
     end
   end
 
@@ -52,7 +52,7 @@ defmodule Example do
     # =============== #
 
     defdata do
-      name       :: String.t()
+      name :: String.t()
       hit_points :: non_neg_integer()
       experience :: non_neg_integer()
     end
@@ -72,21 +72,21 @@ defmodule Example do
   end
 
   defmodule Id do
-    defdata any()
+    defdata(any())
   end
 
-  defdata Wrapper :: any()
+  defdata(Wrapper :: any())
 
   defmodule Person do
     defdata do
       name :: String.t()
-      age  :: non_neg_integer()
+      age :: non_neg_integer()
     end
   end
 
   defmodule Animal do
     defdata do
-      name      :: String.t()
+      name :: String.t()
       leg_count :: non_neg_integer() \\ 4
     end
   end
@@ -96,13 +96,13 @@ defmodule Example do
   end
 
   defmodule Constant do
-    defdata fun()
+    defdata(fun())
 
     def new(value), do: %Constant{constant: fn _ -> value end}
   end
 
   defmodule Nothing do
-    defdata none()
+    defdata(none())
   end
 
   defmodule Light do
@@ -111,9 +111,9 @@ defmodule Example do
     # ============== #
 
     defsum do
-      defdata Red    :: none()
-      defdata Yellow :: none()
-      defdata Green  :: none()
+      defdata(Red :: none())
+      defdata(Yellow :: none())
+      defdata(Green :: none())
     end
 
     # =================== #
@@ -142,18 +142,18 @@ defmodule Example do
 
   defmodule Option do
     defsum do
-      defdata None :: none()
-      defdata Some :: any()
+      defdata(None :: none())
+      defdata(Some :: any())
     end
   end
 
-  defdata Book  :: String.t() \\ "War and Peace"
-  defdata Video :: String.t() \\ "2001: A Space Odyssey"
+  defdata(Book :: String.t() \\ "War and Peace")
+  defdata(Video :: String.t() \\ "2001: A Space Odyssey")
 
   defmodule Media do
     defsum do
-      defdata Paper :: Example.Book.t()  \\ Example.Book.new()
-      defdata Film  :: Example.Video.t() \\ Example.Video.new("A Clockwork Orange")
+      defdata(Paper :: Example.Book.t() \\ Example.Book.new())
+      defdata(Film :: Example.Video.t() \\ Example.Video.new("A Clockwork Orange"))
     end
   end
 end

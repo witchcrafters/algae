@@ -1,6 +1,6 @@
-alias  Algae.Free.{Pure, Roll}
-alias  Witchcraft.Setoid
-alias  TypeClass.Property.Generator
+alias Algae.Free.{Pure, Roll}
+alias Witchcraft.Setoid
+alias TypeClass.Property.Generator
 
 import Algae.Free
 import TypeClass
@@ -19,7 +19,7 @@ end
 definst Witchcraft.Setoid, for: Algae.Free.Roll do
   custom_generator(_) do
     inner = Algae.Id.new()
-    seed  = Generator.generate(1)
+    seed = Generator.generate(1)
 
     seed
     |> new()

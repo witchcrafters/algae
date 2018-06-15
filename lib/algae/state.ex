@@ -73,7 +73,7 @@ defmodule Algae.State do
   @type runner :: (any() -> {any(), any()})
   @type t :: %State{runner: runner()}
 
-  defstruct [runner: &State.default/1]
+  defstruct runner: &State.default/1
 
   @spec default(any()) :: {integer(), any()}
   defp default(s), do: {s, s}
@@ -208,7 +208,7 @@ defmodule Algae.State do
   def get(fun) do
     monad %Algae.State{} do
       s <- get()
-      return fun.(s)
+      return(fun.(s))
     end
   end
 

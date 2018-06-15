@@ -1,5 +1,5 @@
-alias  Algae.Tree.Rose
-alias  Witchcraft.{Chain, Functor}
+alias Algae.Tree.Rose
+alias Witchcraft.{Chain, Functor}
 import TypeClass
 
 definst Witchcraft.Chain, for: Algae.Tree.Rose do

@@ -201,8 +201,8 @@ defmodule Algae do
     inner =
       body
       |> case do
-           {:__block__, _, lines} -> lines
-           line -> List.wrap(line)
+        {:__block__, _, lines} -> lines
+        line -> List.wrap(line)
       end
       |> data_ast()
 
@@ -295,7 +295,7 @@ defmodule Algae do
       #   }
 
   """
-  @spec defsum([do: {:__block__, [any()], ast()}]) :: ast()
+  @spec defsum(do: {:__block__, [any()], ast()}) :: ast()
   defmacro defsum(do: {:__block__, _, [first | _] = parts} = block) do
     module_ctx = __CALLER__.module
     types = or_types(parts, module_ctx)
@@ -313,7 +313,7 @@ defmodule Algae do
       @spec new() :: t()
       def new, do: unquote(default_module).new()
 
-      defoverridable [new: 0]
+      defoverridable new: 0
     end
   end
 end
