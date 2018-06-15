@@ -44,7 +44,7 @@ defmodule Algae.Tree.BinarySearch do
   use Witchcraft, except: [to_list: 1]
 
   defsum do
-    defdata(Empty :: none())
+    defdata Empty :: none()
 
     defdata Node do
       node :: any()

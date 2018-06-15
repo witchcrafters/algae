@@ -38,8 +38,8 @@ defmodule Algae.Free do
 
   defsum do
     # Witchcraft.Functor.t()
-    defdata(Roll :: any())
-    defdata(Pure :: any() \\ %Witchcraft.Unit{})
+    defdata Roll :: any()
+    defdata Pure :: any() \\ %Witchcraft.Unit{}
   end
 
   @doc """

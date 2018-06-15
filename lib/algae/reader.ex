@@ -38,7 +38,7 @@ defmodule Algae.Reader do
   import Algae
   use Witchcraft
 
-  defdata(fun())
+  defdata fun()
 
   @doc """
   `Reader` constructor.
