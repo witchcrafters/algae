@@ -71,7 +71,23 @@ defmodule Algae.Maybe do
   def new(nothing_value, [nothing: nothing_value]), do: Nothing.new()
   def new(value, _), do: Just.new(value)
 
+  @spec new(any()) :: Just.t()
   def new(value), do: Just.new(value)
+
+  @doc """
+  Alias for `new(value, nothing: nil)`.
+
+  ## Examples
+
+      iex> from_nillable(9)
+      %Algae.Maybe.Just{just: 9}
+
+      iex> from_nillable(nil)
+      %Algae.Maybe.Nothing{}
+
+  """
+  @spec from_nillable(any()) :: Just.t()
+  def from_nillable(value), do: new(value, nothing: nil)
 
   @doc """
   Extract a value from a `Maybe`, falling back to a set value in the `Nothing` case.
