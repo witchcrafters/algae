@@ -54,4 +54,17 @@ defmodule AlgaeTest do
 
     assert Media.new() == paper
   end
+
+  test "test either keeps left state using convey" do
+    use Witchcraft
+    r = Algae.Either.Right.new( "right!" )
+    r? = Algae.Either.Right.new( fn x -> "who's there? " <> x end )
+    l = Algae.Either.Left.new( "left the building!!!" )
+
+    assert r |> convey( r? ) == Algae.Either.Right.new( "who's there? right!" ) 
+    assert l |> convey( r? ) == l 
+    assert l |> convey( l ) == l 
+    assert r |> convey( l ) == l 
+  end
+
 end
