@@ -2,6 +2,7 @@ defmodule AlgaeTest do
   alias Example.{Wrapper, Media, Book, Animal}
   use ExUnit.Case
 
+  doctest Algae, import: true
   doctest Algae.Id, import: true
 
   doctest Algae.Maybe,  import: true
