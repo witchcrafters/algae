@@ -7,6 +7,7 @@ defmodule AlgaeTest do
 
   doctest Algae.Maybe,  import: true
   doctest Algae.Either, import: true
+  doctest Algae.Result, import: true
 
   doctest Algae.Free, import: true
 
