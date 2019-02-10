@@ -27,7 +27,7 @@ defmodule Algae.Maybe do
   """
 
   import Algae
-  alias Algae.Maybe.{Nothing, Just}
+  alias Algae.Maybe.{Just, Nothing}
 
   defsum do
     defdata Nothing :: none()
