@@ -159,7 +159,7 @@ end
 
 Grocery.new()
 #=> %Grocery{
-#     item: {"Apple", 4, false}
+#     item: {"Orange", 4, false}
 #   }
 ```
 
