@@ -185,10 +185,10 @@ defmodule Algae do
         data_ast(caller_module, type)
 
       [do: {:__block__, _, lines}] ->
-        data_ast(lines)
+        data_ast(lines, __CALLER__)
 
       [do: line] ->
-        data_ast([line])
+        data_ast([line], __CALLER__)
     end
   end
 
@@ -204,7 +204,7 @@ defmodule Algae do
            {:__block__, _, lines} -> lines
            line -> List.wrap(line)
       end
-      |> data_ast()
+      |> data_ast(__CALLER__)
 
     quote do
       defmodule unquote(module_name) do
