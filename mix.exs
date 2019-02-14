@@ -27,7 +27,7 @@ defmodule Algae.Mixfile do
        {:earmark,  "~> 1.2",  only: :dev},
        {:ex_doc,   "~> 0.16", only: :dev},
 
-       {:inch_ex,  "~> 0.5",  only: [:dev, :docs, :test]},
+       {:inch_ex,  "~> 2.0",  only: [:dev, :docs, :test]},
 
        {:quark,      "~> 2.3"},
        {:type_class, "~> 1.2"},
