@@ -154,7 +154,7 @@ This overwriting syntax is _required_ for complex types:
 
 ```elixir
 defdata Grocery do
-  item :: {String.t(), integer(), boolean()} \\ {"Apple", 4, false}
+  item :: {String.t(), integer(), boolean()} \\ {"Orange", 4, false}
 end
 
 Grocery.new()
