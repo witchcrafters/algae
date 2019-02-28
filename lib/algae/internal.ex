@@ -10,9 +10,28 @@ defmodule Algae.Internal do
   def data_ast(lines, %{aliases: _} = caller) when is_list(lines) do
     {field_values, field_types, specs, args, defaults} = module_elements(lines, caller)
 
+    arg_count = Enum.count(args)
+
+    overridables =
+      Enum.map(0..arg_count, &({:new_partial, &1}))
+      ++ [new: arg_count]
+    # More verbose, but clearer.
+    # for arity <- 0..Enum.count(args) do
+    #   {:new, arity}
+    # end
+
+    args_without_defaults =
+      Enum.map(args, fn({:\\, [], [stripped, _]}) -> stripped end)
+
     quote do
+      use Quark
+
       @type t :: %__MODULE__{unquote_splicing(field_types)}
       defstruct unquote(field_values)
+
+      defpartial new_partial(unquote_splicing(args_without_defaults)) do
+        struct(__MODULE__, unquote(defaults))
+      end
 
       @doc "Positional constructor, with args in the same order as they were defined in"
       @spec new(unquote_splicing(specs)) :: t()
@@ -20,7 +39,7 @@ defmodule Algae.Internal do
         struct(__MODULE__, unquote(defaults))
       end
 
-      defoverridable [new: unquote(Enum.count(args))]
+      defoverridable unquote(overridables)
     end
   end
 
