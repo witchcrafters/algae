@@ -6,9 +6,9 @@ defmodule Algae.Internal do
   @doc """
   Construct a data type AST
   """
-  @spec data_ast(module() | [module()], ast()) :: ast()
-  def data_ast(lines) when is_list(lines) do
-    {field_values, field_types, specs, args, defaults} = module_elements(lines)
+  @spec data_ast(module(), Macro.Env.t() | [module()], ast()) :: ast()
+  def data_ast(lines, %{aliases: _} = caller) when is_list(lines) do
+    {field_values, field_types, specs, args, defaults} = module_elements(lines, caller)
 
     quote do
       @type t :: %__MODULE__{unquote_splicing(field_types)}
@@ -121,7 +121,7 @@ defmodule Algae.Internal do
   @type field :: {atom(), [any()], [any()]}
   @type type  :: {atom(), [any()], [any()]}
 
-  @spec module_elements([ast()])
+  @spec module_elements([ast()], Macro.Env.t())
      :: {
           [{field(), any()}],
           [{field(), type()}],
@@ -129,10 +129,10 @@ defmodule Algae.Internal do
           [{:\\, [], any()}],
           [{field(), any()}]
         }
-  def module_elements(lines) do
+  def module_elements(lines, caller) do
     List.foldr(lines, {[], [], [], [], []},
       fn(line, {value_acc, type_acc, typespec_acc, acc_arg, acc_mapping}) ->
-        {field, type, default_value} = normalize_elements(line)
+        {field, type, default_value} = normalize_elements(line, caller)
         arg = {field, [], Elixir}
 
         {
@@ -145,14 +145,27 @@ defmodule Algae.Internal do
       end)
   end
 
-  @spec normalize_elements(ast()) :: {atom(), type(), any()}
-  def normalize_elements({:::, _, [{field, _, _}, type]}) do
-    {field, type, default_value(type)}
+  @spec normalize_elements(ast(), Macro.Env.t()) :: {atom(), type(), any()}
+  def normalize_elements({:::, _, [{field, _, _}, type]}, caller) do
+    expanded_type = resolve_alias(type, caller)
+    {field, expanded_type, default_value(expanded_type)}
   end
 
-  def normalize_elements({:\\, _, [{:::, _, [{field, _, _}, type]}, default]}) do
+  def normalize_elements({:\\, _, [{:::, _, [{field, _, _}, type]}, default]}, _) do
     {field, type, default}
   end
+
+  @spec resolve_alias(ast(), Macro.Env.t()) :: ast()
+  def resolve_alias({{_, _, _} = a, b, c}, caller) do
+    {resolve_alias(a, caller), b, c}
+  end
+
+  def resolve_alias({:. = a, b, [{:__aliases__, _, _} = the_alias | rest]}, caller) do
+    resolved_alias = Macro.expand(the_alias, caller)
+    {a, b, [resolved_alias | rest]}
+  end
+
+  def resolve_alias(a, _), do: a
 
   @spec or_types([ast()], module()) :: [ast()]
   def or_types({:\\, _, [{:::, _, [_, types]}, _]}, module_ctx) do
@@ -216,9 +229,14 @@ defmodule Algae.Internal do
 
   # credo:disable-for-lines:21 Credo.Check.Refactor.CyclomaticComplexity
   def default_value({{:., _, [{_, _, [:String]}, :t]}, _, _}), do: ""
+  def default_value({{:., _, [String, :t]}, _, _}), do: ""
 
   def default_value({{:., _, [{_, _, adt}, :t]}, _, []}) do
     quote do: unquote(Module.concat(adt)).new()
+  end
+
+  def default_value({{:., _, [module, :t]}, _, []}) do
+    quote do: unquote(module).new()
   end
 
   def default_value([_]), do: []

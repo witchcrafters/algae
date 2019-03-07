@@ -132,22 +132,22 @@ defmodule Algae do
 
   The `new` constructor function may be overwritten.
 
-      defmodule Constant do
-        defdata :: fun()
-
-        def new(value), do: %Constant{constant: fn _ -> value end}
-      end
-
-      fourty_two = Constant.new(42)
-      fourty_two.constant.(33)
-      #=> 42
+      iex> defmodule Constant do
+      ...>   defdata fun()
+      ...>
+      ...>   def new(value), do: %Constant{constant: fn _ -> value end}
+      ...> end
+      ...>
+      ...> fourty_two = Constant.new(42)
+      ...> fourty_two.constant.(33)
+      42
 
   ## Empty Tag
 
   An empty type (with no fields) is definable using the `none`() type
 
       defmodule Nothing do
-        defdata :: none()
+        defdata none()
       end
 
       Nothing.new()
@@ -185,10 +185,10 @@ defmodule Algae do
         data_ast(caller_module, type)
 
       [do: {:__block__, _, lines}] ->
-        data_ast(lines)
+        data_ast(lines, __CALLER__)
 
       [do: line] ->
-        data_ast([line])
+        data_ast([line], __CALLER__)
     end
   end
 
@@ -204,7 +204,7 @@ defmodule Algae do
            {:__block__, _, lines} -> lines
            line -> List.wrap(line)
       end
-      |> data_ast()
+      |> data_ast(__CALLER__)
 
     quote do
       defmodule unquote(module_name) do

@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/expede/algae.svg?branch=master)](https://travis-ci.org/expede/algae) [![Inline docs](http://inch-ci.org/github/expede/algae.svg?branch=master)](http://inch-ci.org/github/expede/algae) [![Deps Status](https://beta.hexfaktor.org/badge/all/github/expede/algae.svg)](https://beta.hexfaktor.org/github/expede/algae) [![hex.pm version](https://img.shields.io/hexpm/v/algae.svg?style=flat)](https://hex.pm/packages/algae) [![API Docs](https://img.shields.io/badge/api-docs-yellow.svg?style=flat)](http://hexdocs.pm/algae/) [![license](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/expede/algae/blob/master/LICENSE)
 
-Algae provides a biolerplate-avoiding DSL for defining algebraic data types (ADTs),
+Algae provides a boilerplate-avoiding DSL for defining algebraic data types (ADTs),
 plus several common structures
 
 # Quickstart
@@ -11,7 +11,7 @@ Add Algae to your list of dependencies in `mix.exs`:
 ```elixir
 
 def deps do
-  [{:algae, "~> 1.0"}]
+  [{:algae, "~> 1.2"}]
 end
 
 ```
@@ -28,7 +28,16 @@ end
 - [A Sampling of ADTs](#a-sampling-of-adts)
   - [`Id`](#algaeid)
   - [`Maybe`](#algaemaybe)
-  - [`Tree.Binary`](#algaetreebinary)
+  - [`Tree.BinarySearch`](#algaetreebinarysearch)
+
+---
+
+> **NOTE**  
+> Please `import Algae` before trying out the examples below.
+> The samples assume that is has already been done to remove
+> the unnecessary clutter.
+
+---
 
 # Product Builder
 Build a product type
@@ -42,7 +51,7 @@ Includes:
 
 ## Definition DSL
 
-For convenveniece, several variants of the DSL are available.
+For convenience, several variants of the DSL are available.
 
 ### Standard
 
@@ -154,12 +163,12 @@ This overwriting syntax is _required_ for complex types:
 
 ```elixir
 defdata Grocery do
-  item :: {String.t(), integer(), boolean()} \\ {"Apple", 4, false}
+  item :: {String.t(), integer(), boolean()} \\ {"Orange", 4, false}
 end
 
 Grocery.new()
 #=> %Grocery{
-#     item: {"Apple", 4, false}
+#     item: {"Orange", 4, false}
 #   }
 ```
 
@@ -185,7 +194,7 @@ An empty type (with no fields) is definable using the `none`() type
 
 ```elixir
 defmodule Nothing do
-  defdata :: none()
+  defdata none()
 end
 
 Nothing.new()
@@ -224,7 +233,7 @@ Light.new()
 
 ## Embedded Products
 
-Data with multiple fileds can be defined directly as part of a sum
+Data with multiple fields can be defined directly as part of a sum
 
 ```elixir
 defmodule Pet do
@@ -260,7 +269,7 @@ Maybe.new()
 
 ## Tagged Unions
 
-Sums join existing types with tags: new types to help distibguish the context
+Sums join existing types with tags: new types to help distinguish the context
 that they are in (the sum type)
 
 ```elixir
@@ -309,10 +318,10 @@ Algae.Maybe.new(42)
 #=> %Algae.Maybe.Just{just: 42}
 ```
 
-## `Tree.Binary`
+## `Tree.BinarySearch`
 
 ```elixir
-alias Algae.Tree.Binary, as: BTree
+alias Algae.Tree.BinarySearch, as: BTree
 
 #   42
 #  /  \
@@ -330,24 +339,24 @@ BTree.Branch.new(
   )
 )
 
-#=> %Algae.Tree.Binary.Branch{
+#=> %Algae.Tree.BinarySearch.Branch{
 #     value: 42,
-#     left: %Algae.Tree.Binary.Branch{
+#     left: %Algae.Tree.BinarySearch.Branch{
 #       value: 77,
-#       left:  %Algae.Tree.Binary.Empty{},
-#       right: %Algae.Tree.Binary.Empty{}
+#       left:  %Algae.Tree.BinarySearch.Empty{},
+#       right: %Algae.Tree.BinarySearch.Empty{}
 #     },
-#     right: %Algae.Tree.Binary.Branch{
+#     right: %Algae.Tree.BinarySearch.Branch{
 #       value: 1234,
-#       left:  %Algae.Tree.Binary.Branch{
+#       left:  %Algae.Tree.BinarySearch.Branch{
 #         value: 98,
-#         left:  %Algae.Tree.Binary.Empty{},
-#         right: %Algae.Tree.Binary.Empty{}
+#         left:  %Algae.Tree.BinarySearch.Empty{},
+#         right: %Algae.Tree.BinarySearch.Empty{}
 #       },
-#       right: %Algae.Tree.Binary.Branch{
+#       right: %Algae.Tree.BinarySearch.Branch{
 #         value: 32,
-#         left:  %Algae.Tree.Binary.Empty{},
-#         right: %Algae.Tree.Binary.Empty{}
+#         left:  %Algae.Tree.BinarySearch.Empty{},
+#         right: %Algae.Tree.BinarySearch.Empty{}
 #       }
 #     }
 #   }
