@@ -21,7 +21,7 @@ defmodule Algae.Mixfile do
      aliases: ["quality": ["test", "credo --strict"]],
 
      deps: [
-       {:credo,    "~> 0.5",  only: [:dev, :test]},
+       {:credo,    "~> 1.0",  only: [:dev, :test]},
 
        {:dialyxir, "~> 0.5",  only: :dev},
        {:earmark,  "~> 1.2",  only: :dev},

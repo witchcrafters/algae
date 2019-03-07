@@ -30,6 +30,15 @@ end
   - [`Maybe`](#algaemaybe)
   - [`Tree.BinarySearch`](#algaetreebinarysearch)
 
+---
+
+> **NOTE**  
+> Please `import Algae` before trying out the examples below.
+> The samples assume that is has already been done to remove
+> the unnecessary clutter.
+
+---
+
 # Product Builder
 Build a product type
 
@@ -154,12 +163,12 @@ This overwriting syntax is _required_ for complex types:
 
 ```elixir
 defdata Grocery do
-  item :: {String.t(), integer(), boolean()} \\ {"Apple", 4, false}
+  item :: {String.t(), integer(), boolean()} \\ {"Orange", 4, false}
 end
 
 Grocery.new()
 #=> %Grocery{
-#     item: {"Apple", 4, false}
+#     item: {"Orange", 4, false}
 #   }
 ```
 
