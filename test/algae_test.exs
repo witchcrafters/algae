@@ -58,14 +58,15 @@ defmodule AlgaeTest do
 
   test "test either keeps left state using convey" do
     use Witchcraft
-    r = Algae.Either.Right.new( "right!" )
-    r? = Algae.Either.Right.new( fn x -> "who's there? " <> x end )
-    l = Algae.Either.Left.new( "left the building!!!" )
 
-    assert r |> convey( r? ) == Algae.Either.Right.new( "who's there? right!" ) 
-    assert l |> convey( r? ) == l 
-    assert l |> convey( l ) == l 
-    assert r |> convey( l ) == l 
+    r_val = Algae.Either.Right.new("right!")
+    r_fun = Algae.Either.Right.new(fn x -> "who's there? " <> x end)
+    l_val = Algae.Either.Left.new("left the building!!!")
+
+    assert convey(r_val, r_fun) == Algae.Either.Right.new("who's there? right!")
+    assert convey(l_val, r_fun) == l_val
+    assert convey(l_val, l_val) == l_val
+    assert convey(r_val, l_val) == l_val
   end
 
 end

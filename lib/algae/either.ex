@@ -184,7 +184,7 @@ definst Witchcraft.Apply, for: Algae.Either.Left do
 end
 
 definst Witchcraft.Apply, for: Algae.Either.Right do
-  def convey(_,   left = %Left{}), do: left 
+  def convey(_,   left = %Left{}), do: left
   def convey(data, %Right{right: fun}), do: map(data, fun)
 end
 
