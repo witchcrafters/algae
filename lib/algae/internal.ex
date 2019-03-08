@@ -242,7 +242,8 @@ defmodule Algae.Internal do
   def default_value([_]), do: []
 
   def default_value({type, _, _}) do
-    case type do
+    type
+    |> case do
       :boolean -> false
 
       :number  -> 0
@@ -253,8 +254,8 @@ defmodule Algae.Internal do
       :pos_integer     -> 1
       :non_neg_integer -> 0
 
-      :bitstring  -> ""
-      :charlist   -> []
+      :bitstring -> ""
+      :charlist  -> []
 
       []    -> []
       :list -> []
@@ -269,5 +270,6 @@ defmodule Algae.Internal do
 
       atom -> atom
     end
+    |> Macro.escape()
   end
 end
