@@ -7,7 +7,7 @@ defmodule Algae.Mixfile do
 
      description: "Bootstrapped algebraic data types for Elixir",
      version: "1.2.2",
-     elixir:  "~> 1.5",
+     elixir:  "~> 1.7",
 
      package: [
        maintainers: ["Brooklyn Zelenka"],
@@ -18,7 +18,9 @@ defmodule Algae.Mixfile do
      source_url:   "https://github.com/expede/algae",
      homepage_url: "https://github.com/expede/algae",
 
-     aliases: ["quality": ["test", "credo --strict"]],
+     aliases: [
+       quality: ["test", "credo --strict"]
+     ],
 
      deps: [
        {:credo,    "~> 1.0",  only: [:dev, :test]},
@@ -27,7 +29,7 @@ defmodule Algae.Mixfile do
        {:earmark,  "~> 1.2",  only: :dev},
        {:ex_doc,   "~> 0.16", only: :dev},
 
-       {:inch_ex,  "~> 0.5",  only: [:dev, :docs, :test]},
+       {:inch_ex,  "~> 2.0",  only: [:dev, :docs, :test]},
 
        {:quark,      "~> 2.3"},
        {:type_class, "~> 1.2"},
