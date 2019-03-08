@@ -242,7 +242,8 @@ defmodule Algae.Internal do
   def default_value([_]), do: []
 
   def default_value({type, _, _}) do
-    case type do
+    type
+    |> case do
       :boolean -> false
 
       :number  -> 0
