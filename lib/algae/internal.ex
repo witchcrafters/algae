@@ -254,8 +254,8 @@ defmodule Algae.Internal do
       :pos_integer     -> 1
       :non_neg_integer -> 0
 
-      :bitstring  -> ""
-      :charlist   -> []
+      :bitstring -> ""
+      :charlist  -> []
 
       []    -> []
       :list -> []
