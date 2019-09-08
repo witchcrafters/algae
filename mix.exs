@@ -8,7 +8,7 @@ defmodule Algae.Mixfile do
       deps: deps(),
 
       # Versions
-      version: "1.2.3",
+      version: "1.2.4",
       elixir: "~> 1.9",
 
       # Docs
@@ -31,8 +31,8 @@ defmodule Algae.Mixfile do
     [
       {:credo, "~> 1.1", only: [:dev, :test]},
       {:dialyxir, "~> 0.5", only: :dev},
-      {:earmark, "~> 1.3.2", only: :dev},
-      {:ex_doc, "~> 0.20.2", only: :dev},
+      {:earmark, "~> 1.4.0", only: :dev},
+      {:ex_doc, "~> 0.21.2", only: :dev},
       {:inch_ex, "~> 2.0", only: [:dev, :docs, :test]},
       {:quark, "~> 2.3"},
       {:type_class, "~> 1.2"},
