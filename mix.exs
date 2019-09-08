@@ -53,7 +53,8 @@ defmodule Algae.Mixfile do
     [
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/witchcrafters/algae"},
-      maintainers: ["Brooklyn Zelenka"]
+      maintainers: ["Brooklyn Zelenka", "Steven Vandevelde"],
+      organization: "witchcrafters"
     ]
   end
 end
