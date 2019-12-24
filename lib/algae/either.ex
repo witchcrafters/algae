@@ -126,7 +126,7 @@ end
 ##########
 
 definst Witchcraft.Monoid, for: Algae.Either.Left do
-  def empty(%Left{left: a}), do: %Right{right: Witchcraft.Monoid.empty(a)}
+  def empty(%Left{left: a}), do: %Left{left: Witchcraft.Monoid.empty(a)}
 end
 
 definst Witchcraft.Monoid, for: Algae.Either.Right do
