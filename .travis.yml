@@ -1,8 +1,0 @@
-language: elixir
-elixir:
-  - 1.7.0
-otp_release:
-  - 20.0
-script: mix test; mix credo --strict
-after_script:
-  - MIX_ENV=docs mix do deps.get, inch.report
