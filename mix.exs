@@ -8,7 +8,7 @@ defmodule Algae.Mixfile do
       deps: deps(),
 
       # Versions
-      version: "1.2.5",
+      version: "1.3.0",
       elixir: "~> 1.9",
 
       # Docs
