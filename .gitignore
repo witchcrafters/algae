@@ -7,3 +7,4 @@ erl_crash.dump
 *.beam
 .DS_Store
 mix.lock
+.mix
