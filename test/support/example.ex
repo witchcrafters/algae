@@ -1,6 +1,8 @@
 import Algae
 
 defmodule Example do
+  @moduledoc false
+
   defdata Complex :: ([{:ok, integer()}] | number()) \\ 22
 
   defdata Any  :: any()
@@ -8,10 +10,14 @@ defmodule Example do
   defdata None :: none()
 
   defmodule Embedded.One do
+    @moduledoc false
+
     defdata do: quux :: any() \\ 22
   end
 
   defmodule Embedded.Many do
+    @moduledoc false
+
     defdata do
       first  :: any()
       second :: integer() \\ 42
@@ -25,10 +31,14 @@ defmodule Example do
   end
 
   defmodule Simple do
+    @moduledoc false
+
     defdata any()
   end
 
   defmodule Sum.Lights do
+    @moduledoc false
+
     defsum do
       defdata Red    :: any() \\ 22
       defdata Yellow :: any()
@@ -37,6 +47,8 @@ defmodule Example do
   end
 
   defmodule Sum.Maybe do
+    @moduledoc false
+
     defsum do
       defdata Just do
         value :: any()
@@ -47,6 +59,8 @@ defmodule Example do
   end
 
   defmodule Player do
+    @moduledoc false
+
     # =============== #
     # Data Definition #
     # =============== #
@@ -72,12 +86,16 @@ defmodule Example do
   end
 
   defmodule Id do
+    @moduledoc false
+
     defdata any()
   end
 
   defdata Wrapper :: any()
 
   defmodule Person do
+    @moduledoc false
+
     defdata do
       name :: String.t()
       age  :: non_neg_integer()
@@ -85,6 +103,8 @@ defmodule Example do
   end
 
   defmodule Animal do
+    @moduledoc false
+
     defdata do
       name      :: String.t()
       leg_count :: non_neg_integer() \\ 4
@@ -96,16 +116,22 @@ defmodule Example do
   end
 
   defmodule Constant do
+    @moduledoc false
+
     defdata fun()
 
     def new(value), do: %Constant{constant: fn _ -> value end}
   end
 
   defmodule Nothing do
+    @moduledoc false
+
     defdata none()
   end
 
   defmodule Light do
+    @moduledoc false
+
     # ============== #
     # Sum Definition #
     # ============== #
@@ -127,6 +153,8 @@ defmodule Example do
   end
 
   defmodule Pet do
+    @moduledoc false
+
     defsum do
       defdata Cat do
         name :: String.t()
@@ -141,6 +169,8 @@ defmodule Example do
   end
 
   defmodule Option do
+    @moduledoc false
+
     defsum do
       defdata None :: none()
       defdata Some :: any()
@@ -151,6 +181,8 @@ defmodule Example do
   defdata Video :: String.t() \\ "2001: A Space Odyssey"
 
   defmodule Media do
+    @moduledoc false
+
     defsum do
       defdata Paper :: Example.Book.t()  \\ Example.Book.new()
       defdata Film  :: Example.Video.t() \\ Example.Video.new("A Clockwork Orange")
