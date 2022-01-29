@@ -16,7 +16,7 @@ defmodule Algae.Reader do
       ...>   monad %Algae.Reader{} do
       ...>     count    <- ask &Map.get(&1, :count)
       ...>     bindings <- ask()
-      ...>     return (count == Map.size(bindings))
+      ...>     return (count == map_size(bindings))
       ...>   end
       ...>
       iex> sample_bindings = %{count: 3, a: 1, b: 2}
