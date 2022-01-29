@@ -6,6 +6,7 @@ defmodule Algae.Mixfile do
       app: :algae,
       aliases: aliases(),
       deps: deps(),
+      preferred_cli_env: [quality: :test],
 
       # Versions
       version: "1.3.0",
