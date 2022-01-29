@@ -76,7 +76,7 @@ defmodule Algae.State do
   defstruct [runner: &State.default/1]
 
   @spec default(any()) :: {integer(), any()}
-  defp default(s), do: {s, s}
+  def default(s), do: {s, s}
 
   @doc """
   Construct a new `Algae.State` struct from a state runner in the form
