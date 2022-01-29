@@ -6,5 +6,4 @@ erl_crash.dump
 *.ez
 *.beam
 .DS_Store
-mix.lock
 .mix
