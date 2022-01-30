@@ -12,21 +12,21 @@ defmodule Algae.Reader do
 
       iex> use Witchcraft
       ...>
-      ...> correct =
+      iex> correct =
       ...>   monad %Algae.Reader{} do
       ...>     count    <- ask &Map.get(&1, :count)
       ...>     bindings <- ask()
-      ...>     return (count == Map.size(bindings))
+      ...>     return (count == map_size(bindings))
       ...>   end
       ...>
-      ...> sample_bindings = %{count: 3, a: 1, b: 2}
-      ...> correct_count   = run(correct, sample_bindings)
-      ...> "Correct count for #{inspect sample_bindings}? #{correct_count}"
+      iex> sample_bindings = %{count: 3, a: 1, b: 2}
+      iex> correct_count   = run(correct, sample_bindings)
+      iex> "Correct count for #{inspect sample_bindings}? #{correct_count}"
       "Correct count for %{a: 1, b: 2, count: 3}? true"
       ...>
-      ...> bad_bindings = %{count: 100, a: 1, b: 2}
-      ...> bad_count    = run(correct, bad_bindings)
-      ...> "Correct count for #{inspect bad_bindings}? #{bad_count}"
+      iex> bad_bindings = %{count: 100, a: 1, b: 2}
+      iex> bad_count    = run(correct, bad_bindings)
+      iex> "Correct count for #{inspect bad_bindings}? #{bad_count}"
       "Correct count for %{a: 1, b: 2, count: 100}? false"
 
   Example adapted from
