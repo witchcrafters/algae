@@ -34,7 +34,7 @@ end
 
 > **NOTE**  
 > Please `import Algae` before trying out the examples below.
-> The samples assume that is has already been done to remove
+> The samples assume that this has already been done to remove
 > the unnecessary clutter.
 
 ---
